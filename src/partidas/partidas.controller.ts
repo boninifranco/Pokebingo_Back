@@ -2,23 +2,24 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PartidasService } from './partidas.service';
 import { CreatePartidaDto } from './dto/create-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
+import { Partida } from './entities/partida.entity';
 
 @Controller('partidas')
 export class PartidasController {
   constructor(private readonly partidasService: PartidasService) {}
 
   @Post()
-  create(@Body() createPartidaDto: CreatePartidaDto) {
+  async create(@Body() createPartidaDto: CreatePartidaDto):Promise <Partida> {
     return this.partidasService.create(createPartidaDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Partida[]> {
     return this.partidasService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Partida> {
     return this.partidasService.findOne(+id);
   }
 

@@ -2,18 +2,19 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TorneosService } from './torneos.service';
 import { CreateTorneoDto } from './dto/create-torneo.dto';
 import { UpdateTorneoDto } from './dto/update-torneo.dto';
+import { Torneo } from './entities/torneo.entity';
 
 @Controller('torneos')
 export class TorneosController {
   constructor(private readonly torneosService: TorneosService) {}
 
   @Post()
-  create(@Body() createTorneoDto: CreateTorneoDto) {
+  async create(@Body() createTorneoDto: CreateTorneoDto): Promise <Torneo> {
     return this.torneosService.create(createTorneoDto);
   }
 
   @Get()
-  findAll() {
+  async findAll():Promise<Torneo[]> {
     return this.torneosService.findAll();
   }
 

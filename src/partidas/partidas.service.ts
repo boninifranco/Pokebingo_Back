@@ -2,13 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { CreatePartidaDto } from './dto/create-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
 import { Partida } from './entities/partida.entity';
+import { setId } from 'src/funciones/funciones';
 
 const baseUrl = 'http://localhost:3030/partidas/'
 
 @Injectable()
 export class PartidasService {
-  create(createPartidaDto: CreatePartidaDto) {
-    return 'This action adds a new partida';
+  async create(createPartidaDto: CreatePartidaDto): Promise<Partida> {
+    const data = await this.findAll();
+    const id = data[0] ? setId(data[data.length - 1].id):setId(0);
+    const newPartida = {...createPartidaDto,id};
+    const res = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(newPartida),
+    })
+    const parsed = res.json();
+    return parsed;
   }
 
   async findAll(): Promise<Partida[]> {
@@ -17,8 +29,10 @@ export class PartidasService {
     return parsed;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} partida`;
+  async findOne(id: number): Promise<Partida> {
+    const res = await fetch (baseUrl + id);
+    const parsed = await res.json();
+    return parsed;
   }
 
   update(id: number, updatePartidaDto: UpdatePartidaDto) {
