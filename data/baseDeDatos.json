@@ -1,0 +1,262 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "apellido": "Apellido2",
+      "nombre": "Nombre2",
+      "celular": "23983303030",
+      "direccion": "Mi Casa2",
+      "usuario": "usuario2",
+      "contrasena": "contraseña2",
+      "administrador": false,
+      "logueado": false
+    },
+    {
+      "id": "2",
+      "apellido": "Apellido2",
+      "nombre": "Nombre2",
+      "celular": "23983303030",
+      "usuario": "usuario2",
+      "contrasena": "contraseña2",
+      "administrador": false,
+      "logueado": false
+    },
+    {
+      "id": "3",
+      "apellido": "Apellido2",
+      "nombre": "Nombre2",
+      "celular": "23983303030",
+      "usuario": "usuario2",
+      "contrasena": "contraseña2",
+      "administrador": false,
+      "logueado": false
+    }
+  ],
+  "registro": [
+    {
+      "id": 1,
+      "usuarioId": 2,
+      "email": "Juampi",
+      "contrasena": "juampi2000"
+    },
+    {
+      "id": 2,
+      "usuarioId": 3,
+      "email": "Tomi",
+      "contrasena": "tomiw"
+    }
+  ],
+  "puntajes": [
+    {
+      "id": "",
+      "descripcion": "",
+      "puntos": ""
+    }
+  ],
+  "sala": [
+    {
+      "id": "0",
+      "partida": "31",
+      "jugadores": "10"
+    },
+    {
+      "id": "1",
+      "partida": "32",
+      "jugadores": "22"
+    },
+    {
+      "id": "2",
+      "partida": "33",
+      "jugadores": "5"
+    },
+    {
+      "id": "3",
+      "partida": "34",
+      "jugadores": "18"
+    }
+  ],
+  "desempeno": [
+    {
+      "id": "1",
+      "jugador": 3,
+      "puntos": 100,
+      "creditos": 200,
+      "cartonesComprados": 0
+    },
+    {
+      "id": 3,
+      "jugador": 2,
+      "puntos": 1500,
+      "creditos": 205,
+      "cartonesComprados": 30
+    },
+    {
+      "id": 4,
+      "jugador": 1,
+      "puntos": 100,
+      "creditos": 200,
+      "cartonesComprados": 0
+    }
+  ],
+  "filas": [
+    {
+      "id": "",
+      "carton": "",
+      "aciertos": ""
+    }
+  ],
+  "partidas": [
+    {
+      "id": "0",
+      "nroPartida": "15",
+      "idTorneo": "2",
+      "horaInicio": "08:25:30",
+      "cantidadCartones": "20"
+    },
+    {
+      "id": "0",
+      "nroPartida": "15",
+      "idTorneo": "2",
+      "horaInicio": "08:55:40",
+      "cantidadCartones": "20"
+    },
+    {
+      "id": "1",
+      "nroPartida": "16",
+      "idTorneo": "2",
+      "horaInicio": "09:25:40",
+      "cantidadCartones": "22"
+    },
+    {
+      "id": "2",
+      "nroPartida": "17",
+      "idTorneo": "2",
+      "horaInicio": "10:15:15",
+      "cantidadCartones": "25"
+    },
+    {
+      "id": "3",
+      "nroPartida": "18",
+      "idTorneo": "2",
+      "horaInicio": "11:00:20",
+      "cantidadCartones": "21"
+    }
+  ],
+  "cartones": [
+    {
+      "id": "1",
+      "nroCarton": "",
+      "idPartida": "",
+      "aciertos": ""
+    },
+    {
+      "id": "2",
+      "nroCarton": "",
+      "idPartida": "",
+      "aciertos": ""
+    }
+  ],
+  "imagenes": [
+    {
+      "id": "",
+      "imagen": ""
+    }
+  ],
+  "logueo": [
+    {
+      "id": 1,
+      "idUsuario": 3,
+      "logueado": true
+    },
+    {
+      "id": 2,
+      "idUsuario": 2,
+      "logueado": true
+    }
+  ],
+  "casilleros": [
+    {
+      "id": "",
+      "idFila": "",
+      "idImagen": "",
+      "Salio": false
+    }
+  ],
+  "stockPremios": [
+    {
+      "id": "",
+      "premio": "",
+      "cantidad": ""
+    }
+  ],
+  "torneos": [
+    {
+      "id": "0",
+      "nro_torneo": "1",
+      "fecha": "01/05/24",
+      "hora_inicio": "00:00:01",
+      "hora_cierre": "23:59:59"
+    },
+    {
+      "id": "1",
+      "nro_torneo": "2",
+      "fecha": "02/05/24",
+      "hora_inicio": "00:00:01",
+      "hora_cierre": "23:59:59"
+    },
+    {
+      "id": "2",
+      "nro_torneo": "3",
+      "fecha": "03/05/24",
+      "hora_inicio": "00:00:01",
+      "hora_cierre": "23:59:59"
+    },
+    {
+      "id": "3",
+      "nro_torneo": "4",
+      "fecha": "04/05/24",
+      "hora_inicio": "00:00:01",
+      "hora_cierre": "23:59:59"
+    }
+  ],
+  "metodos_pago": [
+    {
+      "id": "",
+      "descripcion": ""
+    }
+  ],
+  "premios": [
+    {
+      "id": "",
+      "descripcion": "",
+      "creditos": ""
+    }
+  ],
+  "chat": [
+    {
+      "id": "0",
+      "jugador": "Franco",
+      "mensaje": "Bienvenidos a la sala de juego"
+    },
+    {
+      "id": "1",
+      "jugador": "Ale",
+      "mensaje": "Quiero cambiar mis casilleros por otros!"
+    },
+    {
+      "id": "2",
+      "jugador": "Juanma",
+      "mensaje": "Están todos listos?"
+    },
+    {
+      "id": "3",
+      "jugador": "Juan Pablo",
+      "mensaje": "Bingo!"
+    },
+    {
+      "id": "4",
+      "jugador": "Jugador56",
+      "mensaje": "Dónde puedo canjear los puntos por premios?"
+    }
+  ]
+}
