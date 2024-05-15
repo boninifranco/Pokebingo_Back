@@ -34,13 +34,13 @@
   ],
   "registro": [
     {
-      "id": 1,
+      "id": "1",
       "usuarioId": 2,
       "email": "Juampi",
       "contrasena": "juampi2000"
     },
     {
-      "id": 2,
+      "id": "2",
       "usuarioId": 3,
       "email": "Tomi",
       "contrasena": "tomiw"
@@ -84,14 +84,14 @@
       "cartonesComprados": 0
     },
     {
-      "id": 3,
+      "id": "3",
       "jugador": 2,
       "puntos": 1500,
       "creditos": 205,
       "cartonesComprados": 30
     },
     {
-      "id": 4,
+      "id": "4",
       "jugador": 1,
       "puntos": 100,
       "creditos": 200,
@@ -103,6 +103,9 @@
       "id": "",
       "carton": "",
       "aciertos": ""
+    },
+    {
+      "id": "b378"
     }
   ],
   "partidas": [
@@ -164,12 +167,12 @@
   ],
   "logueo": [
     {
-      "id": 1,
+      "id": "1",
       "idUsuario": 3,
       "logueado": true
     },
     {
-      "id": 2,
+      "id": "2",
       "idUsuario": 2,
       "logueado": true
     }
@@ -180,6 +183,9 @@
       "idFila": "",
       "idImagen": "",
       "Salio": false
+    },
+    {
+      "id": "6c42"
     }
   ],
   "stockPremios": [
