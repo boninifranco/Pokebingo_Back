@@ -12,6 +12,11 @@ export class CartonController {
     return this.cartonService.findAll();
   }
 
+  @Get('id')
+  async findById(@Param('id') id: number) {
+    return this.cartonService.findById(id);
+  }
+
   @Post()
   async create(@Body() cartonDto: CreateCartonDto) {
     return this.cartonService.create(cartonDto);
