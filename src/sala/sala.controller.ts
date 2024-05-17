@@ -20,6 +20,6 @@ export class SalaController {
 
   @Get(':id')
   findOne(@Param('id') id: number):Promise <Sala> {
-    return this.salaService.findOne(id);
+    return this.salaService.findOne(+id);
   }
 }

@@ -3,7 +3,7 @@ import { PremiosService } from './premios.service';
 import { CreatePremiosDto } from './dto/create-premios.dto';
 import { UpdatePremiosDto } from './dto/update-premios.dto';
 
-@Controller('Premios')
+@Controller('premios')
 export class PremiosController {
   constructor(private readonly premiosService: PremiosService) {}
 
@@ -18,17 +18,17 @@ export class PremiosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id') id: string) {
     return this.premiosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateRegistroDto: UpdatePremiosDto) {
-    return this.premiosService.update(+id, UpdatePremiosDto);
+  update(@Param('id') id: string, @Body() updatePremiosDto: UpdatePremiosDto) {
+    return this.premiosService.update(+id, updatePremiosDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: string) {
     return this.premiosService.remove(+id);
   }
 }
