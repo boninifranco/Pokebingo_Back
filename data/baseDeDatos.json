@@ -233,10 +233,10 @@
       "hora_cierre": "23:59:59"
     }
   ],
-  "metodos_pago": [
+  "metodospago": [
     {
-      "id": "",
-      "descripcion": ""
+      "id": 1,
+      "descripcion": "aaaaaaaaaaa"
     }
   ],
   "premios": [
