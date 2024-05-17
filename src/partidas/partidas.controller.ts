@@ -22,14 +22,4 @@ export class PartidasController {
   async findOne(@Param('id') id: string): Promise<Partida> {
     return this.partidasService.findOne(+id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePartidaDto: UpdatePartidaDto) {
-    return this.partidasService.update(+id, updatePartidaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.partidasService.remove(+id);
-  }
 }

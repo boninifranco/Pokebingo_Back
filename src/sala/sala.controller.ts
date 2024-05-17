@@ -22,9 +22,4 @@ export class SalaController {
   findOne(@Param('id') id: number):Promise <Sala> {
     return this.salaService.findOne(id);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.salaService.remove(+id);
-  }
 }

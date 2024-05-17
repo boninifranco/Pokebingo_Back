@@ -22,14 +22,4 @@ export class TorneosController {
   findOne(@Param('id') id: string) {
     return this.torneosService.findOne(+id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTorneoDto: UpdateTorneoDto) {
-    return this.torneosService.update(+id, updateTorneoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.torneosService.remove(+id);
-  }
 }

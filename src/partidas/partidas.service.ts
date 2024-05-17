@@ -30,16 +30,8 @@ export class PartidasService {
   }
 
   async findOne(id: number): Promise<Partida> {
-    const res = await fetch (baseUrl + id);
+    const res = await fetch (`${baseUrl}/${id}`);
     const parsed = await res.json();
     return parsed;
-  }
-
-  update(id: number, updatePartidaDto: UpdatePartidaDto) {
-    return `This action updates a #${id} partida`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} partida`;
   }
 }

@@ -30,16 +30,8 @@ export class TorneosService {
   }
 
   async findOne(id: number): Promise<Torneo> {
-    const res = await fetch(baseUrl + id);
+    const res = await fetch(`${baseUrl}/${id}`);
     const parsed = await res.json();
     return parsed;
-  }
-
-  update(id: number, updateTorneoDto: UpdateTorneoDto) {
-    return `This action updates a #${id} torneo`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} torneo`;
   }
 }

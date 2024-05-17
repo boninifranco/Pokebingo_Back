@@ -31,16 +31,8 @@ export class SalaService {
   }
 
   async findOne(id: number): Promise<Sala> {
-    const res = await fetch(baseUrl + id);
+    const res = await fetch(`${baseUrl}/${id}`);
     const parsed = await res.json();
     return parsed;
-  }
-
-  update(id: number, updateSalaDto: UpdateSalaDto) {
-    return `This action updates a #${id} sala`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sala`;
   }
 }
