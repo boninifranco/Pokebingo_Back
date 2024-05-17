@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CartonController } from './carton.controller';
 import { CartonService } from '../servicies/carton.service';
+import { Partida } from 'src/partidas/entities/partida.entity';
 
 describe('CartonController', () => {
   let controller: CartonController;
@@ -21,17 +22,18 @@ describe('CartonController', () => {
   });
 
   it('should return all cartons', async () => {
-    const cartons = [{ /* datos de ejemplo del cartón */ }];
-    jest.spyOn(service, 'getAllCartons').mockResolvedValue(cartons);
-
-    expect(await controller.getAllCartons()).toBe(cartons);
-  });
-
+    const cartons = [  
+      { id: 1, Nro_Carton: 'Cartón 1', Partida: 'Partida 1', Aciertos: 5, filas: 5 },
+      { id: 2, Nro_Carton: 'Cartón 2', Partida: 'Partida 2', Aciertos: 3, filas: 3 },
+      { id: 3, Nro_Carton: 'Cartón 3', Partida: 'Partida 3', Aciertos: 4, filas: 4 }]
+      jest.spyOn(service, 'findAll').mockResolvedValue(cartons);
+      expect(await controller.findAll()).toBe(cartons);
+    });
+  
   it('should create a new carton', async () => {
-    const cartonDto = { /* datos del DTO para crear un nuevo cartón */ };
-    const createdCarton = { /* datos de ejemplo del cartón creado */ };
-    jest.spyOn(service, 'createCarton').mockResolvedValue(createdCarton);
-
-    expect(await controller.createCarton(cartonDto)).toBe(createdCarton);
+    const cartonDto = {Nro_Carton: 'ABC123', Partida: 'Partida1', Aciertos: 2};
+    const createdCarton = {id:1, Nro_Carton:'ABC123', Partida: 'Partida1', Aciertos:2, filas:5};
+    jest.spyOn(service, 'create').mockResolvedValue(createdCarton);
+    expect(await controller.create(cartonDto)).toBe(createdCarton);
   });
-});
+});  
