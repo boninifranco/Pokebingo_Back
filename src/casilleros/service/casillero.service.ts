@@ -4,11 +4,11 @@ import { Injectable } from '@nestjs/common';
 export class CasilleroService {
   private casilleros: any[] = [];
 
-  getAllCasilleros(): any[] {
+  async getAllCasilleros(): Promise<any[]> {
     return this.casilleros;
   }
 
-  getCasilleroById(id: string): any {
+  async getCasilleroById(id: string): Promise<any[]> {
     return this.casilleros.find(casillero => casillero.id === id);
   }
 
