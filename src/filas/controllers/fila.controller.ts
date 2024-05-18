@@ -15,9 +15,4 @@ export class FilaController {
   async getFilaById(@Param('id') id: string) {
     return this.filaService.getFilaById(id);
   }
-
-  @Post()
-  async createFila(@Body() createFilaDto: CreateFilaDto) {
-    return this.filaService.createFila(createFilaDto);
-  }
-}
+};
