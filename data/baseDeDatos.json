@@ -73,6 +73,11 @@
       "id": "3",
       "partida": "34",
       "jugadores": "18"
+    },
+    {
+      "id": "5",
+      "partida": "7",
+      "jugadores": "5"
     }
   ],
   "desempeno": [
@@ -228,10 +233,10 @@
       "hora_cierre": "23:59:59"
     }
   ],
-  "metodos_pago": [
+  "metodospago": [
     {
-      "id": "",
-      "descripcion": ""
+      "id": 1,
+      "descripcion": "aaaaaaaaaaa"
     }
   ],
   "premios": [

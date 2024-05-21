@@ -2,30 +2,54 @@ import { Injectable } from '@nestjs/common';
 import { CreateMetodosPagoDto } from './dto/create-metodos_pago.dto';
 import { UpdateMetodosPagoDto } from './dto/update-metodos_pago.dto';
 import { MetodosPago } from './entities/metodospago.entity';
+import { setId } from 'src/funciones/funciones';
 
-const baseUrl = 'http://localhost:3030/MetodosPago/'
+const baseUrl = 'http://localhost:3030/metodospago'
 
 @Injectable()
 export class MetodosPagoService {
-  create(createMetodosPagoDto: CreateMetodosPagoDto) {
-    return 'This action adds a new Metodos de Pago';
+  async create(createMetodosPagoDto: CreateMetodosPagoDto): Promise<MetodosPago> {
+    const datos = await this.findAll();
+    const id = datos.length ? setId(datos[datos.length - 1].id) : setId(0);
+    const newMetodoPago = { ...createMetodosPagoDto, id };
+    const res = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newMetodoPago),
+    });
+    const parsed = await res.json();
+    return parsed;
   }
 
-  async findAll():Promise<MetodosPago> {
+  async findAll(): Promise<MetodosPago[]> {
     const res = await fetch(baseUrl);
     const parsed = await res.json();
     return parsed;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} Metodos de Pago`;
+  async findOne(id: number): Promise<MetodosPago> {
+    const res = await fetch(`${baseUrl}/${id}`);
+    const parsed = await res.json();
+    return parsed;
   }
 
-  update(id: number, updateMetodosPagoDto: UpdateMetodosPagoDto) {
-    return `This action updates a #${id} Metodos de Pago`;
+  async update(id: number, updateMetodosPagoDto: UpdateMetodosPagoDto): Promise<MetodosPago> {
+    const res = await fetch(`${baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateMetodosPagoDto),
+    });
+    const parsed = await res.json();
+    return parsed;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} Metodos de Pago`;
+  async remove(id: number): Promise<void> {
+    await fetch(`${baseUrl}/${id}`, {
+      method: 'DELETE',
+    });
   }
 }

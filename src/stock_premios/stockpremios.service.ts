@@ -2,30 +2,54 @@ import { Injectable } from '@nestjs/common';
 import { CreateStockPremiosDto } from './dto/create-stockpremios.dto';
 import { UpdateStockPremiosDto } from './dto/update-stockpremios.dto';
 import { StockPremios } from './entities/stockpremios.entity';
+import { setId } from 'src/funciones/funciones';
 
 const baseUrl = 'http://localhost:3030/stockpremios/'
 
 @Injectable()
 export class StockPremiosService {
-  create(createStockPremiosDto: CreateStockPremiosDto) {
-    return 'This action adds a new Stock Premios';
+  async create(createStockPremiosDto: CreateStockPremiosDto): Promise<StockPremios> {
+    const datos = await this.findAll();
+    const id = datos.length ? setId(datos[datos.length - 1].id) : setId(0);
+    const newStockPremio = { ...createStockPremiosDto, id };
+    const res = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newStockPremio),
+    });
+    const parsed = await res.json();
+    return parsed;
   }
 
-  async findAll():Promise<StockPremios[]> {
+  async findAll(): Promise<StockPremios[]> {
     const res = await fetch(baseUrl);
     const parsed = await res.json();
     return parsed;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} Stock Premios`;
+  async findOne(id: number): Promise<StockPremios> {
+    const res = await fetch(`${baseUrl}/${id}`);
+    const parsed = await res.json();
+    return parsed;
   }
 
-  update(id: number, updateStockPremiosDto: UpdateStockPremiosDto) {
-    return `This action updates a #${id} Stock Premios`;
+  async update(id: number, updateStockPremiosDto: UpdateStockPremiosDto): Promise<StockPremios> {
+    const res = await fetch(`${baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateStockPremiosDto),
+    });
+    const parsed = await res.json();
+    return parsed;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} Stock Premios`;
+  async remove(id: number): Promise<void> {
+    await fetch(`${baseUrl}/${id}`, {
+      method: 'DELETE',
+    });
   }
 }

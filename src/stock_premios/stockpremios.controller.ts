@@ -3,32 +3,32 @@ import { StockPremiosService } from './stockpremios.service';
 import { CreateStockPremiosDto } from './dto/create-stockpremios.dto';
 import { UpdateStockPremiosDto } from './dto/update-stockpremios.dto';
 
-@Controller('Stock Premios')
+@Controller('stockpremios')
 export class StockPremiosController {
-  constructor(private readonly StockPremiosService: StockPremiosService) {}
+  constructor(private readonly stockPremiosService: StockPremiosService) {}
 
   @Post()
   create(@Body() createStockPremiosDto: CreateStockPremiosDto) {
-    return this.StockPremiosService.create(createStockPremiosDto);
+    return this.stockPremiosService.create(createStockPremiosDto);
   }
 
   @Get()
   findAll() {
-    return this.StockPremiosService.findAll();
+    return this.stockPremiosService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.StockPremiosService.findOne(+id);
+  findOne(@Param('id') id: string) {
+    return this.stockPremiosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateStockPremiosDto: UpdateStockPremiosDto) {
-    return this.StockPremiosService.update(+id, updateStockPremiosDto);
+  update(@Param('id') id: string, @Body() updateStockPremiosDto: UpdateStockPremiosDto) {
+    return this.stockPremiosService.update(+id, updateStockPremiosDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.StockPremiosService.remove(+id);
+  remove(@Param('id') id: string) {
+    return this.stockPremiosService.remove(+id);
   }
 }
