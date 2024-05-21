@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class CasilleroService {
-  private casilleros: any[] = [];
+  private BASE_URL = 'http://localhost:3030/cartones';
 
   async getAllCasilleros(): Promise<any[]> {
-    return this.casilleros;
+    const response = await fetch(this.BASE_URL); 
+    if (!response.ok) {
+      throw new Error('Error al obtener los casilleros');
+    }
+    const casilleros = await response.json();
+    return casilleros;
   }
 
-  async getCasilleroById(id: string): Promise<any[]> {
-    return this.casilleros.find(casillero => casillero.id === id);
+  async getCasilleroById(id: string): Promise<any> {
+    const response = await fetch(`${this.BASE_URL}/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error al obtener el casillero con ID ${id}`);
+    }
+    const casillero = await response.json();
+    return casillero;
   }
 
   createCasillero(casilleroData: any): any {
     const newCasillero = { id: Math.random().toString(), ...casilleroData }; 
-    this.casilleros.push(newCasillero);
     return newCasillero;
   }
-
-  deleteCasillero(id: string): { deleted: boolean } {
-    const index = this.casilleros.findIndex(casillero => casillero.id === id);
-    if (index !== -1) {
-      this.casilleros.splice(index, 1);
-      return { deleted: true };
-    }
-    return { deleted: false };
-  }
-}
-
+};

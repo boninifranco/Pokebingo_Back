@@ -6,16 +6,24 @@ import { Imagen } from '../entities/imagen.entity';
 
 @Injectable()
 export class ImagenService {
-  create: any;
-  remove: any;
-  findOne(id: string): Promise<Imagen> {
-    throw new Error('Method not implemented.');
-  }
-  findAll(): Imagen[] | PromiseLike<Imagen[]> {
-    throw new Error('Method not implemented.');
-  }
   private readonly BASE_URL = 'http://localhost:3030/imagenes';
 
+  async findAll(): Promise<Imagen[]> {
+    const response = await fetch(this.BASE_URL);
+    if (!response.ok) {
+      throw new Error('Error al obtener las imágenes');
+    }
+    return response.json();
+  }
+
+  async findOne(id: string): Promise<Imagen> {
+    const response = await fetch(`${this.BASE_URL}/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error al obtener la imagen con el ID ${id}`);
+    }
+    return response.json();
+  }
+  
   async getAllImagenes(): Promise<Imagen[]> {
     const response = await fetch(this.BASE_URL);
     if (!response.ok) {
@@ -28,20 +36,6 @@ export class ImagenService {
     const response = await fetch(`${this.BASE_URL}/${id}`);
     if (!response.ok) {
       throw new Error(`Error al obtener la imagen con el ID ${id}`);
-    }
-    return response.json();
-  }
-
-  async createImagen(createImagenDto: CreateImagenDto): Promise<Imagen> {
-    const response = await fetch(this.BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(createImagenDto),
-    });
-    if (!response.ok) {
-      throw new Error('Error al crear la imagen');
     }
     return response.json();
   }
@@ -59,13 +53,4 @@ export class ImagenService {
     }
     return response.json();
   }
-
-  async deleteImagen(id: string): Promise<void> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error(`Error al eliminar la imagen con el ID ${id}`);
-    }
-  }
-}
+};

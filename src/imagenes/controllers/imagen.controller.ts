@@ -1,5 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { CreateImagenDto } from '../dto/create-imagen.dto';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ImagenService } from '../service/imagen.service';
 import { Imagen } from '../entities/imagen.entity';
 
@@ -16,14 +15,4 @@ export class ImagenController {
   findOne(@Param('id') id: string): Promise<Imagen> {
     return this.imagenService.findOne(id);
   }
-
-  @Post()
-  create(@Body() createImagenDto: CreateImagenDto): Promise<Imagen> {
-    return this.imagenService.create(createImagenDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.imagenService.remove(id);
-  }
-}
+};
