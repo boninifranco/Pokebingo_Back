@@ -16,7 +16,7 @@ export class DesempenoService {
 
   async create(createDesempenoDto: CreateDesempenoDto): Promise<Desempeno> {
     const datos = await this.findAll();
-    const id = datos[0]?setId(datos[datos.length-1].id):setId(0)
+    const id = datos[0]?setId(datos[datos.length-1].id).toString():setId(0)
     const newDesempeno = {...createDesempenoDto,id}
     const idJugador:number = newDesempeno.jugador;
     const usuarios = await this.usuarioService.findAll();
@@ -48,17 +48,34 @@ export class DesempenoService {
     return parsed;
   }
 
-  async findOne(id: number):Promise<Desempeno> {
+  async findOne(id: number):Promise<Desempeno|null> {
     const res = await fetch(`${baseUrl}/${id}`)
+    if(!res.ok)return null;
     const parsed = await res.json()
     return parsed;
   }
 
-  update(id: number, updateDesempenoDto: UpdateDesempenoDto) {
-    return `This action updates a #${id} desempeno`;
+  async update(id: number, updateDesempenoDto: UpdateDesempenoDto): Promise<Desempeno> {
+    const isDesempeno = await this.findOne(id);
+    if(!isDesempeno) return null;
+    const newDesempeno = {...updateDesempenoDto, id};
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: "PATCH",
+      headers:{
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify(newDesempeno)
+      });
+      const parsed = res.json();
+    return parsed;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} desempeno`;
+  async remove(id: number) {
+    const isDesempeno = await this.findOne(id)
+    if(!isDesempeno) return null;
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: "DELETE"
+    })
+    return isDesempeno;
   }
 }

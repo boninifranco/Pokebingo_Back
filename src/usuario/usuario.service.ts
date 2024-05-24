@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
@@ -10,8 +10,8 @@ const baseUrl = 'http://localhost:3030/usuarios';
 export class UsuarioService {
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     const datos = await this.findAll();
-    const id = datos[0] ? setId(datos[datos.length - 1].id) : setId(0);
-    const newUser = { ...createUsuarioDto, id };
+    const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
+    const newUser = { ...createUsuarioDto, id};
     const res = await fetch(baseUrl, {
       method: 'POST',
       headers: {
@@ -21,26 +21,49 @@ export class UsuarioService {
     });
     const parsed = res.json();
     return parsed;
-  }
+  };
 
   async findAll(): Promise<Usuario[]> {
     const res = await fetch(baseUrl);
     const parsed = await res.json();
     return parsed;
-  }
+  };
 
-  async findOne(id: number): Promise<Usuario> {
-    const res = await fetch(`${baseUrl}/${id}`);
-    //baseUrl+`${+id}`
-    const parsed = await res.json();
+  async findOne(id: number): Promise<Usuario|null> {    
+      const res = await fetch(`${baseUrl}/${id}`);
+      if(!res.ok)return null;
+      const parsed = await res.json();      
+      return parsed;      
+  };
+  
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario|null> {
+    const isUser = await this.findOne(id);
+    if(!isUser)return;    
+    try {
+    const updateUser = {...updateUsuarioDto,id};
+    const res = await fetch(`${baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(updateUser),
+    });
+    const parsed = res.json();
     return parsed;
+    } catch (error) {
+      throw new Error(error);      
+    }    
+  };
+
+  async remove(id: number):Promise<any> {
+    const isUser = await this.findOne(id);
+    if(!isUser)return;
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: "DELETE",      
+    });
+    const parsed = res.json();
+    return parsed;        
+  };
+   
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
-  }
-}
