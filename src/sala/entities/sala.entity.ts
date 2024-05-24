@@ -1,5 +1,5 @@
 export class Sala {
-    id: string;
+    id: number;
     partida: number;
     jugadores: number;
 }
