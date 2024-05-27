@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import fetch from 'node-fetch';
+import { CreateCasilleroDto } from '../dto/create-casillero.dto';
 
 @Injectable()
 export class CasilleroService {
@@ -23,8 +24,18 @@ export class CasilleroService {
     return casillero;
   }
 
-  createCasillero(casilleroData: any): any {
-    const newCasillero = { id: Math.random().toString(), ...casilleroData }; 
+  async createCasillero(createCasilleroDto: CreateCasilleroDto): Promise<any> {
+    const response = await fetch(this.BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(createCasilleroDto),
+    });
+    if (!response.ok) {
+      throw new Error('Error al crear el casillero');
+    }
+    const newCasillero = await response.json();
     return newCasillero;
   }
 };
