@@ -10,9 +10,8 @@ const baseUrl = 'http://localhost:3030/registro';
 export class RegistroService {
   async create(createRegistroDto: CreateRegistroDto): Promise<Registro> {
     const datos = await this.findAll();
-    const id = datos[0] ? setId(datos[datos.length - 1].id) : setId(0);
+    const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
     const newRegistro = { ...createRegistroDto, id };
-
     const res = await fetch(baseUrl, {
       method: 'POST',
       headers: {
@@ -21,7 +20,6 @@ export class RegistroService {
       body: JSON.stringify(newRegistro),
     });
     const parsed = res.json();
-
     return parsed;
   }
 
@@ -31,18 +29,35 @@ export class RegistroService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Registro> {
+  async findOne(id: number): Promise<Registro|null> {
     const res = await fetch(`${baseUrl}/${id}`);
-
+    if(!res.ok) return null;
     const parsed = res.json();
     return parsed;
   }
 
-  update(id: number, updateRegistroDto: UpdateRegistroDto) {
-    return `This action updates a #${id} registro`;
+  async update(id: number, updateRegistroDto: UpdateRegistroDto) {
+    const isRegistro = await this.findOne(id);
+    if(!isRegistro)return;
+    const updateRegistro = {...updateRegistroDto,id};
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: "PATCH",
+      headers:{
+        'Content-type':'Application-json',
+      },
+      body: JSON.stringify(updateRegistro)
+    });
+    const parsed = res.json()
+    return parsed;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} registro`;
+  async remove(id: number):Promise<any> {
+    const isRegistro = await this.findOne(id);
+    if(!isRegistro)return;
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: "DELETE"
+    });
+    const parsed = res.json();
+    return parsed;    
   }
 }

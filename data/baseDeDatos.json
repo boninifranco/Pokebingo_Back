@@ -2,32 +2,45 @@
   "usuarios": [
     {
       "id": "1",
-      "apellido": "Apellido2",
-      "nombre": "Nombre2",
-      "celular": "23983303030",
-      "direccion": "Mi Casa2",
-      "usuario": "usuario2",
-      "contrasena": "contraseña2",
+      "apellido": "Wibaux",
+      "nombre": "Tomas",
+      "celular": "2983546065",
+      "direccion": "Castro Barros 257",
+      "usuario": "cr7dlg",
+      "contrasena": "989898",
       "administrador": false,
       "logueado": false
     },
     {
       "id": "2",
-      "apellido": "Apellido2",
-      "nombre": "Nombre2",
-      "celular": "23983303030",
-      "usuario": "usuario2",
-      "contrasena": "contraseña2",
+      "apellido": "Wibaux",
+      "nombre": "Mailen",
+      "celular": "2983453418",
+      "usuario": "mailenw",
+      "contrasena": "121212",
+      "administrador": false,
+      "logueado": false,
+      "direccion": "Castro Barros 257"
+    },
+    {
+      "id": "3",
+      "apellido": "Daruich",
+      "nombre": "Ceferina Andrea",
+      "celular": "2983576606",
+      "direccion": "Castro Barros nº 257",
+      "usuario": "cefedaru",
+      "contrasena": "123456",
       "administrador": false,
       "logueado": false
     },
     {
-      "id": "3",
-      "apellido": "Apellido2",
-      "nombre": "Nombre2",
-      "celular": "23983303030",
-      "usuario": "usuario2",
-      "contrasena": "contraseña2",
+      "id": "4",
+      "apellido": "Wibaux",
+      "nombre": "Juan Pablo",
+      "celular": "2983574551",
+      "direccion": "Castro Barros 257",
+      "usuario": "juampidlg",
+      "contrasena": "987654",
       "administrador": false,
       "logueado": false
     }
@@ -41,9 +54,9 @@
     },
     {
       "id": "2",
-      "usuarioId": 3,
-      "email": "Tomi",
-      "contrasena": "tomiw"
+      "usuarioId": 8,
+      "email": "JuampiW",
+      "contrasena": "juampi2000"
     }
   ],
   "puntajes": [
@@ -84,22 +97,15 @@
     {
       "id": "1",
       "jugador": 3,
-      "puntos": 100,
+      "puntos": 1000,
       "creditos": 200,
       "cartonesComprados": 0
     },
     {
-      "id": "3",
-      "jugador": 2,
-      "puntos": 1500,
-      "creditos": 205,
-      "cartonesComprados": 30
-    },
-    {
-      "id": "4",
-      "jugador": 1,
-      "puntos": 100,
-      "creditos": 200,
+      "id": "2",
+      "jugador": 4,
+      "puntos": 10,
+      "creditos": 2000,
       "cartonesComprados": 0
     }
   ],
@@ -235,7 +241,7 @@
   ],
   "metodospago": [
     {
-      "id": 1,
+      "id": "1",
       "descripcion": "aaaaaaaaaaa"
     }
   ],
