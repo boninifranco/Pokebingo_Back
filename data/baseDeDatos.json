@@ -117,6 +117,15 @@
     },
     {
       "id": "b378"
+    },
+    {
+      "id": "c364"
+    },
+    {
+      "id": "1",
+      "nroCarton": "123",
+      "idPartida": "",
+      "aciertos": ""
     }
   ],
   "partidas": [
@@ -159,13 +168,37 @@
   "cartones": [
     {
       "id": "1",
-      "nroCarton": "",
+      "nroCarton": "123",
       "idPartida": "",
       "aciertos": ""
     },
     {
-      "id": "2",
-      "nroCarton": "",
+      "id": "e550"
+    },
+    {
+      "id": "2830"
+    },
+    {
+      "id": "00c3"
+    },
+    {
+      "id": "70f4"
+    },
+    {
+      "id": "1",
+      "nroCarton": "123",
+      "idPartida": "",
+      "aciertos": ""
+    },
+    {
+      "id": "1",
+      "nroCarton": "123",
+      "idPartida": "",
+      "aciertos": ""
+    },
+    {
+      "id": "1",
+      "nroCarton": "123",
       "idPartida": "",
       "aciertos": ""
     }
@@ -177,6 +210,18 @@
     },
     {
       "id": "bc14"
+    },
+    {
+      "id": "cd40"
+    },
+    {
+      "id": "2f33"
+    },
+    {
+      "id": "1",
+      "nroCarton": "123",
+      "idPartida": "",
+      "aciertos": ""
     }
   ],
   "logueo": [
@@ -200,6 +245,15 @@
     },
     {
       "id": "6c42"
+    },
+    {
+      "id": "8d13"
+    },
+    {
+      "id": "1",
+      "idFila": "",
+      "idImagen": "",
+      "Salio": false
     }
   ],
   "stockPremios": [

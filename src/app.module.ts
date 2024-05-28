@@ -15,19 +15,19 @@ import { CartonModule } from './cartones/carton.module';
 @Module({
   imports: [UsuarioModule, RegistroModule, LogueoModule,
      DesempenoModule, SalaModule, TorneosModule,
-      PartidasModule, ChatModule, CartonModule],
-  //imports:[
-    //TypeOrmModule.forRoot({
-      //type: 'mysql',
-      //host: 'localhost',
-      //port: 3306,
-      //username: 'root',
-      //password: 'root',
-      //database: 'bingo',
-      //entities: ['dist/**/**.entity{.ts,.js}'],
-      //synchronize: true,
-    //}),
-  //],
+     PartidasModule, ChatModule, CartonModule],
+  // //imports:[
+  //   //TypeOrmModule.forRoot({
+  //     type: 'mysql',
+  //     host: 'localhost',
+  //     port: 3306,
+  //     username: 'root',
+  //     password: 'root',
+  //     database: 'bingo',
+  //     entities: ['dist/**/**.entity{.ts,.js}'],
+  //     synchronize: true,
+  //   }),
+  // ],
   controllers: [AppController],
   providers: [AppService],
 })

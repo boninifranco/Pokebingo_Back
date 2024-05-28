@@ -35,4 +35,27 @@ export class FilaService {
     }
     return response.json();
   }
+
+  async updateFila(id: string, updateFilaDto: Partial<CreateFilaDto>): Promise<any> {
+    const response = await fetch(`${this.BASE_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateFilaDto),
+    });
+    if (!response.ok) {
+      throw new Error(`Error al actualizar la fila con ID ${id}`);
+    }
+    return response.json();
+  }
+
+  async deleteFila(id: string): Promise<void> {
+    const response = await fetch(`${this.BASE_URL}/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`Error al eliminar la fila con ID ${id}`);
+    }
+  }
 }
