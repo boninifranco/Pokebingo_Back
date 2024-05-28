@@ -30,9 +30,34 @@ export class SalaService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Sala> {
-    const res = await fetch(`${baseUrl}/${id}`);
+  async findOne(id: number): Promise<Sala | null> {
+    const res = await fetch(baseUrl + id);
+    if(!res.ok){
+      return null;
+    }
     const parsed = await res.json();
+    return parsed;
+  }
+  async update(id: number, updateSalaDto: UpdateSalaDto): Promise<Sala | null> {
+    const isSala = await this.findOne(id);
+    if(!isSala) return null;
+    const update = {...updateSalaDto,id};
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    });
+    await res.json();
+  }
+  async remove(id: number): Promise<any> {
+    const isSala = await this.findOne(id);
+    if(!isSala)return;
+    const res = await fetch(baseUrl + id, {
+      method: 'DELETE',
+    });
+    const parsed = res.json();
     return parsed;
   }
 }

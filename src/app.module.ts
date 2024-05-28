@@ -10,7 +10,7 @@ import { TorneosModule } from './torneos/torneos.module';
 import { PartidasModule } from './partidas/partidas.module';
 import { ChatModule } from './chat/chat.module';
 import { CartonModule } from './cartones/carton.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [UsuarioModule, RegistroModule, LogueoModule,
