@@ -28,10 +28,33 @@ export class TorneosService {
     const parsed = await res.json();
     return parsed;
   }
-
-  async findOne(id: number): Promise<Torneo> {
-    const res = await fetch(`${baseUrl}/${id}`);
+  async findOne(id: number): Promise<Torneo | null> {
+    const res = await fetch(baseUrl + id);
+    if(!res.ok){
+      return null;
+    }
     const parsed = await res.json();
+    return parsed;
+  }
+  async update(id: number, UpdateTorneoDto: UpdateTorneoDto): Promise<Torneo | null> {
+    const update = { ...UpdateTorneoDto, id };
+    const res = await fetch(`${baseUrl}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    });
+    const parsed = await res.json();
+    return parsed;
+  }
+  async remove(id: number): Promise<any> {
+    const isTorneo = await this.findOne(id);
+    if(!isTorneo)return;
+    const res = await fetch(baseUrl + id, {
+      method: 'DELETE',
+    });
+    const parsed = res.json();
     return parsed;
   }
 }

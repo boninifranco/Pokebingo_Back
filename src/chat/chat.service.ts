@@ -29,9 +29,34 @@ export class ChatService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Chat> {
-    const res = await fetch(`${baseUrl}/${id}`);
+  async findOne(id: number): Promise<Chat | null> {
+    const res = await fetch(baseUrl + id);
+    if(!res.ok){
+      return null;
+    }
     const parsed = await res.json();
+    return parsed;
+  }
+  async update(id: number, updateChatDto: UpdateChatDto): Promise<Chat | null> {
+    const update = { ...updateChatDto, id };
+    const res = await fetch(baseUrl + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    });
+    const parsed = await res.json();
+    return parsed;
+  }
+  
+  async remove(id: number): Promise<any> {
+    const isChat = await this.findOne(id);
+    if(!isChat)return;
+    const res = await fetch(baseUrl + id, {
+      method: 'DELETE',
+    });
+    const parsed = res.json();
     return parsed;
   }
 }
