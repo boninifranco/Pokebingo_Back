@@ -10,24 +10,29 @@ import { TorneosModule } from './torneos/torneos.module';
 import { PartidasModule } from './partidas/partidas.module';
 import { ChatModule } from './chat/chat.module';
 import { CartonModule } from './cartones/carton.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 // import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [UsuarioModule, RegistroModule, LogueoModule,
+  /*imports: [UsuarioModule, RegistroModule, LogueoModule,
      DesempenoModule, SalaModule, TorneosModule,
-     PartidasModule, ChatModule, CartonModule],
-  // //imports:[
-  //   //TypeOrmModule.forRoot({
-  //     type: 'mysql',
-  //     host: 'localhost',
-  //     port: 3306,
-  //     username: 'root',
-  //     password: 'root',
-  //     database: 'bingo',
-  //     entities: ['dist/**/**.entity{.ts,.js}'],
-  //     synchronize: true,
-  //   }),
-  // ],
+     PartidasModule, ChatModule, CartonModule],*/
+  imports:[
+    TypeOrmModule.forRoot({
+       type: 'mysql',
+       host: 'localhost',
+       port: 3306,
+       username: 'root',
+       password: 'Password',
+       database: 'bingo',
+       entities: ['dist/**/**.entity{.ts,.js}'],
+       synchronize: true,
+     }),
+    UsuarioModule,
+    LogueoModule,
+    RegistroModule,
+    DesempenoModule
+   ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,4 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
@@ -8,10 +10,12 @@ const baseUrl = 'http://localhost:3030/usuarios';
 
 @Injectable()
 export class UsuarioService {
+    constructor(@InjectRepository(Usuario)
+      private readonly usuarioRepository: Repository<Usuario>){}
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-    const datos = await this.findAll();
-    const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
-    const newUser = { ...createUsuarioDto, id};
+    /*const datos = await this.findAll();
+    const id = datos[0] ? setId(datos[datos.length - 1].id) : setId(0);
+    const newUser = { ...createUsuarioDto, id };
     const res = await fetch(baseUrl, {
       method: 'POST',
       headers: {
@@ -20,8 +24,10 @@ export class UsuarioService {
       body: JSON.stringify(newUser),
     });
     const parsed = res.json();
-    return parsed;
-  };
+    return parsed;*/
+    const nuevoUsuario = this.usuarioRepository.create(createUsuarioDto)
+    return this.usuarioRepository.save(nuevoUsuario)
+  }
 
   async findAll(): Promise<Usuario[]> {
     const res = await fetch(baseUrl);
