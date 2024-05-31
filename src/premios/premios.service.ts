@@ -30,13 +30,15 @@ export class PremiosService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Premios> {
+  async findOne(id: number): Promise<Premios|null> {
     const res = await fetch(`${baseUrl}/${id}`);
+    if(!res)return null;
     const parsed = await res.json();
     return parsed;
   }
 
-  async update(id: number, updatePremiosDto: UpdatePremiosDto): Promise<Premios> {
+  async update(id: number, updatePremiosDto: UpdatePremiosDto): Promise<Premios|null> {
+    
     const res = await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
@@ -48,7 +50,7 @@ export class PremiosService {
     return parsed;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number):Promise<any> {
     await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
