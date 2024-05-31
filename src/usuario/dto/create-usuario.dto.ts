@@ -14,15 +14,15 @@ export class CreateUsuarioDto{
     @IsString()
     direccion?:string;
 
-    @IsString()
-    usuario:string;
+    //@IsString()
+    //usuario:string;
 
-    @IsString()
-    contrasena:string;
+    //@IsString()
+    //contrasena:string;
 
     @IsBoolean()
     administrador:boolean;
 
-    @IsBoolean()
-    logueado:boolean;  
+    //@IsBoolean()
+    //logueado:boolean;  
 }
