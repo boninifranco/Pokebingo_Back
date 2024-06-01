@@ -29,13 +29,14 @@ export class PuntajesService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Puntajes> {
+  async findOne(id: number): Promise<Puntajes|null> {
     const res = await fetch(`${baseUrl}/${id}`);
+    if(!res)return null;
     const parsed = await res.json();
     return parsed;
   }
 
-  async update(id: number, updatePuntajesDto: UpdatePuntajesDto): Promise<Puntajes> {
+  async update(id: number, updatePuntajesDto: UpdatePuntajesDto): Promise<Puntajes|null> {
     const res = await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
@@ -43,13 +44,15 @@ export class PuntajesService {
       },
       body: JSON.stringify(updatePuntajesDto),
     });
+    if(!res)return null;
     const parsed = await res.json();
     return parsed;
   }
 
-  async remove(id: number): Promise<void> {
-    await fetch(`${baseUrl}/${id}`, {
+  async remove(id: number): Promise<Puntajes|null> {
+    const res = await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
+    if(!res)return;
   }
 }
