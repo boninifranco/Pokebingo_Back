@@ -50,9 +50,13 @@ export class PremiosService {
     return parsed;
   }
 
-  async remove(id: number):Promise<any> {
-    await fetch(`${baseUrl}/${id}`, {
-      method: 'DELETE',
+  async remove(id: number): Promise<any> {
+    const isPremio = await this.findOne(id);
+    if(!isPremio)return;
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method: "DELETE",      
     });
-  }
+    const parsed = res.json();
+    return parsed;        
+  };
 }

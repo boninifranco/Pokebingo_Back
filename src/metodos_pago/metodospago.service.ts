@@ -47,9 +47,13 @@ export class MetodosPagoService {
     return parsed;
   }
 
-  async remove(id: number): Promise<void> {
-    await fetch(`${baseUrl}/${id}`, {
+  async remove(id: number): Promise<MetodosPago | null> {
+    const isMetodo = await this.findOne(id);
+    if(!isMetodo)return;
+    const res = await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
+    const parsed = res.json();
+    return parsed;
   }
 }
