@@ -47,7 +47,7 @@ export class StockPremiosService {
     return parsed;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<any> {
     await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });

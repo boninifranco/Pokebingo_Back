@@ -31,7 +31,7 @@ export class SalaService {
   }
 
   async findOne(id: number): Promise<Sala | null> {
-    const res = await fetch(baseUrl + id);
+    const res = await fetch(`${baseUrl}/${id}`);
     if(!res.ok){
       return null;
     }
