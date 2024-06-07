@@ -22,17 +22,17 @@ export class DesempenoController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Desempeno|null> {
+  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Desempeno> {
     const isDesempeno = await this.desempenoService.findOne(id);
     if(isDesempeno){
       res.status(HttpStatus.FOUND).json(isDesempeno)
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `El desempeno con id ${id} no se encontro`})
-    return 
+    return isDesempeno
   }
 
   @Patch(':id')
-  async update(@Res() res: Response, @Param('id',ParseIntPipe) id: number, @Body() updateDesempenoDto: UpdateDesempenoDto): Promise<Desempeno|null> {
+  async update(@Res() res: Response, @Param('id',ParseIntPipe) id: number, @Body() updateDesempenoDto: UpdateDesempenoDto): Promise<Desempeno> {
     const isDesempeno = await this.desempenoService.update(id, updateDesempenoDto);
     if (isDesempeno){
       res.status(HttpStatus.FOUND).json(isDesempeno)
@@ -42,11 +42,10 @@ export class DesempenoController {
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<any> {
+  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const isDesempeno = await this.desempenoService.remove(id);
     if(isDesempeno){
       res.status(HttpStatus.FOUND).json(isDesempeno);
-      return isDesempeno;
     }
     res.status(HttpStatus.NOT_FOUND).json({message:`El desempeno con id ${id} no se encontro`}) 
   }

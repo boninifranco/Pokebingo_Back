@@ -48,16 +48,16 @@ export class DesempenoService {
     return parsed;
   }
 
-  async findOne(id: number):Promise<Desempeno|null> {
+  async findOne(id: number):Promise<Desempeno> {
     const res = await fetch(`${baseUrl}/${id}`)
-    if(!res.ok)return null;
+    if(!res.ok)return;
     const parsed = await res.json()
     return parsed;
   }
 
   async update(id: number, updateDesempenoDto: UpdateDesempenoDto): Promise<Desempeno> {
     const isDesempeno = await this.findOne(id);
-    if(!isDesempeno) return null;
+    if(!isDesempeno) return;
     const newDesempeno = {...updateDesempenoDto, id};
     const res = await fetch(`${baseUrl}/${id}`,{
       method: "PATCH",
@@ -72,7 +72,7 @@ export class DesempenoService {
 
   async remove(id: number) {
     const isDesempeno = await this.findOne(id)
-    if(!isDesempeno) return null;
+    if(!isDesempeno) return;
     const res = await fetch(`${baseUrl}/${id}`,{
       method: "DELETE"
     })

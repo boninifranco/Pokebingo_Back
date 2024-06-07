@@ -22,11 +22,11 @@ export class RegistroController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response,@Param('id', ParseIntPipe) id: number):Promise<Registro|null>{
+  async findOne(@Res() res: Response,@Param('id', ParseIntPipe) id: number):Promise<Registro>{
     const registro = await this.registroService.findOne(id);
     if(registro){
       res.status(HttpStatus.FOUND).json(registro);
-      return;      
+      return registro;      
     }
     res.status(HttpStatus.NOT_FOUND).json({message:`El registro con id ${id} no se encontró`})
   }
@@ -36,11 +36,11 @@ export class RegistroController {
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRegistroDto: UpdateRegistroDto,
-  ):Promise<Registro|null> {
+  ):Promise<Registro> {
     const registro = await this.registroService.update(id, updateRegistroDto);
     if(registro){
       res.status(HttpStatus.FOUND).json(registro)
-      return;
+      return registro;
     } 
     res.status(HttpStatus.NOT_FOUND).json({message:`El registro con id ${id} no se encontró`})
   }

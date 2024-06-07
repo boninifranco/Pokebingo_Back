@@ -4,9 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 @Entity()
 export class Logueo {
     @PrimaryGeneratedColumn('increment')
-    id: number;
-    //@Column('int')
-    //idUsuario: number;
+    id: number;    
     @Column()
     logueado: boolean;
     @Column()

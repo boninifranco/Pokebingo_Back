@@ -3,9 +3,9 @@ import { Usuario } from "src/usuario/entities/usuario.entity";
 
 export class CreateRegistroDto {
 
-    //id: number;
-    //@IsInt()
-    //@Min(1)
+    
+    @IsInt()
+    @Min(1)
     usuarioId: number;
 
     @IsString()

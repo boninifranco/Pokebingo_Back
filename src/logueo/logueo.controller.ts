@@ -22,28 +22,30 @@ export class LogueoController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Logueo|null> {
+  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Logueo> {
     const logueo = await this.logueoService.findOne(+id);
+    
     if(logueo){
+    //if (Object.keys(logueo).length){
       res.status(HttpStatus.FOUND).json(logueo);
-      return;
+      return logueo;
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró`})
   }
 
   @Patch(':id')
-  async update(@Res() res: Response, @Param('id', ParseIntPipe) id: number, @Body() updateLogueoDto: UpdateLogueoDto):Promise<Logueo|null> {
+  async update(@Res() res: Response, @Param('id', ParseIntPipe) id: number, @Body() updateLogueoDto: UpdateLogueoDto):Promise<Logueo> {
     const logueo = await this.logueoService.update(+id, updateLogueoDto);
       if(logueo){
       res.status(HttpStatus.FOUND).json(logueo);
-      return;
+      return logueo;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró`})
+    res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró en el patch`})
   }
   
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number): Promise<any> {
+  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number): Promise<Logueo> {
     const logueo = await this.logueoService.remove(id);
     if(logueo){
       res.status(HttpStatus.FOUND).json({...logueo, borrado:true});

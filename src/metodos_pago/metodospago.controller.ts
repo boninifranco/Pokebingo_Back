@@ -22,31 +22,30 @@ export class MetodosPagoController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<MetodosPago | null> {
+  async findOne(@Res() res: Response, @Param('id') id: number): Promise<MetodosPago> {
     const metodoPago = await this.metodosPagoService.findOne(id)
     if (metodoPago){
       res.status(HttpStatus.FOUND).json(metodoPago);
-      return;
+      return metodoPago;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'Metodo no existe'})
   }
 
   @Patch(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() updateMetodosPagoDto: UpdateMetodosPagoDto): Promise<MetodosPago | null> {
+  async update(@Res() res: Response, @Param('id') id: number, @Body() updateMetodosPagoDto: UpdateMetodosPagoDto): Promise<MetodosPago> {
     const metodoPago = await this.metodosPagoService.update(id, updateMetodosPagoDto)
     if (metodoPago){
       res.status(HttpStatus.FOUND).json(metodoPago);
-      return;
+      return metodoPago;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: "Método no existe"});
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number): Promise<MetodosPago | null> {
+  async remove(@Res() res: Response, @Param('id') id: number) {
     const metodoPago = await this.metodosPagoService.remove(id)
     if (metodoPago){
-      res.status(HttpStatus.FOUND).json(metodoPago);
-      return;
+      res.status(HttpStatus.FOUND).json(metodoPago);      
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: "Método no existe"});
   }

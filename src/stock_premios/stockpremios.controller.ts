@@ -3,8 +3,9 @@ import { StockPremiosService } from './stockpremios.service';
 import { CreateStockPremiosDto } from './dto/create-stockpremios.dto';
 import { UpdateStockPremiosDto } from './dto/update-stockpremios.dto';
 import { Response } from 'express';
+import { StockPremios } from './entities/stockpremios.entity';
 
-@Controller('stockpremios')
+@Controller('stockPremios')
 export class StockPremiosController {
   constructor(private readonly stockPremiosService: StockPremiosService) {}
 
@@ -21,11 +22,11 @@ export class StockPremiosController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Res() res: Response) {
+  async findOne(@Param('id') id: number, @Res() res: Response):Promise<StockPremios> {
     const isStockPremio = await this.stockPremiosService.findOne(id);
     if(isStockPremio){
       res.status(HttpStatus.FOUND).json(isStockPremio);
-      return;
+      return isStockPremio;
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `No existe StockPremio con id ${id}`})
 
@@ -33,11 +34,11 @@ export class StockPremiosController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateStockPremiosDto: UpdateStockPremiosDto, @Res() res: Response) {
+  async update(@Param('id') id: number, @Body() updateStockPremiosDto: UpdateStockPremiosDto, @Res() res: Response):Promise<StockPremios> {
     const isStockPremio = await this.stockPremiosService.update(id, updateStockPremiosDto);
     if(isStockPremio){
       res.status(HttpStatus.FOUND).json(isStockPremio);
-      return;
+      return isStockPremio;
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `No existe StockPremio con id ${id}`})
 
@@ -45,11 +46,11 @@ export class StockPremiosController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @Res() res: Response):Promise<any> {
+  async remove(@Param('id') id: number, @Res() res: Response){
     const isStockPremio = await this.stockPremiosService.remove(id);
     if(isStockPremio){
       res.status(HttpStatus.FOUND).json(isStockPremio);
-      return;
+      return isStockPremio;
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `No existe StockPremio con id ${id}`})
 

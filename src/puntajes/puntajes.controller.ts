@@ -3,6 +3,7 @@ import { PuntajesService } from './puntajes.service';
 import { CreatePuntajesDto } from './dto/create-puntajes.dto';
 import { UpdatePuntajesDto } from './dto/update-puntajes.dto';
 import { Response } from 'express';
+import { Puntajes } from './entities/puntajes.entity';
 
 @Controller('puntajes')
 export class PuntajesController {
@@ -21,21 +22,21 @@ export class PuntajesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Res() res: Response) {
+  async findOne(@Param('id') id: number, @Res() res: Response):Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.findOne(id);
     if(isPuntaje){
       res.status(HttpStatus.FOUND).json(isPuntaje)
-      return;
+      return isPuntaje;
     }
     res.status(HttpStatus.NOT_FOUND).json({message:`El puntaje con id ${id} no existe`})
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updatePuntajesDto: UpdatePuntajesDto, @Res() res: Response ) {
+  async update(@Param('id') id: number, @Body() updatePuntajesDto: UpdatePuntajesDto, @Res() res: Response ):Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.update(+id, updatePuntajesDto);
     if(isPuntaje){
       res.status(HttpStatus.FOUND).json(isPuntaje)
-      return;
+      return isPuntaje;
     }
     res.status(HttpStatus.NOT_FOUND).json({message:`El puntaje con id ${id} no existe`})
   }
@@ -46,8 +47,7 @@ export class PuntajesController {
   async remove(@Param('id') id: number, @Res() res:Response) {
     const isPuntaje = await this.puntajesService.remove(id);
     if(isPuntaje){
-      res.status(HttpStatus.FOUND).json(isPuntaje)
-      return;
+      res.status(HttpStatus.FOUND).json(isPuntaje)     
     }
     res.status(HttpStatus.NOT_FOUND).json({message:`El puntaje con id ${id} no existe`})
     

@@ -1,1 +1,7 @@
-export class CreateMetodosPagoDto {}
+import { IsString } from "class-validator";
+
+export class CreateMetodosPagoDto {
+
+    @IsString()
+    descripcion: string;
+}
