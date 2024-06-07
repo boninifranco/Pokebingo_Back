@@ -4,14 +4,12 @@ export class CreateCartonDto {
 
   @IsNotEmpty()
   @IsString()
-    readonly Nro_Carton: string;
+    readonly nroCarton: string;
 
-  @IsNotEmpty()
-  @IsString()
-    readonly Partida: string;
+  @IsNotEmpty()  
+    readonly idPartida: number;
 
-  @IsNotEmpty()
-  @IsString()
-    readonly Aciertos: number;
+  @IsNotEmpty()  
+    readonly aciertos: number;
   }
   

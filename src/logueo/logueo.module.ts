@@ -5,11 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logueo } from './entities/logueo.entity';
 
 @Module({
-  imports:[
+  /*imports:[
     TypeOrmModule.forFeature([
       Logueo
     ])
-  ],
+  ],*/
   controllers: [LogueoController],
   providers: [LogueoService],
 })

@@ -10,12 +10,12 @@ const baseUrl = 'http://localhost:3030/registro';
 
 @Injectable()
 export class RegistroService {
-  constructor(@InjectRepository(Registro)    
+  /*constructor(@InjectRepository(Registro)    
     private readonly registroRepository: Repository<Registro>
     //private usuarioService: UsuarioService
-  ){}
+  ){}*/
   async create(createRegistroDto: CreateRegistroDto): Promise<Registro> {
-    /*const datos = await this.findAll();
+    const datos = await this.findAll();
     const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
     const newRegistro = { ...createRegistroDto, id };
     const res = await fetch(baseUrl, {
@@ -26,9 +26,9 @@ export class RegistroService {
       body: JSON.stringify(newRegistro),
     });
     const parsed = res.json();
-    return parsed;*/
-    const nuevoRegistro: Registro = this.registroRepository.create(createRegistroDto);
-    return this.registroRepository.save(nuevoRegistro);
+    return parsed;
+    /*const nuevoRegistro: Registro = this.registroRepository.create(createRegistroDto);
+    return this.registroRepository.save(nuevoRegistro);*/
   }
 
   async findAll(): Promise<Registro[]> {
@@ -38,14 +38,14 @@ export class RegistroService {
     
   }
 
-  async findOne(id: number): Promise<Registro|null> {
+  async findOne(id: number): Promise<Registro> {
     const res = await fetch(`${baseUrl}/${id}`);
-    if(!res.ok) return null;
+    if(!res.ok) return;
     const parsed = res.json();
     return parsed;
   }
 
-  async update(id: number, updateRegistroDto: UpdateRegistroDto) {
+  async update(id: number, updateRegistroDto: UpdateRegistroDto): Promise<Registro> {
     const isRegistro = await this.findOne(id);
     if(!isRegistro)return;
     const updateRegistro = {...updateRegistroDto,id};
@@ -60,7 +60,7 @@ export class RegistroService {
     return parsed;
   }
 
-  async remove(id: number):Promise<any> {
+  async remove(id: number):Promise<Registro> {
     const isRegistro = await this.findOne(id);
     if(!isRegistro)return;
     const res = await fetch(`${baseUrl}/${id}`,{

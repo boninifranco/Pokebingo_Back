@@ -10,11 +10,11 @@ const baseUrl = 'http://localhost:3030/usuarios';
 
 @Injectable()
 export class UsuarioService {
-    constructor(@InjectRepository(Usuario)
-      private readonly usuarioRepository: Repository<Usuario>){}
+    /*constructor(@InjectRepository(Usuario)
+      private readonly usuarioRepository: Repository<Usuario>){}*/
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-    /*const datos = await this.findAll();
-    const id = datos[0] ? setId(datos[datos.length - 1].id) : setId(0);
+    const datos = await this.findAll();
+    const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
     const newUser = { ...createUsuarioDto, id };
     const res = await fetch(baseUrl, {
       method: 'POST',
@@ -24,9 +24,9 @@ export class UsuarioService {
       body: JSON.stringify(newUser),
     });
     const parsed = res.json();
-    return parsed;*/
-    const nuevoUsuario = this.usuarioRepository.create(createUsuarioDto)
-    return this.usuarioRepository.save(nuevoUsuario)
+    return parsed;
+    /*const nuevoUsuario = this.usuarioRepository.create(createUsuarioDto)
+    return this.usuarioRepository.save(nuevoUsuario)*/
   }
 
   async findAll(): Promise<Usuario[]> {
@@ -35,14 +35,14 @@ export class UsuarioService {
     return parsed;
   };
 
-  async findOne(id: number): Promise<Usuario|null> {    
+  async findOne(id: number): Promise<Usuario> {    
       const res = await fetch(`${baseUrl}/${id}`);
-      if(!res.ok)return null;
+      if(!res.ok)return;
       const parsed = await res.json();      
       return parsed;      
   };
   
-  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario|null> {
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario> {
     const isUser = await this.findOne(id);
     if(!isUser)return;    
     try {
@@ -61,7 +61,7 @@ export class UsuarioService {
     }    
   };
 
-  async remove(id: number):Promise<any> {
+  async remove(id: number):Promise<Usuario> {
     const isUser = await this.findOne(id);
     if(!isUser)return;
     const res = await fetch(`${baseUrl}/${id}`,{

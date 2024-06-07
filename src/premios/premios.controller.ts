@@ -22,31 +22,30 @@ export class PremiosController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Premios | null> {
+  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Premios> {
     const premios = await this.premiosService.findOne(id);
     if(premios){
       res.status(HttpStatus.FOUND).json(premios);
-      return;
+      return premios;
     }
     res.status(HttpStatus.NOT_FOUND).json({error: 'premio no existente'});
   }
 
   @Patch(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() updatePremiosDto: UpdatePremiosDto): Promise<Premios | null> {
+  async update(@Res() res: Response, @Param('id') id: number, @Body() updatePremiosDto: UpdatePremiosDto): Promise<Premios> {
     const premios = await this.premiosService.update(id, updatePremiosDto);
     if (premios){
       res.status(HttpStatus.FOUND).json(premios);
-      return;
+      return premios;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente'})
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number): Promise<void> {
+  async remove(@Res() res: Response, @Param('id') id: number){
     const premios = await this.premiosService.remove(id);
     if(premios){
-      res.status(HttpStatus.FOUND).json(premios);
-      return;
+      res.status(HttpStatus.FOUND).json(premios);      
     }
     res.status(HttpStatus.NOT_FOUND).json({error: 'premio no existente'});
   }

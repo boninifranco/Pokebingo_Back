@@ -14,16 +14,9 @@ export class Usuario {
     @Column('text')
     celular:string;
     @Column('text')
-    direccion:string;
-    
-    //@Column('text')
-    //usuario:string;
-    //@Column('text')
-    //contrasena:string;
+    direccion:string;    
     @Column('boolean')
-    administrador:boolean;
-    //@Column('boolean')
-    //logueado:boolean
+    administrador:boolean;    
     @OneToMany(()=>Logueo,
         (logueo)=>logueo.idUsuario
     )

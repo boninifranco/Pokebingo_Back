@@ -29,16 +29,19 @@ export class LogueoService {
     return parsed;
   }
 
-  async findOne(id: number):Promise<Logueo|null> {
+  async findOne(id: number):Promise<Logueo> {
     const res = await fetch(`${baseUrl}/${id}`);
-    if(!res.ok)return null;    
-    const parsed = res.json();
-    return parsed;
+    if(!res.ok)return;    
+      const parsed = res.json();
+      return parsed;
+    
+       
+    
   }
 
-  async update(id: number, updateLogueoDto: UpdateLogueoDto) {
+  async update(id: number, updateLogueoDto: UpdateLogueoDto):Promise<Logueo> {
     const isLogueo = await this.findOne(id);
-    if(!isLogueo)return null;
+    if(!isLogueo)return;
     const newLogueo = {...updateLogueoDto,id};
     const res = await fetch(`${baseUrl}/${id}`,{
       method:"PATCH",
@@ -51,9 +54,9 @@ export class LogueoService {
     return parsed;
   }
 
-  async remove(id: number):Promise<any> {
+  async remove(id: number):Promise<Logueo> {
     const isLogueo = await this.findOne(id);
-    if(!isLogueo)return null;
+    if(!isLogueo)return;
     const res = await fetch(`${baseUrl}/${id}`,{
       method:"DELETE"
     });

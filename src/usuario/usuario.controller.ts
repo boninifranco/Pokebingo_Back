@@ -22,18 +22,18 @@ export class UsuarioController {
   }
 
   @Get(':id')  
-  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Usuario|null>{
+  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Usuario>{
     const usuario = await this.usuarioService.findOne(id)
     
     if(usuario){
       res.status(HttpStatus.FOUND).json(usuario);
-      return;      
+      return usuario;      
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `Usuario con id ${id} no encontrado`});
   };
   
   @Patch(':id')
-  async update(@Res() res: Response,@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto):Promise<Usuario|null> {
+  async update(@Res() res: Response,@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto):Promise<Usuario> {
     const usuarioUpdate = await this.usuarioService.update(id, updateUsuarioDto);
     if(usuarioUpdate){
       res.status(HttpStatus.FOUND).json(usuarioUpdate);
@@ -43,11 +43,10 @@ export class UsuarioController {
   };
 
   @Delete(':id')
-  async remove(@Res() res: Response,@Param('id', ParseIntPipe) id: number):Promise<Usuario|null> {
+  async remove(@Res() res: Response,@Param('id', ParseIntPipe) id: number) {
     const usuarioDelete = await this.usuarioService.remove(id)
     if(usuarioDelete){
-      res.status(HttpStatus.FOUND).json(usuarioDelete);
-      return usuarioDelete;
+      res.status(HttpStatus.FOUND).json(usuarioDelete);      
     }else{
       res.status(HttpStatus.NOT_FOUND).json({message: `Usuario con id ${id} no encontrado`})}   
     ;
