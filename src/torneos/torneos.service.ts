@@ -28,15 +28,15 @@ export class TorneosService {
     const parsed = await res.json();
     return parsed;
   }
-  async findOne(id: number): Promise<Torneo | null> {
+  async findOne(id: number): Promise<Torneo> {
     const res = await fetch(baseUrl + id);
     if(!res.ok){
-      return null;
+      return;
     }
     const parsed = await res.json();
     return parsed;
   }
-  async update(id: number, UpdateTorneoDto: UpdateTorneoDto): Promise<Torneo | null> {
+  async update(id: number, UpdateTorneoDto: UpdateTorneoDto): Promise<Torneo> {
     const update = { ...UpdateTorneoDto, id };
     const res = await fetch(`${baseUrl}/${id}`, {
       method: 'PUT',
@@ -48,7 +48,7 @@ export class TorneosService {
     const parsed = await res.json();
     return parsed;
   }
-  async remove(id: number): Promise<any> {
+  async remove(id: number): Promise<Torneo> {
     const isTorneo = await this.findOne(id);
     if(!isTorneo)return;
     const res = await fetch(baseUrl + id, {

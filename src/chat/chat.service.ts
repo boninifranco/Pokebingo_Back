@@ -29,15 +29,15 @@ export class ChatService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Chat | null> {
-    const res = await fetch(baseUrl + id);
-    if(!res.ok){
-      return null;
-    }
+  async findOne(id: number): Promise<Chat> {
+    const res = await fetch(`${baseUrl}${id}`);
+    if(!res.ok) return;
     const parsed = await res.json();
     return parsed;
   }
-  async update(id: number, updateChatDto: UpdateChatDto): Promise<Chat | null> {
+  async update(id: number, updateChatDto: UpdateChatDto): Promise<Chat> {
+    const isChat = await this.findOne(id);
+    if(!isChat) return;
     const update = { ...updateChatDto, id };
     const res = await fetch(baseUrl + id, {
       method: 'PUT',
@@ -50,7 +50,7 @@ export class ChatService {
     return parsed;
   }
   
-  async remove(id: number): Promise<any> {
+  async remove(id: number): Promise<Chat> {
     const isChat = await this.findOne(id);
     if(!isChat)return;
     const res = await fetch(baseUrl + id, {

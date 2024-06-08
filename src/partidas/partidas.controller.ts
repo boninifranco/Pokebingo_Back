@@ -10,38 +10,38 @@ export class PartidasController {
   constructor(private readonly partidasService: PartidasService) {}
 
   @Post()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createPartidaDto: CreatePartidaDto): Promise<Partida> {
     return this.partidasService.create(createPartidaDto);
   }
 
   @Get()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Partida[]> {
     return this.partidasService.findAll();
   }
   
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Partida | null> {
+  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Partida> {
     const partida = await this.partidasService.findOne(id)
     if (partida) {
       res.status(HttpStatus.FOUND).json(partida);
-      return;
+      return partida;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'partida no existe' });
   }
   @Put(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() UpdatePartidaDto: UpdatePartidaDto): Promise<Partida | null> {
+  async update(@Res() res: Response, @Param('id') id: number, @Body() UpdatePartidaDto: UpdatePartidaDto): Promise<Partida> {
     const partida = await this.partidasService.update(id, UpdatePartidaDto);
     if (partida) {
       res.status(HttpStatus.FOUND).json(partida);
-      return;
+      return partida;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'partida no existe' });
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number): Promise<void> {
+  async remove(@Res() res: Response, @Param('id') id: number){
     const partida = await this.partidasService.remove(id);
     if(partida){
       res.status(HttpStatus.FOUND).json(partida);      

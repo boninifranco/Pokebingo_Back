@@ -60,19 +60,19 @@
       "jugadores": "22"
     },
     {
-      "id": "2",
-      "partida": "33",
-      "jugadores": "5"
-    },
-    {
       "id": "3",
-      "partida": "34",
-      "jugadores": "18"
+      "partida": "33636",
+      "jugadores": "1001"
     },
     {
       "id": "5",
       "partida": "7",
       "jugadores": "5"
+    },
+    {
+      "id": "4",
+      "partida": "34",
+      "jugadores": "11"
     }
   ],
   "desempeno": [
@@ -250,7 +250,7 @@
     },
     {
       "id": "1",
-      "jugador": "Ale",
+      "jugador": "1eeee",
       "mensaje": "Quiero cambiar mis casilleros por otros!"
     },
     {

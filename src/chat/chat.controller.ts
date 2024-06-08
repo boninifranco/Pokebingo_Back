@@ -10,39 +10,39 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Post()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createChatDto: CreateChatDto): Promise<Chat> {
     return this.chatService.create(createChatDto);
   }
 
   @Get()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Chat[]> {
     return this.chatService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Chat | null> {
+  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Chat> {
     const chat = await this.chatService.findOne(id)
     if (chat) {
       res.status(HttpStatus.FOUND).json(chat);
-      return;
+      return chat;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'chat no existe' });
   }
 
   @Put(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() updateChatDto: UpdateChatDto): Promise<Chat | null> {
+  async update(@Res() res: Response, @Param('id') id: number, @Body() updateChatDto: UpdateChatDto): Promise<Chat> {
     const chat = await this.chatService.update(id, updateChatDto);
     if (chat) {
       res.status(HttpStatus.FOUND).json(chat);
-      return;
+      return chat;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'chat no existe' });
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number): Promise<void> {
+  async remove(@Res() res: Response, @Param('id') id: number){
     const chat = await this.chatService.remove(id);
     if(chat){
       res.status(HttpStatus.FOUND).json(chat);      

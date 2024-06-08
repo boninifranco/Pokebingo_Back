@@ -29,15 +29,13 @@ export class PartidasService {
     return parsed;
   }
 
-  async findOne(id: number): Promise<Partida | null> {
+  async findOne(id: number): Promise<Partida> {
     const res = await fetch(baseUrl + id);
-    if(!res.ok){
-      return null;
-    }
+    if(!res.ok) return;
     const parsed = await res.json();
     return parsed;
   }
-  async update(id: number, UpdatePartidaDto: UpdatePartidaDto): Promise<Partida | null> {
+  async update(id: number, UpdatePartidaDto: UpdatePartidaDto): Promise<Partida> {
     const update = { ...UpdatePartidaDto, id };
     const res = await fetch(baseUrl + id, {
       method: 'PUT',
@@ -49,7 +47,7 @@ export class PartidasService {
     const parsed = await res.json();
     return parsed;
   }
-  async remove(id: number): Promise<any> {
+  async remove(id: number): Promise<Partida> {
     const isPartida = await this.findOne(id);
     if(!isPartida)return;
     const res = await fetch(baseUrl + id, {

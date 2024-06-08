@@ -52,12 +52,14 @@ export class ImagenService {
     return response.json();
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<Imagen> {
     const response = await fetch(`${this.BASE_URL}/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
       throw new Error(`Error al eliminar la imagen con el ID ${id}`);
     }
+    const parsed = response.json();
+    return parsed;
   }
 }
