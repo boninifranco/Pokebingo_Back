@@ -15,6 +15,6 @@ export class Registro {
         
     @OneToOne(type=>Usuario, (usuario)=>usuario.id)
     @JoinColumn()
-    usuarioId:number;
+    usuarioId:Usuario;
     
 }

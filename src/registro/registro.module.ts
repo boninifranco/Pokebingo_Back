@@ -5,11 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Registro } from './entities/registro.entity';
 
 @Module({
-  /*imports:[
+  imports:[
     TypeOrmModule.forFeature([
       Registro
     ])
-  ],*/
+  ],
   controllers: [RegistroController],
   providers: [RegistroService],
 })

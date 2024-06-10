@@ -5,17 +5,20 @@ import { UpdateDesempenoDto } from './dto/update-desempeno.dto';
 import { Desempeno } from './entities/desempeno.entity';
 import { setId } from 'src/funciones/funciones';
 import { UsuarioService } from 'src/usuario/usuario.service';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 const baseUrl = 'http://localhost:3030/desempeno'
 @Injectable()
 export class DesempenoService {
 
-  constructor(
-    private readonly usuarioService : UsuarioService
+  constructor(@InjectRepository(Desempeno)
+    //private readonly usuarioService : UsuarioService
+    private readonly desempenoRepository : Repository<Desempeno>
   ){}
 
   async create(createDesempenoDto: CreateDesempenoDto): Promise<Desempeno> {
-    const datos = await this.findAll();
+    /*const datos = await this.findAll();
     const id = datos[0]?setId(datos[datos.length-1].id).toString():setId(0)
     const newDesempeno = {...createDesempenoDto,id}
     const idJugador:number = newDesempeno.jugador;
@@ -39,7 +42,9 @@ export class DesempenoService {
       }      
     }else{
       throw new BadRequestException(`El usuario con id ${idJugador} no esta registrado`)
-    }
+    }*/
+    const newDesempeno: Desempeno = this.desempenoRepository.create(createDesempenoDto)
+    return this.desempenoRepository.save(newDesempeno)
   }
 
   async findAll():Promise<Desempeno[]> {
