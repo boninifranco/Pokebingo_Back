@@ -30,8 +30,30 @@ export class PartidasService {
   }
 
   async findOne(id: number): Promise<Partida> {
-    const res = await fetch (`${baseUrl}/${id}`);
+    const res = await fetch(baseUrl + id);
+    if(!res.ok) return;
     const parsed = await res.json();
+    return parsed;
+  }
+  async update(id: number, UpdatePartidaDto: UpdatePartidaDto): Promise<Partida> {
+    const update = { ...UpdatePartidaDto, id };
+    const res = await fetch(baseUrl + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    });
+    const parsed = await res.json();
+    return parsed;
+  }
+  async remove(id: number): Promise<Partida> {
+    const isPartida = await this.findOne(id);
+    if(!isPartida)return;
+    const res = await fetch(baseUrl + id, {
+      method: 'DELETE',
+    });
+    const parsed = res.json();
     return parsed;
   }
 }

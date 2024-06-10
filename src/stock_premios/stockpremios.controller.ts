@@ -1,34 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { StockPremiosService } from './stockpremios.service';
 import { CreateStockPremiosDto } from './dto/create-stockpremios.dto';
 import { UpdateStockPremiosDto } from './dto/update-stockpremios.dto';
+import { Response } from 'express';
+import { StockPremios } from './entities/stockpremios.entity';
 
-@Controller('stockpremios')
+@Controller('stockPremios')
 export class StockPremiosController {
   constructor(private readonly stockPremiosService: StockPremiosService) {}
 
   @Post()
+  @HttpCode(HttpStatus.FOUND)
   create(@Body() createStockPremiosDto: CreateStockPremiosDto) {
     return this.stockPremiosService.create(createStockPremiosDto);
   }
 
   @Get()
+  @HttpCode(HttpStatus.FOUND)
   findAll() {
     return this.stockPremiosService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: number, @Res() res: Response):Promise<StockPremios> {
+    const isStockPremio = await this.stockPremiosService.findOne(id);
+    if(isStockPremio){
+      res.status(HttpStatus.FOUND).json(isStockPremio);
+      return isStockPremio;
+    }
+    res.status(HttpStatus.NOT_FOUND).json({message: `No existe StockPremio con id ${id}`})
+
     return this.stockPremiosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStockPremiosDto: UpdateStockPremiosDto) {
-    return this.stockPremiosService.update(+id, updateStockPremiosDto);
+  async update(@Param('id') id: number, @Body() updateStockPremiosDto: UpdateStockPremiosDto, @Res() res: Response):Promise<StockPremios> {
+    const isStockPremio = await this.stockPremiosService.update(id, updateStockPremiosDto);
+    if(isStockPremio){
+      res.status(HttpStatus.FOUND).json(isStockPremio);
+      return isStockPremio;
+    }
+    res.status(HttpStatus.NOT_FOUND).json({message: `No existe StockPremio con id ${id}`})
+
+    return this.stockPremiosService.findOne(+id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stockPremiosService.remove(+id);
+  async remove(@Param('id') id: number, @Res() res: Response){
+    const isStockPremio = await this.stockPremiosService.remove(id);
+    if(isStockPremio){
+      res.status(HttpStatus.FOUND).json(isStockPremio);
+      return isStockPremio;
+    }
+    res.status(HttpStatus.NOT_FOUND).json({message: `No existe StockPremio con id ${id}`})
+
+    return this.stockPremiosService.findOne(+id);
   }
 }

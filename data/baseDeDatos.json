@@ -2,55 +2,50 @@
   "usuarios": [
     {
       "id": "1",
-      "apellido": "Apellido2",
-      "nombre": "Nombre2",
-      "celular": "23983303030",
-      "direccion": "Mi Casa2",
-      "usuario": "usuario2",
-      "contrasena": "contraseña2",
-      "administrador": false,
-      "logueado": false
+      "apellido": "Wibaux",
+      "nombre": "Juan Pablo",
+      "celular": "2983574551",
+      "direccion": "Castro Barros 257",
+      "administrador": true
     },
     {
       "id": "2",
-      "apellido": "Apellido2",
-      "nombre": "Nombre2",
-      "celular": "23983303030",
-      "usuario": "usuario2",
-      "contrasena": "contraseña2",
-      "administrador": false,
-      "logueado": false
+      "apellido": "Wibaux",
+      "nombre": "Tomas",
+      "celular": "34343434",
+      "direccion": "Castro Barros 257",
+      "administrador": false
     },
     {
       "id": "3",
-      "apellido": "Apellido2",
-      "nombre": "Nombre2",
-      "celular": "23983303030",
-      "usuario": "usuario2",
-      "contrasena": "contraseña2",
-      "administrador": false,
-      "logueado": false
+      "apellido": "Wibaux",
+      "nombre": "Mailen",
+      "celular": "21212121",
+      "direccion": "Castro Barros 257",
+      "administrador": false
+    },
+    {
+      "id": "4",
+      "apellido": "Daruich",
+      "nombre": "Ceferina",
+      "celular": "67676767",
+      "direccion": "Castro Barros 257",
+      "administrador": false
     }
   ],
   "registro": [
     {
       "id": "1",
-      "usuarioId": 2,
+      "usuarioId": 6,
       "email": "Juampi",
       "contrasena": "juampi2000"
-    },
-    {
-      "id": "2",
-      "usuarioId": 3,
-      "email": "Tomi",
-      "contrasena": "tomiw"
     }
   ],
   "puntajes": [
     {
-      "id": "",
-      "descripcion": "",
-      "puntos": ""
+      "id": "1",
+      "descripcion": "sdsdsdsd",
+      "puntos": 1000
     }
   ],
   "sala": [
@@ -65,42 +60,35 @@
       "jugadores": "22"
     },
     {
-      "id": "2",
-      "partida": "33",
-      "jugadores": "5"
-    },
-    {
       "id": "3",
-      "partida": "34",
-      "jugadores": "18"
+      "partida": "33636",
+      "jugadores": "1001"
     },
     {
       "id": "5",
       "partida": "7",
       "jugadores": "5"
+    },
+    {
+      "id": "4",
+      "partida": "34",
+      "jugadores": "11"
     }
   ],
   "desempeno": [
     {
       "id": "1",
       "jugador": 3,
-      "puntos": 100,
+      "puntos": 1000,
       "creditos": 200,
       "cartonesComprados": 0
     },
     {
-      "id": "3",
-      "jugador": 2,
-      "puntos": 1500,
-      "creditos": 205,
-      "cartonesComprados": 30
-    },
-    {
-      "id": "4",
-      "jugador": 1,
-      "puntos": 100,
-      "creditos": 200,
-      "cartonesComprados": 0
+      "id": "2",
+      "jugador": 4,
+      "puntos": 1000,
+      "creditos": 2050,
+      "cartonesComprados": 10
     }
   ],
   "filas": [
@@ -111,6 +99,15 @@
     },
     {
       "id": "b378"
+    },
+    {
+      "id": "c364"
+    },
+    {
+      "id": "1",
+      "nroCarton": "123",
+      "idPartida": "",
+      "aciertos": ""
     }
   ],
   "partidas": [
@@ -153,36 +150,21 @@
   "cartones": [
     {
       "id": "1",
-      "nroCarton": "",
+      "nroCarton": "12345",
       "idPartida": "",
       "aciertos": ""
-    },
-    {
-      "id": "2",
-      "nroCarton": "",
-      "idPartida": "",
-      "aciertos": ""
-    }
-  ],
-  "imagenes": [
-    {
-      "id": "",
-      "imagen": ""
-    },
-    {
-      "id": "bc14"
     }
   ],
   "logueo": [
     {
       "id": "1",
-      "idUsuario": 3,
-      "logueado": true
+      "idUsuario": 2,
+      "logueado": false
     },
     {
       "id": "2",
-      "idUsuario": 2,
-      "logueado": true
+      "idUsuario": 3,
+      "logueado": false
     }
   ],
   "casilleros": [
@@ -194,13 +176,22 @@
     },
     {
       "id": "6c42"
+    },
+    {
+      "id": "8d13"
+    },
+    {
+      "id": "1",
+      "idFila": "",
+      "idImagen": "",
+      "Salio": false
     }
   ],
   "stockPremios": [
     {
-      "id": "",
-      "premio": "",
-      "cantidad": ""
+      "id": "1",
+      "premio": 2,
+      "cantidad": 300
     }
   ],
   "torneos": [
@@ -235,15 +226,20 @@
   ],
   "metodospago": [
     {
-      "id": 1,
-      "descripcion": "aaaaaaaaaaa"
+      "id": "1",
+      "descripcion": "bbbbbbbbb"
     }
   ],
   "premios": [
     {
-      "id": "",
-      "descripcion": "",
-      "creditos": ""
+      "id": "1",
+      "descripcion": "asasas",
+      "creditos": 100
+    },
+    {
+      "id": "2",
+      "descripcion": "sdsdsdsd",
+      "creditos": 10000
     }
   ],
   "chat": [
@@ -254,7 +250,7 @@
     },
     {
       "id": "1",
-      "jugador": "Ale",
+      "jugador": "1eeee",
       "mensaje": "Quiero cambiar mis casilleros por otros!"
     },
     {

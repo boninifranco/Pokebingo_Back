@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Logueo } from './entities/logueo.entity';
@@ -10,7 +10,7 @@ const baseUrl = 'http://localhost:3030/logueo'
 export class LogueoService {
   async create(createLogueoDto: CreateLogueoDto):Promise<Logueo> {
     const datos = await this.findAll();
-    const id = datos[0]?setId(datos[datos.length-1].id) : setId(0);
+    const id = datos[0]?setId(datos[datos.length-1].id).toString() : setId(0);
     const newLogueo = {...createLogueoDto,id}
     const res = await fetch(baseUrl,{
       method:'POST',
@@ -19,8 +19,7 @@ export class LogueoService {
       },
       body: JSON.stringify(newLogueo)
     });
-    const parsed = res.json()
-    
+    const parsed = res.json()    
     return parsed ;
   }
 
@@ -32,15 +31,36 @@ export class LogueoService {
 
   async findOne(id: number):Promise<Logueo> {
     const res = await fetch(`${baseUrl}/${id}`);
-    const parsed = res.json();
+    if(!res.ok)return;    
+      const parsed = res.json();
+      return parsed;
+    
+       
+    
+  }
+
+  async update(id: number, updateLogueoDto: UpdateLogueoDto):Promise<Logueo> {
+    const isLogueo = await this.findOne(id);
+    if(!isLogueo)return;
+    const newLogueo = {...updateLogueoDto,id};
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method:"PATCH",
+      headers:{
+        'Content-type':'Application-json'
+      },
+      body: JSON.stringify(newLogueo)
+    });
+    const parsed = res.json()
     return parsed;
   }
 
-  update(id: number, updateLogueoDto: UpdateLogueoDto) {
-    return `This action updates a #${id} logueo`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} logueo`;
+  async remove(id: number):Promise<Logueo> {
+    const isLogueo = await this.findOne(id);
+    if(!isLogueo)return;
+    const res = await fetch(`${baseUrl}/${id}`,{
+      method:"DELETE"
+    });
+    const parsed = res.json();
+    return parsed;
   }
 }

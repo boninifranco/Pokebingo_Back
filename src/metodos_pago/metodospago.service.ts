@@ -10,7 +10,7 @@ const baseUrl = 'http://localhost:3030/metodospago'
 export class MetodosPagoService {
   async create(createMetodosPagoDto: CreateMetodosPagoDto): Promise<MetodosPago> {
     const datos = await this.findAll();
-    const id = datos.length ? setId(datos[datos.length - 1].id) : setId(0);
+    const id = datos.length ? setId(datos[datos.length - 1].id).toString() : setId(0);
     const newMetodoPago = { ...createMetodosPagoDto, id };
     const res = await fetch(baseUrl, {
       method: 'POST',
@@ -31,25 +31,32 @@ export class MetodosPagoService {
 
   async findOne(id: number): Promise<MetodosPago> {
     const res = await fetch(`${baseUrl}/${id}`);
+    if(!res.ok) return;
     const parsed = await res.json();
     return parsed;
   }
 
   async update(id: number, updateMetodosPagoDto: UpdateMetodosPagoDto): Promise<MetodosPago> {
+    const isMetodo = await this.findOne(id);
+    if(!isMetodo)return;
     const res = await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(updateMetodosPagoDto),
-    });
+    });    
     const parsed = await res.json();
     return parsed;
   }
 
-  async remove(id: number): Promise<void> {
-    await fetch(`${baseUrl}/${id}`, {
+  async remove(id: number): Promise<MetodosPago> {
+    const isMetodo = await this.findOne(id);
+    if(!isMetodo)return;
+    const res = await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
+    const parsed = res.json();
+    return parsed;
   }
 }

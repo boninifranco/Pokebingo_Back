@@ -4,7 +4,6 @@ import { UpdateSalaDto } from './dto/update-sala.dto';
 import { Sala } from './entities/sala.entity';
 import { setId } from 'src/funciones/funciones';
 
-
 const baseUrl = 'http://localhost:3030/sala/'
 
 @Injectable()
@@ -31,7 +30,31 @@ export class SalaService {
   }
 
   async findOne(id: number): Promise<Sala> {
-    const res = await fetch(`${baseUrl}/${id}`);
+    const res = await fetch(baseUrl + id);
+    if(!res.ok) return;
+    const parsed = await res.json();
+    return parsed;
+  }
+  async update(id: number, updateSalaDto: UpdateSalaDto): Promise<Sala> {
+    const isSala = await this.findOne(id);
+    if(!isSala) return;
+    const update = {...updateSalaDto,id};
+    const res = await fetch(baseUrl + id,{
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    });
+    const parsed = await res.json();
+    return parsed;
+  }
+  async remove(id: number): Promise<Sala> {
+    const isSala = await this.findOne(id);
+    if(!isSala)return;
+    const res = await fetch(baseUrl + id, {
+      method: 'DELETE',
+    });
     const parsed = await res.json();
     return parsed;
   }

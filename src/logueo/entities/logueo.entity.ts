@@ -1,5 +1,20 @@
+import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
 export class Logueo {
-    id: number;
-    idUsuario: number;
-    logueado: false
+    @PrimaryGeneratedColumn('increment')
+    id: number;    
+    @Column()
+    logueado: boolean;
+    @Column()
+    login: Date;
+    @Column()
+    logout: Date;
+    @ManyToOne(()=>Usuario,
+        (usuario)=>usuario.logueos
+    )
+    @JoinColumn()
+    public idUsuario:Usuario;
+    
 }

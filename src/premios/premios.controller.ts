@@ -1,34 +1,52 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { PremiosService } from './premios.service';
 import { CreatePremiosDto } from './dto/create-premios.dto';
 import { UpdatePremiosDto } from './dto/update-premios.dto';
+import { Premios } from './entities/premios.entity';
+import { Response } from 'express';
 
 @Controller('premios')
 export class PremiosController {
   constructor(private readonly premiosService: PremiosService) {}
 
   @Post()
-  create(@Body() createPremiosDto: CreatePremiosDto) {
+  @HttpCode(HttpStatus.FOUND)
+  async create(@Body() createPremiosDto: CreatePremiosDto): Promise<Premios> {
     return this.premiosService.create(createPremiosDto);
   }
 
   @Get()
-  findAll() {
+  @HttpCode(HttpStatus.FOUND)
+  async findAll(): Promise<Premios[]> {
     return this.premiosService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.premiosService.findOne(+id);
+  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Premios> {
+    const premios = await this.premiosService.findOne(id);
+    if(premios){
+      res.status(HttpStatus.FOUND).json(premios);
+      return premios;
+    }
+    res.status(HttpStatus.NOT_FOUND).json({error: 'premio no existente'});
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePremiosDto: UpdatePremiosDto) {
-    return this.premiosService.update(+id, updatePremiosDto);
+  async update(@Res() res: Response, @Param('id') id: number, @Body() updatePremiosDto: UpdatePremiosDto): Promise<Premios> {
+    const premios = await this.premiosService.update(id, updatePremiosDto);
+    if (premios){
+      res.status(HttpStatus.FOUND).json(premios);
+      return premios;
+    }
+    res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente'})
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.premiosService.remove(+id);
+  async remove(@Res() res: Response, @Param('id') id: number){
+    const premios = await this.premiosService.remove(id);
+    if(premios){
+      res.status(HttpStatus.FOUND).json(premios);      
+    }
+    res.status(HttpStatus.NOT_FOUND).json({error: 'premio no existente'});
   }
 }

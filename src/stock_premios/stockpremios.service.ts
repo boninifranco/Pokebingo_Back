@@ -4,13 +4,13 @@ import { UpdateStockPremiosDto } from './dto/update-stockpremios.dto';
 import { StockPremios } from './entities/stockpremios.entity';
 import { setId } from 'src/funciones/funciones';
 
-const baseUrl = 'http://localhost:3030/stockpremios/'
+const baseUrl = 'http://localhost:3030/stockPremios'
 
 @Injectable()
 export class StockPremiosService {
   async create(createStockPremiosDto: CreateStockPremiosDto): Promise<StockPremios> {
     const datos = await this.findAll();
-    const id = datos.length ? setId(datos[datos.length - 1].id) : setId(0);
+    const id = datos.length ? setId(datos[datos.length - 1].id).toString() : setId(0);
     const newStockPremio = { ...createStockPremiosDto, id };
     const res = await fetch(baseUrl, {
       method: 'POST',
@@ -31,11 +31,14 @@ export class StockPremiosService {
 
   async findOne(id: number): Promise<StockPremios> {
     const res = await fetch(`${baseUrl}/${id}`);
+    if(!res.ok)return;
     const parsed = await res.json();
     return parsed;
   }
 
   async update(id: number, updateStockPremiosDto: UpdateStockPremiosDto): Promise<StockPremios> {
+    const stockPremio = await this.findOne(id);
+    if(!stockPremio)return;
     const res = await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
@@ -47,9 +50,13 @@ export class StockPremiosService {
     return parsed;
   }
 
-  async remove(id: number): Promise<void> {
-    await fetch(`${baseUrl}/${id}`, {
+  async remove(id: number): Promise<StockPremios> {
+    const stockPremio = await this.findOne(id);
+    if(!stockPremio)return;
+    const res = await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
+    const parsed = await res.json();
+    return parsed; 
   }
 }
