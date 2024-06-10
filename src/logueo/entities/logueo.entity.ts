@@ -1,5 +1,5 @@
 import { Usuario } from "src/usuario/entities/usuario.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Logueo {
@@ -8,13 +8,14 @@ export class Logueo {
     @Column()
     logueado: boolean;
     @Column()
-    login: Date;
+    login: string;    
     @Column()
-    logout: Date;
-    @ManyToOne(()=>Usuario,
-        (usuario)=>usuario.logueos
+    logout: string;
+    
+    
+    @ManyToOne(type=>Usuario, usuario=>usuario.logueos,
+        //{onDelete:'CASCADE'}
     )
     @JoinColumn()
-    public idUsuario:Usuario;
-    
+    idUsuario:Usuario;   
 }

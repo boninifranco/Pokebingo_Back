@@ -10,12 +10,12 @@ const baseUrl = 'http://localhost:3030/registro';
 
 @Injectable()
 export class RegistroService {
-  /*constructor(@InjectRepository(Registro)    
+  constructor(@InjectRepository(Registro)    
     private readonly registroRepository: Repository<Registro>
     //private usuarioService: UsuarioService
-  ){}*/
+  ){}
   async create(createRegistroDto: CreateRegistroDto): Promise<Registro> {
-    const datos = await this.findAll();
+    /*const datos = await this.findAll();
     const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
     const newRegistro = { ...createRegistroDto, id };
     const res = await fetch(baseUrl, {
@@ -26,9 +26,9 @@ export class RegistroService {
       body: JSON.stringify(newRegistro),
     });
     const parsed = res.json();
-    return parsed;
-    /*const nuevoRegistro: Registro = this.registroRepository.create(createRegistroDto);
-    return this.registroRepository.save(nuevoRegistro);*/
+    return parsed;*/
+    const nuevoRegistro: Registro = this.registroRepository.create(createRegistroDto);
+    return this.registroRepository.save(nuevoRegistro);
   }
 
   async findAll(): Promise<Registro[]> {

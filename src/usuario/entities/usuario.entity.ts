@@ -1,3 +1,4 @@
+import { Desempeno } from "src/desempeno/entities/desempeno.entity";
 import { Logueo } from "src/logueo/entities/logueo.entity";
 import { Registro } from "src/registro/entities/registro.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
@@ -16,16 +17,25 @@ export class Usuario {
     @Column('text')
     direccion:string;    
     @Column('boolean')
-    administrador:boolean;    
+    administrador:boolean;
+
     @OneToMany(()=>Logueo,
-        (logueo)=>logueo.idUsuario
+        (logueo)=>logueo.idUsuario,
+        //{cascade: true}
     )
     @JoinColumn()
     public logueos:Logueo[];
 
-@OneToOne(()=>Registro,
+
+    @OneToOne(()=>Registro,
         (registro)=>registro.usuarioId
     )
     @JoinColumn()
     public registro:Registro;
+
+    @OneToOne(()=>Desempeno,
+        (desempeno)=>desempeno.jugador
+    )
+    @JoinColumn()
+    public desempeno: Desempeno;
 };

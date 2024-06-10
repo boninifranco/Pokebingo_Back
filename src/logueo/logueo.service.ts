@@ -3,13 +3,18 @@ import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Logueo } from './entities/logueo.entity';
 import { setId } from 'src/funciones/funciones';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 const baseUrl = 'http://localhost:3030/logueo'
 
 @Injectable()
 export class LogueoService {
+  constructor(@InjectRepository(Logueo)    
+    private readonly logueoRepository: Repository<Logueo>){}
+  
   async create(createLogueoDto: CreateLogueoDto):Promise<Logueo> {
-    const datos = await this.findAll();
+    /*const datos = await this.findAll();
     const id = datos[0]?setId(datos[datos.length-1].id).toString() : setId(0);
     const newLogueo = {...createLogueoDto,id}
     const res = await fetch(baseUrl,{
@@ -20,7 +25,9 @@ export class LogueoService {
       body: JSON.stringify(newLogueo)
     });
     const parsed = res.json()    
-    return parsed ;
+    return parsed ;*/
+    const nuevoLogueo: Logueo= this.logueoRepository.create(createLogueoDto);
+    return this.logueoRepository.save(nuevoLogueo);
   }
 
   async findAll():Promise<Logueo[]> {
