@@ -1,5 +1,10 @@
+import { Column, Entity, PrimaryColumn } from "typeorm";
+@Entity('chats')
 export class Chat {
-    id: number;
-    jugadorId: number;
+    @PrimaryColumn()
+        id: number;
+    @Column()
+    idUsuario: number;
     mensaje: string;
+
 }

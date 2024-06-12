@@ -3,11 +3,14 @@ import { CreateTorneoDto } from './dto/create-torneo.dto';
 import { UpdateTorneoDto } from './dto/update-torneo.dto';
 import { Torneo } from './entities/torneo.entity';
 import { setId } from 'src/funciones/funciones';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 const baseUrl = 'http://localhost:3030/torneos/';
 
 @Injectable()
 export class TorneosService {
+  constructor(@InjectRepository(Torneo) private readonly torneoRepository: Repository<Torneo>){}
   async create(createTorneoDto: CreateTorneoDto): Promise<Torneo> {
     const data = await this.findAll();
     const id = data[0] ? setId(data[data.length - 1].id) : setId(0);
