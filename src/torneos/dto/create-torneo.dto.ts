@@ -8,11 +8,11 @@ export class CreateTorneoDto {
     nroTorneo: number;
 
     @IsDate()
-    fecha: Date;
+    fecha: string;
 
     @IsTimeZone()
-    horaInicio: number;
+    horaInicio: string;
 
     @IsTimeZone()
-    horaCierre: number;
+    horaCierre: string;
 }

@@ -23,7 +23,7 @@ import { PuntajesModule } from './puntajes/puntajes.module';
        host: 'localhost',
        port: 3306,
        username: 'root',
-       password: 'root',
+       password: 'admin',
        database: 'bingo',
        entities: ['dist/**/**.entity{.ts,.js}'],
        synchronize: true,
