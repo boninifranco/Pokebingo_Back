@@ -1,7 +1,10 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsInt } from 'class-validator';
 
 export class CreateFilaDto {
-  @IsNotEmpty()
-  @IsString()
-    readonly nombre: string;
-  }
+  @IsInt()
+  filaId: number;
+  @IsInt()
+  filaAciertos: number;
+  @IsInt()
+  cartonId: number;
+}

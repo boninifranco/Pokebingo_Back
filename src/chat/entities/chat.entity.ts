@@ -1,10 +1,12 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
-@Entity('chats')
+import { Sala } from "src/sala/entities/sala.entity";
+import { Column, Entity, OneToOne, PrimaryColumn } from "typeorm";
+@Entity('chat')
 export class Chat {
     @PrimaryColumn()
-        id: number;
+    chatId: number;
     @Column()
-    idUsuario: number;
     mensaje: string;
 
+    // @OneToOne(()=> Sala, (sala) => sala.chat)
+    // sala: Sala;
 }

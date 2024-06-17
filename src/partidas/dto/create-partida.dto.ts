@@ -17,5 +17,5 @@ export class CreatePartidaDto {
     estadoPartida: boolean;
 
     @IsInt()
-    idTorneo: number;
+    salaId: number;
 }
