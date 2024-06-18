@@ -1,5 +1,6 @@
+import { Carton } from "src/cartones/entities/carton.entity";
 import { Sala } from "src/sala/entities/sala.entity";
-import { Column, ColumnTypeUndefinedError, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, ColumnTypeUndefinedError, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('partidas')
 export class Partida {
@@ -16,4 +17,6 @@ export class Partida {
 
     @OneToOne(()=> Sala, (sala) => sala.partida)
     sala: Sala;
+    @OneToMany(()=> Carton, (carton) => carton.partida)
+    cartones: Carton[];
 }

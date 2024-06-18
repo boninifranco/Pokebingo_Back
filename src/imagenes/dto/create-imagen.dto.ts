@@ -1,12 +1,10 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsString } from "class-validator";
 
 export class CreateImagenDto {
-  @IsNotEmpty()
-  @IsString()
-    readonly name: string;
+  @IsInt()
+    imagenId: number;
 
-  @IsNotEmpty()
   @IsString()
-    readonly description: string;
+    imagen: string;
   }
   
