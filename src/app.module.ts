@@ -34,7 +34,11 @@ import { PuntajesModule } from './puntajes/puntajes.module';
     UsuarioModule,
     LogueoModule,
     RegistroModule,
-    DesempenoModule
+    DesempenoModule,
+    MetodosPagoModule,
+    PremiosModule,
+    StockPremiosModule,
+    PuntajesModule
    ],
   controllers: [AppController],
   providers: [AppService],

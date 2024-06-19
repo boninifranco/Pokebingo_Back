@@ -1,73 +1,81 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Logueo } from './entities/logueo.entity';
-import { setId } from 'src/funciones/funciones';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
-const baseUrl = 'http://localhost:3030/logueo'
+import { Repository, FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class LogueoService {
   constructor(@InjectRepository(Logueo)    
-    private readonly logueoRepository: Repository<Logueo>){}
+    private readonly logueoRepository: Repository<Logueo>,    
+    ){}
   
   async create(createLogueoDto: CreateLogueoDto):Promise<Logueo> {
-    /*const datos = await this.findAll();
-    const id = datos[0]?setId(datos[datos.length-1].id).toString() : setId(0);
-    const newLogueo = {...createLogueoDto,id}
-    const res = await fetch(baseUrl,{
-      method:'POST',
-      headers:{
-        'Content-type':'application/json'
-      },
-      body: JSON.stringify(newLogueo)
-    });
-    const parsed = res.json()    
-    return parsed ;*/
-    const nuevoLogueo: Logueo= this.logueoRepository.create(createLogueoDto);
-    return this.logueoRepository.save(nuevoLogueo);
+    try {
+      const nuevoLogueo: Logueo= this.logueoRepository.create(createLogueoDto);
+      return this.logueoRepository.save(nuevoLogueo);      
+    } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+        error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);
+    }
   }
 
   async findAll():Promise<Logueo[]> {
-    const res = await fetch(baseUrl);
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const logueos = await this.logueoRepository.find()
+      if(logueos.length==0){
+        throw new BadRequestException(`No existen logueos en la base de datos`)
+      }
+      return logueos      
+    } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+        error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);      
+    }    
   }
 
   async findOne(id: number):Promise<Logueo> {
-    const res = await fetch(`${baseUrl}/${id}`);
-    if(!res.ok)return;    
-      const parsed = res.json();
-      return parsed;
-    
-       
-    
+    try {
+      const criterio :FindOneOptions = {where:{id:id}}
+      const logueo = await this.logueoRepository.findOne(criterio);
+      if(!logueo) throw new BadRequestException(`No existe logueo con id ${id} en la base de datos`);
+        return logueo;
+      
+    } catch (error) {
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+ error},HttpStatus.NOT_FOUND)
   }
+}
 
   async update(id: number, updateLogueoDto: UpdateLogueoDto):Promise<Logueo> {
-    const isLogueo = await this.findOne(id);
-    if(!isLogueo)return;
-    const newLogueo = {...updateLogueoDto,id};
-    const res = await fetch(`${baseUrl}/${id}`,{
-      method:"PATCH",
-      headers:{
-        'Content-type':'Application-json'
-      },
-      body: JSON.stringify(newLogueo)
-    });
-    const parsed = res.json()
-    return parsed;
-  }
 
+    try {
+      const criterio : FindOneOptions = {where: { id:id }};
+      let logueo = await this.logueoRepository.findOne(criterio);
+      if(!logueo) throw new BadRequestException(`No se encuentra el logueo con id ${id}`);
+      logueo.idUsuario = (updateLogueoDto.idUsuario);
+      logueo.login = (updateLogueoDto.login);
+      logueo.logout = (updateLogueoDto.logout);
+      logueo.logueado = (updateLogueoDto.logueado);
+      await this.logueoRepository.update(id,logueo)
+      return logueo;
+    } catch (error) {
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+ error},HttpStatus.NOT_FOUND)
+      }
+    }
+  
   async remove(id: number):Promise<Logueo> {
-    const isLogueo = await this.findOne(id);
-    if(!isLogueo)return;
-    const res = await fetch(`${baseUrl}/${id}`,{
-      method:"DELETE"
-    });
-    const parsed = res.json();
-    return parsed;
+    try {
+      const criterio : FindOneOptions = {where: { id:id }};
+      let logueo = await this.logueoRepository.findOne(criterio);
+      if(!logueo) throw new BadRequestException(`No se encuentra el logueo con id ${id}`);
+      await this.logueoRepository.delete(id);
+      return logueo;
+      
+    } catch (error) {
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+ error},HttpStatus.NOT_FOUND)      
+    }          
   }
 }

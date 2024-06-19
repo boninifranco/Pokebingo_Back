@@ -1,8 +1,9 @@
-import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Registro } from "src/registro/entities/registro.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Desempeno {
+export class Desempenio {
+    
     @PrimaryGeneratedColumn('increment')
     id:number;
     
@@ -12,8 +13,9 @@ export class Desempeno {
     creditos: number;
     @Column()
     cartonesComprados: number;
-    
-    @OneToOne(type=>Usuario, (usuario)=>usuario.id)
+    @OneToOne(type=>Registro, (registro)=>registro.id,
+    {onDelete:'CASCADE'}
+    )
     @JoinColumn()
-    jugador: Usuario;
+    jugador:Registro;    
 }

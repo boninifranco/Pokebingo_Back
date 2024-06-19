@@ -1,11 +1,10 @@
 import { IsInt, IsOptional, Min } from "class-validator";
-import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Registro } from "src/registro/entities/registro.entity";
 
-export class CreateDesempenoDto {
+export class CreateDesempenioDto {
 
-    @IsInt()
-    //@Min(1)
-    jugador:Usuario;
+    @IsInt()    
+    jugador:Registro;
 
     @IsInt()    
     puntos:number;
