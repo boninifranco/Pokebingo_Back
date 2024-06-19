@@ -3,8 +3,7 @@ import { Usuario } from "src/usuario/entities/usuario.entity";
 
 export class CreateRegistroDto {
 
-    @IsInt()
-    @Min(1)
+    @IsInt()    
     usuarioId: Usuario;
 
     @IsString()

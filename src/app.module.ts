@@ -35,14 +35,10 @@ import { ImagenModule } from './imagenes/imagen.module';
     LogueoModule,
     RegistroModule,
     DesempenoModule,
-    SalaModule,
-    PartidasModule,
-    TorneosModule,
-    ChatModule,
-    CartonModule,
-    CasilleroModule,
-    FilaModule,
-    ImagenModule
+    MetodosPagoModule,
+    PremiosModule,
+    StockPremiosModule,
+    PuntajesModule
    ],
   controllers: [AppController],
   providers: [AppService],
