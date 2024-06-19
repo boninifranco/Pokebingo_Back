@@ -1,11 +1,19 @@
-import { IsBoolean, IsInt, Min } from "class-validator";
+import { IsBoolean, IsDate, IsInt, IsOptional, IsString, Min } from "class-validator";
+import { Registro } from "src/registro/entities/registro.entity";
 
 export class CreateLogueoDto {
 
-    @IsInt()
-    @Min(1)    
-    idUsuario:number;
+    @IsInt()       
+    idUsuario:Registro;
 
     @IsBoolean()
     logueado:boolean;
+
+    @IsString()
+    @IsOptional()
+    login: string;
+
+    @IsString()
+    @IsOptional()
+    logout: string;
 }

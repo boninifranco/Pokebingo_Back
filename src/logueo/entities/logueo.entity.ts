@@ -1,20 +1,23 @@
-import { Usuario } from "src/usuario/entities/usuario.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Registro } from "src/registro/entities/registro.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Logueo {
     @PrimaryGeneratedColumn('increment')
     id: number;    
+    
     @Column()
     logueado: boolean;
+    
     @Column()
-    login: Date;
+    login: string;    
+    
     @Column()
-    logout: Date;
-    @ManyToOne(()=>Usuario,
-        (usuario)=>usuario.logueos
+    logout: string;    
+    
+    @ManyToOne(type=>Registro, registro=>registro.id,
+        {onDelete:'CASCADE'}
     )
     @JoinColumn()
-    public idUsuario:Usuario;
-    
+    idUsuario:Registro;   
 }

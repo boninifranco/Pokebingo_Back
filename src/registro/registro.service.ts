@@ -1,72 +1,76 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { CreateRegistroDto } from './dto/create-registro.dto';
 import { UpdateRegistroDto } from './dto/update-registro.dto';
 import { Registro } from './entities/registro.entity';
-import { setId } from 'src/funciones/funciones';
-
-const baseUrl = 'http://localhost:3030/registro';
 
 @Injectable()
 export class RegistroService {
-  /*constructor(@InjectRepository(Registro)    
-    private readonly registroRepository: Repository<Registro>
-    //private usuarioService: UsuarioService
-  ){}*/
+  constructor(@InjectRepository(Registro)    
+    private readonly registroRepository: Repository<Registro>,
+    
+  ){}
   async create(createRegistroDto: CreateRegistroDto): Promise<Registro> {
-    const datos = await this.findAll();
-    const id = datos[0] ? setId(datos[datos.length - 1].id).toString() : setId(0);
-    const newRegistro = { ...createRegistroDto, id };
-    const res = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(newRegistro),
-    });
-    const parsed = res.json();
-    return parsed;
-    /*const nuevoRegistro: Registro = this.registroRepository.create(createRegistroDto);
-    return this.registroRepository.save(nuevoRegistro);*/
+    try {      
+        const nuevoRegistro: Registro = this.registroRepository.create(createRegistroDto);
+        return this.registroRepository.save(nuevoRegistro);            
+    } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+        error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);            
+    } 
   }
 
   async findAll(): Promise<Registro[]> {
-    const res = await fetch(baseUrl);
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const registros = await this.registroRepository.find();
+      if(!registros) throw new BadRequestException(`No se encontraron registros`);
+      return registros;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+ error}, HttpStatus.NOT_FOUND)
+      }      
+    }
     
-  }
+  
 
   async findOne(id: number): Promise<Registro> {
-    const res = await fetch(`${baseUrl}/${id}`);
-    if(!res.ok) return;
-    const parsed = res.json();
-    return parsed;
+    try {
+      const criterio: FindOneOptions = {where:{id : id}}
+      const registro = await this.registroRepository.findOne(criterio);
+      if(!registro) throw new BadRequestException(`No existe el registro con id ${id}`)
+      return registro;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+error},HttpStatus.NOT_FOUND);     
+    }
   }
 
   async update(id: number, updateRegistroDto: UpdateRegistroDto): Promise<Registro> {
-    const isRegistro = await this.findOne(id);
-    if(!isRegistro)return;
-    const updateRegistro = {...updateRegistroDto,id};
-    const res = await fetch(`${baseUrl}/${id}`,{
-      method: "PATCH",
-      headers:{
-        'Content-type':'Application-json',
-      },
-      body: JSON.stringify(updateRegistro)
-    });
-    const parsed = res.json()
-    return parsed;
+    try {
+      const criterio : FindOneOptions = {where: {id : id}};
+      let registro = await this.registroRepository.findOne(criterio);
+      if(!registro) throw new BadRequestException(`No existe el registro con id ${id}`);
+      registro.email = (updateRegistroDto.email);
+      registro.contrasena = (updateRegistroDto.contrasena);
+      await this.registroRepository.update(id,registro);
+      return registro;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+ error},HttpStatus.NOT_FOUND);      
+    }    
   }
 
   async remove(id: number):Promise<Registro> {
-    const isRegistro = await this.findOne(id);
-    if(!isRegistro)return;
-    const res = await fetch(`${baseUrl}/${id}`,{
-      method: "DELETE"
-    });
-    const parsed = res.json();
-    return parsed;    
+    try {
+      const criterio : FindOneOptions = {where: {id : id}};
+      let registro = await this.registroRepository.findOne(criterio);
+      if(!registro) throw new BadRequestException(`No existe el registro con id ${id}`);
+      await this.registroRepository.delete(registro)
+      return registro; 
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición'+ error},HttpStatus.NOT_FOUND);      
+    } 
   }
 }

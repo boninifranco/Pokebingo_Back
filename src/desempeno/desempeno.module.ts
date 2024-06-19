@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
-import { DesempenoService } from './desempeno.service';
-import { DesempenoController } from './desempeno.controller';
-import { UsuarioModule } from 'src/usuario/usuario.module';
+import { DesempenioService } from './desempeno.service';
+import { DesempenioController } from './desempeno.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Desempenio } from './entities/desempeno.entity';
 
-@Module({  
-  controllers: [DesempenoController],
-  providers: [DesempenoService],
-  imports:[UsuarioModule]
+@Module({
+  imports:[
+    TypeOrmModule.forFeature([
+      Desempenio
+    ])
+  ],  
+  controllers: [DesempenioController],
+  providers: [DesempenioService],
+  
 })
 export class DesempenoModule {}

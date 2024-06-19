@@ -16,28 +16,30 @@ import { PremiosModule } from './premios/premios.module';
 import { StockPremiosModule } from './stock_premios/stockpremios.module';
 import { PuntajesModule } from './puntajes/puntajes.module';
 
-// import { TypeOrmModule } from '@nestjs/typeorm';
-
 @Module({
-  imports: [UsuarioModule, RegistroModule, LogueoModule,
+  /*imports: [UsuarioModule, RegistroModule, LogueoModule,
      DesempenoModule, SalaModule, TorneosModule,
-     PartidasModule, ChatModule, CartonModule, MetodosPagoModule, PremiosModule, StockPremiosModule, PuntajesModule ],
-  //imports:[
-    //TypeOrmModule.forRoot({
-       //type: 'mysql',
-       //host: 'localhost',
-       //port: 3306,
-       //username: 'root',
-       //password: 'Password',
-       //database: 'bingo',
-       //entities: ['dist/**/**.entity{.ts,.js}'],
-       //synchronize: true,
-     //}),
-    //UsuarioModule,
-    //LogueoModule,
-    //RegistroModule,
-    //DesempenoModule
-   //],
+     PartidasModule, ChatModule, CartonModule, MetodosPagoModule, PremiosModule, StockPremiosModule, PuntajesModule ],*/
+  imports:[
+    TypeOrmModule.forRoot({
+       type: 'mysql',
+       host: 'localhost',
+       port: 3306,
+       username: 'root',
+       password: 'Password',
+       database: 'bingo',
+       entities: ['dist/**/**.entity{.ts,.js}'],
+       synchronize: true,
+     }),
+    UsuarioModule,
+    LogueoModule,
+    RegistroModule,
+    DesempenoModule,
+    MetodosPagoModule,
+    PremiosModule,
+    StockPremiosModule,
+    PuntajesModule
+   ],
   controllers: [AppController],
   providers: [AppService],
 })

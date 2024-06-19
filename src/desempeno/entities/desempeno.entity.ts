@@ -1,15 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Registro } from "src/registro/entities/registro.entity";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Desempeno {
+export class Desempenio {
+    
     @PrimaryGeneratedColumn('increment')
     id:number;
-    @Column()
-    jugador: number;
+    
     @Column()
     puntos: number;
     @Column()
     creditos: number;
     @Column()
-    cartonesComprados: number 
+    cartonesComprados: number;
+    @OneToOne(type=>Registro, (registro)=>registro.id,
+    {onDelete:'CASCADE'}
+    )
+    @JoinColumn()
+    jugador:Registro;    
 }

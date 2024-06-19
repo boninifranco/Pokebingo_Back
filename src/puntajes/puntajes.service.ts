@@ -1,62 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePuntajesDto } from './dto/create-puntajes.dto';
 import { UpdatePuntajesDto } from './dto/update-puntajes.dto';
 import { Puntajes } from './entities/puntajes.entity';
-import { setId } from 'src/funciones/funciones';
-
-const baseUrl = 'http://localhost:3030/puntajes'
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class PuntajesService {
+  constructor(@InjectRepository(Puntajes)
+private readonly puntajesRepository : Repository<Puntajes>){};
   async create(createPuntajesDto: CreatePuntajesDto): Promise<Puntajes> {
-    const datos = await this.findAll();
-    const id = datos.length ? setId(datos[datos.length - 1].id).toString() : setId(0);
-    const newPuntaje = { ...createPuntajesDto, id };
-    const res = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newPuntaje),
-    });
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const puntaje = this.puntajesRepository.create(createPuntajesDto);      
+      return this.puntajesRepository.save(puntaje);
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'No se puede crear el puntaje'+ error}, HttpStatus.NOT_FOUND)      
+    }
   }
 
   async findAll(): Promise<Puntajes[]> {
-    const res = await fetch(baseUrl);
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const puntajes = await this.puntajesRepository.find();
+      if(!puntajes) throw new BadRequestException(`No se encuentan puntajes en la base de datos`);
+      return puntajes;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+    }    
   }
 
   async findOne(id: number): Promise<Puntajes> {
-    const res = await fetch(`${baseUrl}/${id}`);
-    if(!res.ok)return;
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const criterio: FindOneOptions = {where:{id:id}};
+      const puntaje = await this.puntajesRepository.findOne(criterio);
+      if(!puntaje)throw new BadRequestException(`No se encuentra puntaje con id ${id}`)
+      return puntaje;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+    }
   }
 
   async update(id: number, updatePuntajesDto: UpdatePuntajesDto): Promise<Puntajes> {
-    const isPuntaje = await this.findOne(id);
-    if(!isPuntaje)return;
-    const res = await fetch(`${baseUrl}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatePuntajesDto),
-    });    
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const criterio: FindOneOptions = {where:{id:id}};
+      let puntaje = await this.puntajesRepository.findOne(criterio);
+      puntaje.descripcion = (updatePuntajesDto.descripcion);
+      puntaje.puntos = (updatePuntajesDto.puntos);
+      await this.puntajesRepository.update(id,puntaje);
+      return puntaje;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+    }
   }
 
   async remove(id: number){
-    const isPuntaje = await this.findOne(id);
-    if(!isPuntaje)return;
-    const res = await fetch(`${baseUrl}/${id}`, {
-      method: 'DELETE',
-    });
-    const parsed = res.json();
-    return parsed;    
+    try {
+      const criterio: FindOneOptions = {where: {id : id}};
+      const puntaje = await this.puntajesRepository.findOne(criterio);
+      await this.puntajesRepository.delete(puntaje);
+      return puntaje;      
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+    }        
   }
 }
