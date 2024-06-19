@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 
 @Entity('filas')
 export class Fila {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
     filaId: number;
     @Column()
     aciertos: number;
@@ -12,8 +12,7 @@ export class Fila {
     @OneToMany(()=> Casillero, (casilleros)=> casilleros.fila)
     casilleros: Casillero[];
 
-    constructor(id: number, aciertos: number) {
-      this.filaId = id;
+    constructor(aciertos: number) {
       this.aciertos = aciertos;
     }
 

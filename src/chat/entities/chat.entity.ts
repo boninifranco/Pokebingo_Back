@@ -1,12 +1,14 @@
-import { Sala } from "src/sala/entities/sala.entity";
-import { Column, Entity, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 @Entity('chat')
 export class Chat {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('increment')
     chatId: number;
     @Column()
     mensaje: string;
 
-    // @OneToOne(()=> Sala, (sala) => sala.chat)
-    // sala: Sala;
+    constructor(mensaje: string){
+        this.mensaje = mensaje;
+    }
+    public getMensaje(): string {return this.mensaje};
+    public setMensaje(mensaje: string): void {this.mensaje = mensaje};
 }

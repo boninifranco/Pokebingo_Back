@@ -8,7 +8,7 @@ export class CreatePartidaDto {
     nroPartida: number;
 
     @IsTimeZone()
-    horaInicio: number;
+    horaInicio: string;
 
     @IsInt()
     cantidadCartones: number;

@@ -1,62 +1,68 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { Chat } from './entities/chat.entity';
-import { setId } from 'src/funciones/funciones';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 const baseUrl = 'http://localhost:3030/chat/';
 
 @Injectable()
 export class ChatService {
+  constructor(@InjectRepository(Chat) private readonly chatRepository : Repository <Chat>){}
   async create(createChatDto: CreateChatDto): Promise<Chat> {
-    const data = await this.findAll();
-    const id = data[0] ? setId(data[data.length - 1].id) : setId(0);
-    const newChat = { ...createChatDto, id };
-    const res = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(newChat),
-    });
-    const parsed = res.json();
-    return parsed;
+    try{
+      let chat: Chat = await this.chatRepository.save(new Chat(
+        createChatDto.mensaje
+      ));
+      if (chat)
+        return chat;
+      else
+      throw new Error('No se pudo crear el chat');
+    } catch (error){
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Error en la creación del chat'+error}, HttpStatus.NOT_FOUND);
+    }
   }
 
   async findAll(): Promise<Chat[]> {
-    const res = await fetch(baseUrl);
-    const parsed = await res.json();
-    return parsed;
+    let chats: Chat[] = await this.chatRepository.find();
+    return chats;
   }
 
   async findOne(id: number): Promise<Chat> {
-    const res = await fetch(`${baseUrl}${id}`);
-    if(!res.ok) return;
-    const parsed = await res.json();
-    return parsed;
+    let criterio : FindOneOptions = {where: { idChat: id }};
+    let chat : Chat = await this.chatRepository.findOne(criterio);
+    return chat;
   }
   async update(id: number, updateChatDto: UpdateChatDto): Promise<Chat> {
-    const isChat = await this.findOne(id);
-    if(!isChat) return;
-    const update = { ...updateChatDto, id };
-    const res = await fetch(baseUrl + id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(update),
-    });
-    const parsed = await res.json();
-    return parsed;
+    try {
+      let criterio : FindOneOptions = {where: {idChat: id}};
+      let chat : Chat = await this.chatRepository.findOne(criterio);
+      if (!chat)
+        throw new Error('No se encuentra el chat');
+      else
+      chat.setMensaje(updateChatDto.mensaje);     
+      chat = await this.chatRepository.save(chat);
+      return chat;
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Error en la actualización del chat' +error},HttpStatus.NOT_FOUND);
+    }
   }
   
-  async remove(id: number): Promise<Chat> {
-    const isChat = await this.findOne(id);
-    if(!isChat)return;
-    const res = await fetch(baseUrl + id, {
-      method: 'DELETE',
-    });
-    const parsed = res.json();
-    return parsed;
+  async remove(id: number): Promise<boolean> {
+    try {
+      let criterio : FindOneOptions = {where: {id}};
+      let chat : Chat = await this.chatRepository.findOne(criterio);
+      if (!chat)
+      throw new Error('No se encuentra el chat');
+      else
+      await this.chatRepository.delete(id);
+      return true;
+      } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+      error : 'Error en la eliminacion del chat '+error}, HttpStatus.NOT_FOUND);
+      }
   }
 }

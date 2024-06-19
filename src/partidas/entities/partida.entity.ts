@@ -4,7 +4,7 @@ import { Column, ColumnTypeUndefinedError, Entity, OneToMany, OneToOne, PrimaryG
 
 @Entity('partidas')
 export class Partida {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
     partidaId: number;
     @Column()
     nroPartida: number;
@@ -19,4 +19,20 @@ export class Partida {
     sala: Sala;
     @OneToMany(()=> Carton, (carton) => carton.partida)
     cartones: Carton[];
+
+    constructor(nroPartida: number, horaInicio: string, cantidadCartones: number, estadoPartida: boolean){
+        this.nroPartida = nroPartida;
+        this.horaInicio = horaInicio;
+        this.cantidadCartones = cantidadCartones;
+        this. estadoPartida = estadoPartida;
+    }
+
+    public getNroPartida(): number {return this.nroPartida};
+    public setNroPartida(nroPartida: number): void {this.nroPartida = nroPartida};
+    public getHoraInicio(): string {return this.horaInicio};
+    public setHoraInicio(horaInicio: string): void {this.horaInicio = horaInicio};
+    public getCantidadCartones(): number {return this.cantidadCartones};
+    public setCantidadCartones(cantidadCartones: number): void {this.cantidadCartones = cantidadCartones};
+    public getEstadoPartida(): boolean {return this.estadoPartida};
+    public setEstadoPartida(estadoPartida: boolean): void {this.estadoPartida = estadoPartida};
 }

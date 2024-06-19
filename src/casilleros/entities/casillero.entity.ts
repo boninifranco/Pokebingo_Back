@@ -4,7 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 
 @Entity('casilleros')
 export class Casillero {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
       casilleroId: number;
     @Column()
     salio: boolean;    
@@ -17,5 +17,10 @@ export class Casillero {
     @JoinColumn()
     imagen: Imagen;
 
+    constructor(salio: boolean){
+      this.salio = false;
+    }
+    public getSalio(): boolean {return this.salio};
+    public setSalio(salio: boolean): void {this.salio = salio};
   }
   

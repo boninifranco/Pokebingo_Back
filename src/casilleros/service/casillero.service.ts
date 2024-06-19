@@ -1,69 +1,69 @@
-import { Injectable } from '@nestjs/common';
-import fetch from 'node-fetch';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCasilleroDto } from '../dto/create-casillero.dto';
 import { UpdateCasilleroDto } from '../dto/update-casillero.dto';
 import { Casillero } from '../entities/casillero.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class CasilleroService {
   private BASE_URL = 'http://localhost:3030/casilleros'; 
 
-  async getAllCasilleros(): Promise<Casillero[]> {
-    const response = await fetch(this.BASE_URL);
-    if (!response.ok) {
-      throw new Error('Error al obtener los casilleros');
-    }
-    const casilleros = await response.json();
+  constructor(@InjectRepository(Casillero) private readonly casilleroRepository : Repository <Casillero>){}
+  async findAll(): Promise<Casillero[]> {
+    let casilleros: Casillero[] = await this.casilleroRepository.find();
     return casilleros;
   }
 
-  async getCasilleroById(id: string): Promise<Casillero> {
-    const response = await fetch(`${this.BASE_URL}/${id}`);
-    if (!response.ok) {
-      throw new Error(`Error al obtener el casillero con ID ${id}`);
-    }
-    const casillero = await response.json();
+  async findOne(id: string): Promise<Casillero> {
+    let criterio : FindOneOptions = {where: { id }};
+    let casillero : Casillero = await this.casilleroRepository.findOne(criterio);
     return casillero;
   }
 
-  async createCasillero(createCasilleroDto: CreateCasilleroDto): Promise<Casillero> {
-    const response = await fetch(this.BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(createCasilleroDto),
-    });
-    if (!response.ok) {
-      throw new Error('Error al crear el casillero');
+  async create(createCasilleroDto: CreateCasilleroDto): Promise<Casillero> {
+    try{
+      let casillero: Casillero = await this.casilleroRepository.save(new Casillero(
+        createCasilleroDto.salio
+      ));
+      if (casillero)
+        return casillero;
+      else
+      throw new Error('No se pudo crear el casillero');
+    } catch (error){
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Error en la creación del casillero'+error}, HttpStatus.NOT_FOUND);
     }
-    const newCasillero = await response.json();
-    return newCasillero;
   }
 
-  async updateCasillero(id: string, updateCasilleroDto: UpdateCasilleroDto): Promise<Casillero> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateCasilleroDto),
-    });
-    if (!response.ok) {
-      throw new Error('Error al actualizar el casillero');
+  async update(id: string, updateCasilleroDto: UpdateCasilleroDto): Promise<Casillero> {
+    try {
+      let criterio : FindOneOptions = {where: {id}};
+      let casillero : Casillero = await this.casilleroRepository.findOne(criterio);
+      if (!casillero)
+        throw new Error('No se encuentra el casillero');
+      else
+      casillero.setSalio(updateCasilleroDto.salio);     
+      casillero = await this.casilleroRepository.save(casillero);
+      return casillero;
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Error en la actualización del casillero' +error},HttpStatus.NOT_FOUND);
     }
-    const updatedCasillero = await response.json();
-    return updatedCasillero;
   }
 
-  async deleteCasillero(id: string): Promise<Casillero> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Error al eliminar el casillero');
-    }
-    const parsed = response.json();
-    return parsed;
+  async delete(id: string): Promise<boolean> {
+    try {
+      let criterio : FindOneOptions = {where: {id}};
+      let casillero : Casillero = await this.casilleroRepository.findOne(criterio);
+      if (!casillero)
+      throw new Error('No se encuentra el casillero');
+      else
+      await this.casilleroRepository.delete(id);
+      return true;
+      } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+      error : 'Error en la eliminacion del casillero '+error}, HttpStatus.NOT_FOUND);
+      }
   }
 }

@@ -4,7 +4,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn
 
 @Entity('sala')
 export class Sala {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
     salaId: number;
 
     @OneToOne(()=> Chat)

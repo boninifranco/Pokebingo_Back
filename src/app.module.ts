@@ -15,6 +15,9 @@ import { MetodosPagoModule } from './metodos_pago/metodospago.module';
 import { PremiosModule } from './premios/premios.module';
 import { StockPremiosModule } from './stock_premios/stockpremios.module';
 import { PuntajesModule } from './puntajes/puntajes.module';
+import { CasilleroModule } from './casilleros/casillero.module';
+import { FilaModule } from './filas/fila.module';
+import { ImagenModule } from './imagenes/imagen.module';
 
 @Module({
    imports:[
@@ -35,7 +38,11 @@ import { PuntajesModule } from './puntajes/puntajes.module';
     SalaModule,
     PartidasModule,
     TorneosModule,
-    ChatModule
+    ChatModule,
+    CartonModule,
+    CasilleroModule,
+    FilaModule,
+    ImagenModule
    ],
   controllers: [AppController],
   providers: [AppService],

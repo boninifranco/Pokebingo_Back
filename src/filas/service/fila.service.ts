@@ -1,64 +1,68 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import fetch from 'node-fetch';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFilaDto } from '../dto/create-fila.dto';
 import { Fila } from '../entities/fila.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class FilaService {
   private readonly BASE_URL = 'http://localhost:3030/filas';
 
+  constructor(@InjectRepository(Fila) private readonly filaRepository : Repository<Fila>){}
   async getAllFilas(): Promise<Fila[]> {
-    const response = await fetch(this.BASE_URL);
-    if (!response.ok) {
-      throw new Error('Error al obtener las filas');
-    }
-    return response.json();
+    let filas: Fila[] = await this.filaRepository.find();
+    return filas;
   }
 
   async getFilaById(id: string): Promise<Fila> {
-    const response = await fetch(`${this.BASE_URL}/${id}`);
-    if (!response.ok) {
-      throw new NotFoundException(`La fila con el ID ${id} no fue encontrada`);
-    }
-    return response.json();
+    let criterio : FindOneOptions = {where: { idFila: id }};
+    let fila : Fila = await this.filaRepository.findOne(criterio);
+    return fila;
   }
 
   async createFila(createFilaDto: CreateFilaDto): Promise<Fila> {
-    const response = await fetch(this.BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(createFilaDto),
-    });
-    if (!response.ok) {
-      throw new Error('Error al crear la fila');
+    try{
+      let fila:Fila = await this.filaRepository.save(new Fila(
+        createFilaDto.filaAciertos
+      ));
+      if (fila)
+        return fila;
+      else
+      throw new Error('No se pudo crear la fila');
+    } catch (error){
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Error en la creación de la fila'+error}, HttpStatus.NOT_FOUND);
     }
-    return response.json();
   }
 
   async updateFila(id: string, updateFilaDto: Partial<CreateFilaDto>): Promise<Fila> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateFilaDto),
-    });
-    if (!response.ok) {
-      throw new Error(`Error al actualizar la fila con ID ${id}`);
+    try {
+      let criterio : FindOneOptions = {where: {idFila: id}};
+      let fila : Fila = await this.filaRepository.findOne(criterio);
+      if (!fila)
+        throw new Error('No se encuentra la fila');
+      else
+      fila.setAciertos(updateFilaDto.filaAciertos);     
+      fila = await this.filaRepository.save(fila);
+      return fila;
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Error en la actualización de la fila' +error},HttpStatus.NOT_FOUND);
     }
-    return response.json();
   }
 
-  async deleteFila(id: string): Promise<Fila> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error(`Error al eliminar la fila con ID ${id}`);
+  async deleteFila(id: string): Promise<boolean> {
+    try {
+      let criterio : FindOneOptions = {where: {id}};
+      let fila : Fila = await this.filaRepository.findOne(criterio);
+      if (!fila)
+      throw new Error('No se encuentra la fila');
+      else
+      await this.filaRepository.delete(id);
+      return true;
+      } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+      error : 'Error en la eliminacion de la fila '+error}, HttpStatus.NOT_FOUND);
+      }
     }
-    const parsed = response.json();
-    return parsed;
-  }
 }

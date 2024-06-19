@@ -11,7 +11,7 @@ export class CasilleroController {
 
   @Get()
   async getAllCasilleros(@Res() res: Response):Promise <Casillero[]> {
-    const casilleros = await this.casilleroService.getAllCasilleros();
+    const casilleros = await this.casilleroService.findAll();
     res.status(HttpStatus.OK).json(casilleros);
     return casilleros;
   }
@@ -19,7 +19,7 @@ export class CasilleroController {
   @Get(':id')
   async getCasilleroById(@Param('id') id: string, @Res() res: Response):Promise<Casillero> {
     try {
-      const casillero = await this.casilleroService.getCasilleroById(id);
+      const casillero = await this.casilleroService.findOne(id);
       res.status(HttpStatus.OK).json(casillero);
       return casillero;
     } catch (error) {
@@ -30,7 +30,7 @@ export class CasilleroController {
   @Post()
   async createCasillero(@Body() createCasilleroDto: CreateCasilleroDto, @Res() res: Response):Promise<Casillero> {
     try {
-      const newCasillero = await this.casilleroService.createCasillero(createCasilleroDto);
+      const newCasillero = await this.casilleroService.create(createCasilleroDto);
       res.status(HttpStatus.CREATED).json(newCasillero);
       return newCasillero;
     } catch (error) {
@@ -41,7 +41,7 @@ export class CasilleroController {
   @Put(':id')
   async updateCasillero(@Param('id') id: string, @Body() updateCasilleroDto: UpdateCasilleroDto, @Res() res: Response):Promise<Casillero> {
     try {
-      const updatedCasillero = await this.casilleroService.updateCasillero(id, updateCasilleroDto);
+      const updatedCasillero = await this.casilleroService.update(id, updateCasilleroDto);
       res.status(HttpStatus.OK).json(updatedCasillero);
       return updatedCasillero;
     } catch (error) {
@@ -52,7 +52,7 @@ export class CasilleroController {
   @Delete(':id')
   async deleteCasillero(@Param('id') id: string, @Res() res: Response) {
     try {
-      await this.casilleroService.deleteCasillero(id);
+      await this.casilleroService.delete(id);
       return res.status(HttpStatus.NO_CONTENT).send();
     } catch (error) {
       throw new NotFoundException('Error al eliminar el casillero');
