@@ -21,13 +21,12 @@ import { ImagenModule } from './imagenes/imagen.module';
 
 @Module({
    imports:[
-   imports:[
     TypeOrmModule.forRoot({
        type: 'mysql',
        host: 'localhost',
        port: 3306,
        username: 'root',
-       password: 'root',
+       password: 'admin',
        database: 'bingo',
        entities: ['dist/**/**.entity{.ts,.js}'],
        synchronize: true,
@@ -43,7 +42,11 @@ import { ImagenModule } from './imagenes/imagen.module';
     SalaModule,
     PartidasModule,
     TorneosModule,
-    ChatModule
+    ChatModule,
+    CartonModule,
+    CasilleroModule,
+    FilaModule,
+    ImagenModule
    ],
   controllers: [AppController],
   providers: [AppService],

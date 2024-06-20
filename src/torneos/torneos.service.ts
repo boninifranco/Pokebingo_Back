@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTorneoDto } from './dto/create-torneo.dto';
 import { UpdateTorneoDto } from './dto/update-torneo.dto';
 import { Torneo } from './entities/torneo.entity';
-import { setId } from 'src/funciones/funciones';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 
@@ -31,13 +30,13 @@ export class TorneosService {
     return torneos;
   }
   async findOne(id: number): Promise<Torneo> {
-    let criterio : FindOneOptions = {where: { id }};
+    let criterio : FindOneOptions = {where: {torneoId: id }};
     let torneo : Torneo = await this.torneoRepository.findOne(criterio);
     return torneo;
   }
   async update(id: number, UpdateTorneoDto: UpdateTorneoDto): Promise<Torneo> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {torneoId: id}};
       let torneo : Torneo = await this.torneoRepository.findOne(criterio);
       if (!torneo)
         throw new Error('No se encuentra el torneo');
@@ -55,7 +54,7 @@ export class TorneosService {
   }
   async remove(id: number): Promise<boolean> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {torneoId: id}};
       let torneo : Torneo = await this.torneoRepository.findOne(criterio);
       if (!torneo)
       throw new Error('No se encuentra el torneo');

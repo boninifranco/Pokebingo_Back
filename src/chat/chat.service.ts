@@ -31,13 +31,13 @@ export class ChatService {
   }
 
   async findOne(id: number): Promise<Chat> {
-    let criterio : FindOneOptions = {where: { idChat: id }};
+    let criterio : FindOneOptions = {where: { chatId: id }};
     let chat : Chat = await this.chatRepository.findOne(criterio);
     return chat;
   }
   async update(id: number, updateChatDto: UpdateChatDto): Promise<Chat> {
     try {
-      let criterio : FindOneOptions = {where: {idChat: id}};
+      let criterio : FindOneOptions = {where: {chatId: id}};
       let chat : Chat = await this.chatRepository.findOne(criterio);
       if (!chat)
         throw new Error('No se encuentra el chat');
@@ -53,7 +53,7 @@ export class ChatService {
   
   async remove(id: number): Promise<boolean> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {chatId: id}};
       let chat : Chat = await this.chatRepository.findOne(criterio);
       if (!chat)
       throw new Error('No se encuentra el chat');

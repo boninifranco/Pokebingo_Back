@@ -31,13 +31,13 @@ export class PartidasService {
   }
 
   async findOne(id: number): Promise<Partida> {
-    let criterio : FindOneOptions = {where: { id }};
+    let criterio : FindOneOptions = {where: {partidaId: id }};
     let partida : Partida = await this.partidaRepository.findOne(criterio);
     return partida;
   }
   async update(id: number, UpdatePartidaDto: UpdatePartidaDto): Promise<Partida> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {partidaId: id}};
       let partida : Partida = await this.partidaRepository.findOne(criterio);
       if (!partida)
         throw new Error('No se encuentra la partida');
@@ -55,7 +55,7 @@ export class PartidasService {
   }
   async remove(id: number): Promise<boolean> {
     try {
-    let criterio : FindOneOptions = {where: {id}};
+    let criterio : FindOneOptions = {where: {partidaId: id}};
     let partida : Partida = await this.partidaRepository.findOne(criterio);
     if (!partida)
     throw new Error('No se encuentra la partida');

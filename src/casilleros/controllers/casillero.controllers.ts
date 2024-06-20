@@ -50,12 +50,7 @@ export class CasilleroController {
   }
 
   @Delete(':id')
-  async deleteCasillero(@Param('id') id: string, @Res() res: Response) {
-    try {
-      await this.casilleroService.delete(id);
-      return res.status(HttpStatus.NO_CONTENT).send();
-    } catch (error) {
-      throw new NotFoundException('Error al eliminar el casillero');
-    }
+  async deleteCasillero(@Param('id') id: string) {
+    return this.casilleroService.delete(id);
   }
 }

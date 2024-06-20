@@ -16,7 +16,7 @@ export class CartonService {
   }
 
   public async findById(id: number): Promise<Carton> { 
-    let criterio : FindOneOptions = {where: {id}};
+    let criterio : FindOneOptions = {where: {cartonId: id}};
     let carton: Carton = await this.cartonRepository.findOne(criterio);
     return carton;
   }
@@ -37,7 +37,7 @@ export class CartonService {
   }
   async update(id: number, updateCartonDto: UpdateCartonDto ): Promise<Carton> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {cartonId: id}};
       let carton : Carton = await this.cartonRepository.findOne(criterio);
       if (!carton)
         throw new Error('No se encuentra el cartón');
@@ -53,10 +53,10 @@ export class CartonService {
   }
   async delete(id: number):Promise<boolean>{
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {cartonId: id}};
       let carton : Carton = await this.cartonRepository.findOne(criterio);
       if (!carton)
-      throw new Error('No se encuentra la ciudad');
+      throw new Error('No se encuentra el carton');
       else
       await this.cartonRepository.delete(id);
       return true;

@@ -16,7 +16,7 @@ export class CasilleroService {
   }
 
   async findOne(id: string): Promise<Casillero> {
-    let criterio : FindOneOptions = {where: { id }};
+    let criterio : FindOneOptions = {where: {casilleroId: id }};
     let casillero : Casillero = await this.casilleroRepository.findOne(criterio);
     return casillero;
   }
@@ -38,7 +38,7 @@ export class CasilleroService {
 
   async update(id: string, updateCasilleroDto: UpdateCasilleroDto): Promise<Casillero> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {casilleroId: id}};
       let casillero : Casillero = await this.casilleroRepository.findOne(criterio);
       if (!casillero)
         throw new Error('No se encuentra el casillero');
@@ -54,7 +54,7 @@ export class CasilleroService {
 
   async delete(id: string): Promise<boolean> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {casilleroId: id}};
       let casillero : Casillero = await this.casilleroRepository.findOne(criterio);
       if (!casillero)
       throw new Error('No se encuentra el casillero');

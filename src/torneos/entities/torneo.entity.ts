@@ -7,13 +7,13 @@ export class Torneo {
   @Column()
   nroTorneo: number;
   @Column()
-  fecha: Date;
+  fecha: string;
   @Column()
-  horaInicio: Date;
+  horaInicio: string;
   @Column()
-  horaCierre: Date;
+  horaCierre: string;
 
-  constructor(nroTorneo: number, fecha: Date, horaInicio: Date, horaCierre: Date,) {
+  constructor(nroTorneo: number, fecha: string, horaInicio: string, horaCierre: string,) {
     this.nroTorneo = nroTorneo;
     this.fecha = fecha;
     this.horaInicio = horaInicio;
@@ -21,10 +21,10 @@ export class Torneo {
   }
   public getNroTorneo(): number {return this.nroTorneo}
   public setNroTorneo(nroTorneo: number): void {this.nroTorneo = nroTorneo}
-  public getFecha(): Date {return this.fecha}
-  public setFecha(fecha: Date): void {this.fecha = fecha}
-  public getHoraInicio(): Date {return this.horaInicio}
-  public setHoraInicio(horaInicio: Date): void {this.horaInicio = horaInicio}
-  public getHoraCierre(): Date {return this.horaCierre}
-  public setHoraCierre(horaCierre: Date): void {this.horaCierre = horaCierre}
+  public getFecha(): string {return this.fecha}
+  public setFecha(fecha: string): void {this.fecha = fecha}
+  public getHoraInicio(): string {return this.horaInicio}
+  public setHoraInicio(horaInicio: string): void {this.horaInicio = horaInicio}
+  public getHoraCierre(): string {return this.horaCierre}
+  public setHoraCierre(horaCierre: string): void {this.horaCierre = horaCierre}
 }

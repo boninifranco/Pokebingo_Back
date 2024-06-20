@@ -18,7 +18,7 @@ export class ImagenService {
   }
 
   async findOne(id: string): Promise<Imagen> {
-    let criterio : FindOneOptions = {where: { id }};
+    let criterio : FindOneOptions = {where: {imagenId: id }};
     let imagenes : Imagen = await this.imagenRepository.findOne(criterio);
     return imagenes;
   }
@@ -40,7 +40,7 @@ export class ImagenService {
 
   async update(id: string, updateImagenDto: UpdateImagenDto): Promise<Imagen> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {imagenId: id}};
       let imagen : Imagen = await this.imagenRepository.findOne(criterio);
       if (!imagen)
         throw new Error('No se encuentra la imagen');
@@ -56,7 +56,7 @@ export class ImagenService {
 
   async remove(id: string): Promise<boolean> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {imagenId: id}};
       let imagen : Imagen = await this.imagenRepository.findOne(criterio);
       if (!imagen)
       throw new Error('No se encuentra la imagen');

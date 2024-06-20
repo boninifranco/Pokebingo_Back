@@ -21,7 +21,7 @@ export class CartonController {
    
       if(carton){
         res.status(HttpStatus.FOUND).json(carton);
-        return;
+        return carton;
       }
       res.status(HttpStatus.NOT_FOUND).json({message: `El carton con id ${id} no se encontró`})
     
@@ -33,7 +33,7 @@ export class CartonController {
     return res.status(HttpStatus.CREATED).json(createdCarton);
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateCartonDto: UpdateCartonDto, @Res() res: Response):Promise<Carton> {
     const updatedCarton = await this.cartonService.update(id, updateCartonDto);
     if(updatedCarton){
@@ -44,7 +44,7 @@ export class CartonController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number, @Res() res: Response):Promise<boolean> {
+  async delete(@Param('id', ParseIntPipe) id: number){
     return this.cartonService.delete(id);
   }
 }

@@ -1,13 +1,11 @@
-import { IsBoolean, IsInt, IsTimeZone } from "class-validator";
+import { IsBoolean, IsInt, IsString, IsTimeZone } from "class-validator";
 
 export class CreatePartidaDto {
-    @IsInt()
-    partidaId: number;
-
+    
     @IsInt()
     nroPartida: number;
 
-    @IsTimeZone()
+    @IsString()
     horaInicio: string;
 
     @IsInt()
@@ -16,6 +14,4 @@ export class CreatePartidaDto {
     @IsBoolean()
     estadoPartida: boolean;
 
-    @IsInt()
-    salaId: number;
 }

@@ -15,7 +15,7 @@ export class FilaService {
   }
 
   async getFilaById(id: string): Promise<Fila> {
-    let criterio : FindOneOptions = {where: { idFila: id }};
+    let criterio : FindOneOptions = {where: { filaId: id }};
     let fila : Fila = await this.filaRepository.findOne(criterio);
     return fila;
   }
@@ -37,7 +37,7 @@ export class FilaService {
 
   async updateFila(id: string, updateFilaDto: Partial<CreateFilaDto>): Promise<Fila> {
     try {
-      let criterio : FindOneOptions = {where: {idFila: id}};
+      let criterio : FindOneOptions = {where: {filaId: id}};
       let fila : Fila = await this.filaRepository.findOne(criterio);
       if (!fila)
         throw new Error('No se encuentra la fila');
@@ -53,7 +53,7 @@ export class FilaService {
 
   async deleteFila(id: string): Promise<boolean> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {filaId: id}};
       let fila : Fila = await this.filaRepository.findOne(criterio);
       if (!fila)
       throw new Error('No se encuentra la fila');

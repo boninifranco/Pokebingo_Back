@@ -50,12 +50,7 @@ export class FilaController {
   }
 
   @Delete(':id')
-  async deleteFila(@Param('id') id: string, @Res() res: Response) {
-    try {
-      await this.filaService.deleteFila(id);
-      return res.status(HttpStatus.NO_CONTENT).send();
-    } catch (error) {
-      throw new NotFoundException('La fila no fue encontrada');
-    }
+  async deleteFila(@Param('id') id: string) {
+    return this.filaService.deleteFila(id);
   }
 }

@@ -31,13 +31,13 @@ export class SalaService {
   }
 
   async findOne(id: number): Promise<Sala> {
-    let criterio : FindOneOptions = {where: { id }};
+    let criterio : FindOneOptions = {where: {salaId: id }};
     let sala : Sala = await this.salaRepository.findOne(criterio);
     return sala;
   }
   async update(id: number, updateSalaDto: UpdateSalaDto): Promise<Sala> {
     try {
-      let criterio : FindOneOptions = {where: {idChat: id}};
+      let criterio : FindOneOptions = {where: {salaId: id}};
       let sala : Sala = await this.salaRepository.findOne(criterio);
       if (!sala)
         throw new Error('No se encuentra la sala');
@@ -51,7 +51,7 @@ export class SalaService {
   }
   async remove(id: number): Promise<boolean> {
     try {
-      let criterio : FindOneOptions = {where: {id}};
+      let criterio : FindOneOptions = {where: {salaId: id}};
       let sala : Sala = await this.salaRepository.findOne(criterio);
       if (!sala)
       throw new Error('No se encuentra la sala');
