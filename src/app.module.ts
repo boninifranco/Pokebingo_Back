@@ -15,18 +15,18 @@ import { MetodosPagoModule } from './metodos_pago/metodospago.module';
 import { PremiosModule } from './premios/premios.module';
 import { StockPremiosModule } from './stock_premios/stockpremios.module';
 import { PuntajesModule } from './puntajes/puntajes.module';
+import { CasilleroModule } from './casilleros/casillero.module';
+import { FilaModule } from './filas/fila.module';
+import { ImagenModule } from './imagenes/imagen.module';
 
 @Module({
-  /*imports: [UsuarioModule, RegistroModule, LogueoModule,
-     DesempenoModule, SalaModule, TorneosModule,
-     PartidasModule, ChatModule, CartonModule, MetodosPagoModule, PremiosModule, StockPremiosModule, PuntajesModule ],*/
-  imports:[
+   imports:[
     TypeOrmModule.forRoot({
        type: 'mysql',
        host: 'localhost',
        port: 3306,
        username: 'root',
-       password: 'Password',
+       password: 'admin',
        database: 'bingo',
        entities: ['dist/**/**.entity{.ts,.js}'],
        synchronize: true,
@@ -38,7 +38,15 @@ import { PuntajesModule } from './puntajes/puntajes.module';
     MetodosPagoModule,
     PremiosModule,
     StockPremiosModule,
-    PuntajesModule
+    PuntajesModule,
+    SalaModule,
+    PartidasModule,
+    TorneosModule,
+    ChatModule,
+    CartonModule,
+    CasilleroModule,
+    FilaModule,
+    ImagenModule
    ],
   controllers: [AppController],
   providers: [AppService],
