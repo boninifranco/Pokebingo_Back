@@ -18,7 +18,7 @@ describe('CasilleroService', () => {
 
   it('should return all casilleros', async () => {
     // Simula llamada al método getAllCasilleros del servicio
-    const result = await service.getAllCasilleros();
+    const result = await service.findAll();
   
     // Verifica que el resultado no sea undefined
     expect(result).toBeDefined();

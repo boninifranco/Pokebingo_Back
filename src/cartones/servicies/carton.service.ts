@@ -1,60 +1,68 @@
-import { Injectable } from '@nestjs/common';
-import { CartonEntity } from '../entities/carton.entity';
-import fetch from 'node-fetch';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Carton } from '../entities/carton.entity';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { CreateCartonDto } from '../dto/create-carton.dto';
-import { setId } from 'src/funciones/funciones';
+import { InjectRepository } from '@nestjs/typeorm';
+import {FindOneOptions, Repository } from 'typeorm';
 
 const BASE_URL = 'http://localhost:3030/cartones';
 @Injectable()
 export class CartonService {   
 
-  async findAll(): Promise<CartonEntity[]> {
-    const response = await fetch (BASE_URL);
-    const data = await response.json();    
-    return data;    
+  constructor(@InjectRepository(Carton) private readonly cartonRepository : Repository <Carton>){}
+  public async findAll(): Promise<Carton[]> {
+    let cartones: Carton[] = await this.cartonRepository.find();
+    return cartones;
   }
 
-  async findById(id: number): Promise<CartonEntity> { 
-    const response = await fetch (`${BASE_URL}/${id}`);
-    if(!response.ok)return;
-    const data = await response.json();
-    return data;
+  public async findById(id: number): Promise<Carton> { 
+    let criterio : FindOneOptions = {where: {cartonId: id}};
+    let carton: Carton = await this.cartonRepository.findOne(criterio);
+    return carton;
   }
 
-  async create(createCartonDto: CreateCartonDto): Promise<CartonEntity> {
-    const datos = await this.findAll();
-    const id = datos[0]?setId(datos[datos.length-1].id).toString() : setId(0);
-    const newCarton = {...createCartonDto,id}
-    const response = await fetch(BASE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newCarton),      
-    });
-    const parsed = await response.json();
-    
-    return parsed;
+  async create(createCartonDto: CreateCartonDto): Promise<Carton> {
+    try{
+      let carton: Carton = await this.cartonRepository.save(new Carton(
+        createCartonDto.nroCarton, createCartonDto.aciertos
+      ));
+      if (carton)
+        return carton;
+      else
+      throw new Error('No se pudo crear el cartón');
+    } catch (error){
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Error en la creación del cartón'+error}, HttpStatus.NOT_FOUND);
+    }
   }
-  async update(id: number, updateCartonDto: UpdateCartonDto ): Promise<CartonEntity> {
-    const isCarton = await this.findById(id);
-    if(!isCarton)return;
-    const newCarton = {...updateCartonDto, id}
-    const response = await fetch(`${BASE_URL}/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newCarton),
-    });
-    const updatedCarton = await response.json();    
-    return updatedCarton;
+  async update(id: number, updateCartonDto: UpdateCartonDto ): Promise<Carton> {
+    try {
+      let criterio : FindOneOptions = {where: {cartonId: id}};
+      let carton : Carton = await this.cartonRepository.findOne(criterio);
+      if (!carton)
+        throw new Error('No se encuentra el cartón');
+      else
+      carton.setNroCarton(updateCartonDto.nroCarton);
+      carton.setaciertos(updateCartonDto.aciertos);
+      carton = await this.cartonRepository.save(carton);
+      return carton;
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Error en la actualización del cartón' +error},HttpStatus.NOT_FOUND);
+    }
   }
-  async delete(id: number):Promise<CartonEntity>{
-    const isCarton = await this.findById(id);
-    if(!isCarton)return;    
-    const res = await fetch(`${BASE_URL}/${id}`, {      
-      method: 'DELETE',
-    });
-    const parsed = await res.json();    
-    return parsed;
-    
+  async delete(id: number):Promise<boolean>{
+    try {
+      let criterio : FindOneOptions = {where: {cartonId: id}};
+      let carton : Carton = await this.cartonRepository.findOne(criterio);
+      if (!carton)
+      throw new Error('No se encuentra el carton');
+      else
+      await this.cartonRepository.delete(id);
+      return true;
+      } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+      error : 'Error en la eliminacion del cartón '+error}, HttpStatus.NOT_FOUND);
+      }
   }
 }

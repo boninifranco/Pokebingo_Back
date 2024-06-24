@@ -58,12 +58,7 @@ export class ImagenController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() res: Response){
-    try {
-      await this.imagenService.remove(id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor' });
-    }
+  async remove(@Param('id') id: string){
+    return this.imagenService.remove(id);
   }
 }

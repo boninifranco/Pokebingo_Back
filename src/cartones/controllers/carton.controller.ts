@@ -3,7 +3,7 @@ import { CartonService } from '../servicies/carton.service';
 import { CreateCartonDto } from '../dto/create-carton.dto';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { Response } from 'express';
-import { CartonEntity } from '../entities/carton.entity';
+import { Carton } from '../entities/carton.entity';
 
 @Controller('cartones')
 export class CartonController {
@@ -16,12 +16,12 @@ export class CartonController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number, @Res() res: Response):Promise<CartonEntity> {
+  async findById(@Param('id') id: number, @Res() res: Response):Promise<Carton> {
     const carton = await this.cartonService.findById(id);
    
       if(carton){
         res.status(HttpStatus.FOUND).json(carton);
-        return;
+        return carton;
       }
       res.status(HttpStatus.NOT_FOUND).json({message: `El carton con id ${id} no se encontró`})
     
@@ -33,8 +33,8 @@ export class CartonController {
     return res.status(HttpStatus.CREATED).json(createdCarton);
   }
 
-  @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateCartonDto: UpdateCartonDto, @Res() res: Response):Promise<CartonEntity> {
+  @Put(':id')
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateCartonDto: UpdateCartonDto, @Res() res: Response):Promise<Carton> {
     const updatedCarton = await this.cartonService.update(id, updateCartonDto);
     if(updatedCarton){
       res.status(HttpStatus.FOUND).json(updatedCarton);
@@ -44,12 +44,7 @@ export class CartonController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number, @Res() res: Response):Promise<CartonEntity> {
-    const deleteCarton = await this.cartonService.delete(id);
-    if(deleteCarton){
-      res.status(HttpStatus.FOUND).json({...deleteCarton, borrado:true});
-      return;
-    }
-    res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró`})
+  async delete(@Param('id', ParseIntPipe) id: number){
+    return this.cartonService.delete(id);
   }
 }

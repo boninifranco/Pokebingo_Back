@@ -1,63 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePremiosDto } from './dto/create-premios.dto';
 import { UpdatePremiosDto } from './dto/update-premios.dto';
 import { Premios } from './entities/premios.entity';
-import { setId } from 'src/funciones/funciones';
-
-
-const baseUrl = 'http://localhost:3030/premios'
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
-export class PremiosService {
+export class PremiosService {  
+  constructor(@InjectRepository(Premios)
+    private readonly premiosReposirory : Repository<Premios>
+  ){}
   async create(createPremiosDto: CreatePremiosDto): Promise<Premios> {
-    const datos = await this.findAll();
-    const id = datos.length ? setId(datos[datos.length - 1].id).toString() : setId(0);
-    const newPremio = { ...createPremiosDto, id };
-    const res = await fetch(baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newPremio),
-    });
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const premio: Premios = this.premiosReposirory.create(createPremiosDto)
+      return await this.premiosReposirory.save(premio);      
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)
+    }    
   }
 
   async findAll(): Promise<Premios[]> {
-    const res = await fetch(baseUrl);
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const premios = await this.premiosReposirory.find();
+      if(!premios) throw new BadRequestException(`No se encontraron premios en la base de datos`)
+      return premios;
+      } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)
+    }    
   }
 
   async findOne(id: number): Promise<Premios> {
-    const res = await fetch(`${baseUrl}/${id}`);
-    if(!res.ok)return;
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const criterio: FindOneOptions = {where:{ id:id}};
+      const premio = await this.premiosReposirory.findOne(criterio);
+      if(!premio) throw new BadRequestException(`No se encontró el premio con el id ${id} en la base de datos`)
+      return premio;
+
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)      
+    }
   }
 
   async update(id: number, updatePremiosDto: UpdatePremiosDto): Promise<Premios> {
-    const isPremio = await this.findOne(id);
-    if(!isPremio)return;
-    const res = await fetch(`${baseUrl}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatePremiosDto),
-    });
-    const parsed = await res.json();
-    return parsed;
+    try {
+      const criterio: FindOneOptions = {where:{ id:id}};
+      let premio = await this.premiosReposirory.findOne(criterio);
+      if(!premio) throw new BadRequestException(`No se encontró el premio con el id ${id} en la base de datos`)
+        premio.descripcion = (updatePremiosDto.descripcion)
+        premio.creditos = (updatePremiosDto.creditos)
+        await this.premiosReposirory.update(id,premio)       
+      return premio;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)      
+    }
   }
 
   async remove(id: number){
-    const isPremio = await this.findOne(id);
-    if(!isPremio)return;
-    const res = await fetch(`${baseUrl}/${id}`,{
-      method: "DELETE",      
-    });
-    const parsed = res.json();
-    return parsed;        
+    try {
+      const criterio: FindOneOptions = {where:{ id:id}};
+      const premio = await this.premiosReposirory.findOne(criterio);
+      if(!premio) throw new BadRequestException(`No se encontró el premio con el id ${id} en la base de datos`)
+      await this.premiosReposirory.delete(id)
+        return premio;
+    } catch (error) {
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)      
+    }        
   };
 }

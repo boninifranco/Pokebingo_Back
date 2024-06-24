@@ -1,65 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import fetch from 'node-fetch';
 import { CreateImagenDto } from '../dto/create-imagen.dto'; 
-import { UpdateImagenDto } from '../dto/update-imagen.dto';
 import { Imagen } from '../entities/imagen.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
+import { UpdateImagenDto } from '../dto/update-imagen.dto';
 
 @Injectable()
 export class ImagenService {
   private readonly BASE_URL = 'http://localhost:3030/imagenes';
 
+  constructor(@InjectRepository(Imagen) private readonly imagenRepository : Repository<Imagen>){}
+
   async findAll(): Promise<Imagen[]> {
-    const response = await fetch(this.BASE_URL);
-    if (!response.ok) {
-      throw new Error('Error al obtener las imágenes');
-    }
-    return response.json();
+    let imagenes: Imagen[] = await this.imagenRepository.find();
+    return imagenes;
   }
 
   async findOne(id: string): Promise<Imagen> {
-    const response = await fetch(`${this.BASE_URL}/${id}`);
-    if (!response.ok) {
-      throw new Error(`Error al obtener la imagen con el ID ${id}`);
-    }
-    return response.json();
+    let criterio : FindOneOptions = {where: {imagenId: id }};
+    let imagenes : Imagen = await this.imagenRepository.findOne(criterio);
+    return imagenes;
   }
 
   async create(createImagenDto: CreateImagenDto): Promise<Imagen> {
-    const response = await fetch(this.BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(createImagenDto),
-    });
-    if (!response.ok) {
-      throw new Error('Error al crear la imagen');
+    try{
+      let imagen: Imagen = await this.imagenRepository.save(new Imagen(
+        createImagenDto.imagen
+      ));
+      if (imagen)
+        return imagen;
+      else
+      throw new Error('No se pudo crear la imagen');
+    } catch (error){
+      throw new HttpException({status : HttpStatus.NOT_FOUND,
+        error: 'Error en la creación de la imagen'+error}, HttpStatus.NOT_FOUND);
     }
-    return response.json();
   }
 
   async update(id: string, updateImagenDto: UpdateImagenDto): Promise<Imagen> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateImagenDto),
-    });
-    if (!response.ok) {
-      throw new Error(`Error al actualizar la imagen con el ID ${id}`);
+    try {
+      let criterio : FindOneOptions = {where: {imagenId: id}};
+      let imagen : Imagen = await this.imagenRepository.findOne(criterio);
+      if (!imagen)
+        throw new Error('No se encuentra la imagen');
+      else
+      imagen.setImagen(updateImagenDto.imagen);     
+      imagen = await this.imagenRepository.save(imagen);
+      return imagen;
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND,
+        error:'Error en la actualización de la imagen' +error},HttpStatus.NOT_FOUND);
     }
-    return response.json();
   }
 
-  async remove(id: string): Promise<Imagen> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error(`Error al eliminar la imagen con el ID ${id}`);
-    }
-    const parsed = response.json();
-    return parsed;
+  async remove(id: string): Promise<boolean> {
+    try {
+      let criterio : FindOneOptions = {where: {imagenId: id}};
+      let imagen : Imagen = await this.imagenRepository.findOne(criterio);
+      if (!imagen)
+      throw new Error('No se encuentra la imagen');
+      else
+      await this.imagenRepository.delete(id);
+      return true;
+      } catch (error) {
+      throw new HttpException( { status : HttpStatus.NOT_FOUND,
+      error : 'Error en la eliminacion de la imagen'+error}, HttpStatus.NOT_FOUND);
+      }
   }
 }

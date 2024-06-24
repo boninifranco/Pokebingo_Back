@@ -1,15 +1,14 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import {IsInt} from "class-validator";
 
 export class CreateCartonDto {
 
-  @IsNotEmpty()
-  @IsString()
-    readonly nroCarton: string;
+  @IsInt()
+    nroCarton: number;
 
-  @IsNotEmpty()  
-    readonly idPartida: number;
+  @IsInt()  
+    idPartida: number;
 
-  @IsNotEmpty()  
-    readonly aciertos: number;
+  @IsInt()  
+    aciertos: number;
   }
   
