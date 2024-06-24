@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Res} from '@nestjs/common';
-import { DesempenioService } from './desempeno.service';
-import { CreateDesempenioDto } from './dto/create-desempeno.dto';
-import { UpdateDesempenioDto } from './dto/update-desempeno.dto';
+import { DesempenioService } from './desempenio.service';
+import { CreateDesempenioDto } from './dto/create-desempenio.dto';
+import { UpdateDesempenioDto } from './dto/update-desempenio.dto';
 import { Response } from 'express';
-import { Desempenio } from './entities/desempeno.entity';
+import { Desempenio } from './entities/desempenio.entity';
 
-@Controller('desempeno')
+@Controller('desempenio')
 export class DesempenioController {
   constructor(private readonly desempenioService: DesempenioService) {}
 
@@ -27,7 +27,7 @@ export class DesempenioController {
     if(isDesempenio){
       res.status(HttpStatus.FOUND).json(isDesempenio)
     }
-    res.status(HttpStatus.NOT_FOUND).json({message: `El desempeno con id ${id} no se encontro`})
+    res.status(HttpStatus.NOT_FOUND).json({message: `El desempenio con id ${id} no se encontro`})
     return isDesempenio
   }
 
@@ -38,7 +38,7 @@ export class DesempenioController {
       res.status(HttpStatus.FOUND).json(isDesempenio)
       return isDesempenio;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El desempeno con id ${id} no se encontró`}) ;
+    res.status(HttpStatus.NOT_FOUND).json({message:`El desempenio con id ${id} no se encontró`}) ;
   }
 
   @Delete(':id')
@@ -47,6 +47,6 @@ export class DesempenioController {
     if(isDesempenio){
       res.status(HttpStatus.FOUND).json(isDesempenio);
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El desempeno con id ${id} no se encontro`}) 
+    res.status(HttpStatus.NOT_FOUND).json({message:`El desempenio con id ${id} no se encontro`}) 
   }
 }

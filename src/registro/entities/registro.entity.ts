@@ -1,5 +1,5 @@
 
-import { Desempenio } from "src/desempeno/entities/desempeno.entity";
+import { Desempenio } from "src/desempenio/entities/desempenio.entity";
 import { Logueo } from "src/logueo/entities/logueo.entity";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";

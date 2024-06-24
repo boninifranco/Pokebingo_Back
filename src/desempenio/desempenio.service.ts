@@ -1,8 +1,8 @@
 
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateDesempenioDto } from './dto/create-desempeno.dto';
-import { UpdateDesempenioDto } from './dto/update-desempeno.dto';
-import { Desempenio } from './entities/desempeno.entity';
+import { CreateDesempenioDto } from './dto/create-desempenio.dto';
+import { UpdateDesempenioDto } from './dto/update-desempenio.dto';
+import { Desempenio } from './entities/desempenio.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -15,8 +15,8 @@ export class DesempenioService {
 
   async create(createDesempenioDto: CreateDesempenioDto): Promise<Desempenio> {
     try {
-      const newDesempeno: Desempenio = this.desempenioRepository.create(createDesempenioDto)
-      return this.desempenioRepository.save(newDesempeno);      
+      const newDesempenio: Desempenio = this.desempenioRepository.create(createDesempenioDto)
+      return this.desempenioRepository.save(newDesempenio);      
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
         error: 'Se produjo un error al enviar la petición'+ error}, HttpStatus.NOT_FOUND);

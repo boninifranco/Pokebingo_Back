@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { UsuarioModule } from './usuario/usuario.module';
 import { RegistroModule } from './registro/registro.module';
 import { LogueoModule } from './logueo/logueo.module';
-import { DesempenoModule } from './desempeno/desempeno.module';
+import { DesempenioModule } from './desempenio/desempenio.module';
 import { SalaModule } from './sala/sala.module';
 import { TorneosModule } from './torneos/torneos.module';
 import { PartidasModule } from './partidas/partidas.module';
@@ -34,7 +34,7 @@ import { ImagenModule } from './imagenes/imagen.module';
     UsuarioModule,
     LogueoModule,
     RegistroModule,
-    DesempenoModule,
+    DesempenioModule,
     MetodosPagoModule,
     PremiosModule,
     StockPremiosModule,

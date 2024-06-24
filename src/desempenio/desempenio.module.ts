@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DesempenioService } from './desempeno.service';
-import { DesempenioController } from './desempeno.controller';
+import { DesempenioService } from './desempenio.service';
+import { DesempenioController } from './desempenio.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Desempenio } from './entities/desempeno.entity';
+import { Desempenio } from './entities/desempenio.entity';
 
 @Module({
   imports:[
@@ -14,4 +14,4 @@ import { Desempenio } from './entities/desempeno.entity';
   providers: [DesempenioService],
   
 })
-export class DesempenoModule {}
+export class DesempenioModule {}
