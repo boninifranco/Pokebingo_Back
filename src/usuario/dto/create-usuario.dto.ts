@@ -8,6 +8,9 @@ export class CreateUsuarioDto{
     nombre:string;
 
     @IsString()
+    dni:string;
+
+    @IsString()
     celular:string;
 
     @IsOptional()

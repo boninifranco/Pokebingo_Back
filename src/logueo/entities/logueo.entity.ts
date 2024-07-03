@@ -18,6 +18,7 @@ export class Logueo {
     @ManyToOne(type=>Registro, registro=>registro.id,
         {onDelete:'CASCADE'}
     )
-    @JoinColumn()
-    idUsuario:Registro;   
+    @JoinColumn({name:'idUsuario'})
+    idUsuario:number;
+       
 }

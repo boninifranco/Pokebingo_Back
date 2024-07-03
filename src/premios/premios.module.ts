@@ -13,5 +13,6 @@ import { StockPremios } from 'src/stock_premios/entities/stockpremios.entity';
   ],
   controllers: [PremiosController],
   providers: [PremiosService],
+  exports: [PremiosService]
 })
 export class PremiosModule {}

@@ -16,6 +16,8 @@ export class Desempenio {
     @OneToOne(type=>Registro, (registro)=>registro.id,
     {onDelete:'CASCADE'}
     )
-    @JoinColumn()
-    jugador:Registro;    
+    @JoinColumn({name:'jugadorId'})
+    jugador:number;
+    
 }
+

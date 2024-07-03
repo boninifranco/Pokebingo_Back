@@ -26,10 +26,11 @@ import { ImagenModule } from './imagenes/imagen.module';
        host: 'localhost',
        port: 3306,
        username: 'root',
-       password: 'admin',
+       password: 'Password',
        database: 'bingo',
        entities: ['dist/**/**.entity{.ts,.js}'],
        synchronize: true,
+       //logging: true
      }),
     UsuarioModule,
     LogueoModule,
