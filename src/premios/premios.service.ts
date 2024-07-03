@@ -16,18 +16,18 @@ export class PremiosService {
       return await this.premiosReposirory.save(premio);      
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)
+        error:`Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)
     }    
   }
 
   async findAll(): Promise<Premios[]> {
     try {
       const premios = await this.premiosReposirory.find();
-      if(!premios) throw new BadRequestException(`No se encontraron premios en la base de datos`)
+      if(premios.length===0) throw new BadRequestException(`No se encontraron premios en la base de datos`)
       return premios;
       } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)
+        error:`Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)
     }    
   }
 
@@ -40,7 +40,7 @@ export class PremiosService {
 
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)      
+        error:`Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
@@ -55,7 +55,7 @@ export class PremiosService {
       return premio;
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)      
+        error:`Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
@@ -65,10 +65,10 @@ export class PremiosService {
       const premio = await this.premiosReposirory.findOne(criterio);
       if(!premio) throw new BadRequestException(`No se encontró el premio con el id ${id} en la base de datos`)
       await this.premiosReposirory.delete(id)
-        return premio;
+        return `Se ha eliminado el premio con id ${id}`;
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error:'Se produjo un error al enviar la petición' + error}, HttpStatus.NOT_FOUND)      
+        error:`Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }        
   };
 }

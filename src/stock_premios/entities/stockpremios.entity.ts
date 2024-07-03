@@ -9,7 +9,7 @@ export class StockPremios {
         {onDelete:'CASCADE'}
     )
     @JoinColumn()
-    premio: Premios;
+    premio: number;
     @Column()
     cantidad: number;
 }

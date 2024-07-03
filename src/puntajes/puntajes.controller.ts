@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
 import { PuntajesService } from './puntajes.service';
 import { CreatePuntajesDto } from './dto/create-puntajes.dto';
 import { UpdatePuntajesDto } from './dto/update-puntajes.dto';
@@ -22,7 +22,7 @@ export class PuntajesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number, @Res() res: Response):Promise<Puntajes> {
+  async findOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response):Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.findOne(id);
     if(isPuntaje){
       res.status(HttpStatus.FOUND).json(isPuntaje)
@@ -32,7 +32,7 @@ export class PuntajesController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updatePuntajesDto: UpdatePuntajesDto, @Res() res: Response ):Promise<Puntajes> {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updatePuntajesDto: UpdatePuntajesDto, @Res() res: Response ):Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.update(+id, updatePuntajesDto);
     if(isPuntaje){
       res.status(HttpStatus.FOUND).json(isPuntaje)
@@ -44,7 +44,7 @@ export class PuntajesController {
   
 
   @Delete(':id')
-  async remove(@Param('id') id: number, @Res() res:Response) {
+  async remove(@Param('id',ParseIntPipe) id: number, @Res() res:Response) {
     const isPuntaje = await this.puntajesService.remove(id);
     if(isPuntaje){
       res.status(HttpStatus.FOUND).json(isPuntaje)     

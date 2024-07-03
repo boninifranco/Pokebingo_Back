@@ -48,7 +48,7 @@ export class LogueoController {
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number): Promise<Logueo> {
     const logueo = await this.logueoService.remove(id);
     if(logueo){
-      res.status(HttpStatus.FOUND).json({...logueo, borrado:true});
+      res.status(HttpStatus.FOUND).json(logueo);
       return;
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró`})

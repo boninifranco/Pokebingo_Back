@@ -23,7 +23,7 @@ export class RegistroController {
 
   @Get(':id')
   async findOne(@Res() res: Response,@Param('id', ParseIntPipe) id: number):Promise<Registro>{
-    const registro = await this.registroService.findOne(id);
+    const registro = await this.registroService.findOneId(id);
     if(registro){
       res.status(HttpStatus.FOUND).json(registro);
       return registro;      

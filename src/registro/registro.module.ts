@@ -15,5 +15,6 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
   ],
   controllers: [RegistroController],
   providers: [RegistroService],
+  exports: [RegistroService]
 })
 export class RegistroModule {}

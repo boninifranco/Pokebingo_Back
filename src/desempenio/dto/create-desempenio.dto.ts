@@ -4,7 +4,7 @@ import { Registro } from "src/registro/entities/registro.entity";
 export class CreateDesempenioDto {
 
     @IsInt()    
-    jugador:Registro;
+    jugador:number;
 
     @IsInt()    
     puntos:number;

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
 import { MetodosPagoService } from './metodospago.service';
 import { CreateMetodosPagoDto } from './dto/create-metodos_pago.dto';
 import { UpdateMetodosPagoDto } from './dto/update-metodos_pago.dto';
@@ -22,7 +22,7 @@ export class MetodosPagoController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<MetodosPago> {
+  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number): Promise<MetodosPago> {
     const metodoPago = await this.metodosPagoService.findOne(id)
     if (metodoPago){
       res.status(HttpStatus.FOUND).json(metodoPago);
@@ -32,7 +32,7 @@ export class MetodosPagoController {
   }
 
   @Patch(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() updateMetodosPagoDto: UpdateMetodosPagoDto): Promise<MetodosPago> {
+  async update(@Res() res: Response, @Param('id', ParseIntPipe) id: number, @Body() updateMetodosPagoDto: UpdateMetodosPagoDto): Promise<MetodosPago> {
     const metodoPago = await this.metodosPagoService.update(id, updateMetodosPagoDto)
     if (metodoPago){
       res.status(HttpStatus.FOUND).json(metodoPago);
@@ -42,7 +42,7 @@ export class MetodosPagoController {
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number) {
+  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const metodoPago = await this.metodosPagoService.remove(id)
     if (metodoPago){
       res.status(HttpStatus.FOUND).json(metodoPago);      
