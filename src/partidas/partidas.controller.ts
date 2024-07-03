@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode, Put, ParseIntPipe } from '@nestjs/common';
 import { PartidasService } from './partidas.service';
 import { CreatePartidaDto } from './dto/create-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
@@ -11,41 +11,31 @@ export class PartidasController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createPartidaDto: CreatePartidaDto): Promise<Partida> {
+  create(@Body() createPartidaDto: CreatePartidaDto): Promise<Partida> {
     return this.partidasService.create(createPartidaDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll(): Promise<Partida[]> {
+  findAll(): Promise<Partida[]> {
     return this.partidasService.findAll();
   }
   
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Partida> {
-    const partida = await this.partidasService.findOne(id)
-    if (partida) {
-      res.status(HttpStatus.FOUND).json(partida);
-      return partida;
-    }
-    res.status(HttpStatus.NOT_FOUND).json({ error: 'partida no existe' });
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Partida> {
+    const partida = await this.partidasService.findOne(id);
+    return partida;
   }
+
   @Put(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() UpdatePartidaDto: UpdatePartidaDto): Promise<Partida> {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() UpdatePartidaDto: UpdatePartidaDto): Promise<Partida> {
     const partida = await this.partidasService.update(id, UpdatePartidaDto);
-    if (partida) {
-      res.status(HttpStatus.FOUND).json(partida);
-      return partida;
-    }
-    res.status(HttpStatus.NOT_FOUND).json({ error: 'partida no existe' });
+    return partida;
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number){
+  async remove(@Param('id', ParseIntPipe) id: number){
     const partida = await this.partidasService.remove(id);
-    if(partida){
-      res.status(HttpStatus.FOUND).json(partida);      
-    }
-    res.status(HttpStatus.NOT_FOUND).json({error:`chat no existe`})
+    return partida;
   }
 }

@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, NotFoundException, ParseIntPipe, HttpCode } from '@nestjs/common';
 import { FilaService } from '../service/fila.service';
 import { CreateFilaDto } from '../dto/create-fila.dto';
-import { UpdateFilaDto } from '../dto/update-fila.dto'; 
-import { Response } from 'express';
+import { UpdateFilaDto } from '../dto/update-fila.dto';
 import { Fila } from '../entities/fila.entity';
 
 @Controller('filas')
@@ -10,47 +9,31 @@ export class FilaController {
   constructor(private readonly filaService: FilaService) {}
 
   @Get()
-  async getAllFilas(@Res() res: Response): Promise<Fila[]> {
-    const filas = await this.filaService.getAllFilas();
-    res.status(HttpStatus.OK).json(filas);
-    return filas;
+  @HttpCode(HttpStatus.OK)
+  findAll(): Promise<Fila[]> {
+    return this.filaService.findAll();
   }
 
   @Get(':id')
-  async getFilaById(@Param('id') id: string, @Res() res: Response):Promise<Fila> {
-    try {
-      const fila = await this.filaService.getFilaById(id);
-      res.status(HttpStatus.OK).json(fila);
-      return fila;
-    } catch (error) {
-      throw new NotFoundException('La fila no fue encontrada');
-    }
+  async findOne(@Param('id', ParseIntPipe) id: string):Promise<Fila> {
+    const fila = await this.filaService.findOne(id);
+    return fila;
   }
 
   @Post()
-  async createFila(@Body() createFilaDto: CreateFilaDto, @Res() res: Response):Promise<Fila> {
-    try {
-      const newFila = await this.filaService.createFila(createFilaDto);
-      res.status(HttpStatus.CREATED).json(newFila);
-      return newFila;
-    } catch (error) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error al crear la fila' });
-    }
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() createFilaDto: CreateFilaDto):Promise<Fila> {
+    return this.filaService.create(createFilaDto);
   }
 
   @Put(':id')
-  async updateFila(@Param('id') id: string, @Body() updateFilaDto: UpdateFilaDto, @Res() res: Response):Promise<Fila> {
-    try {
-      const updatedFila = await this.filaService.updateFila(id, updateFilaDto);
-      res.status(HttpStatus.OK).json(updatedFila);
+  async update(@Param('id', ParseIntPipe) id: string, @Body() updateFilaDto: UpdateFilaDto):Promise<Fila> {
+      const updatedFila = await this.filaService.update(id, updateFilaDto);
       return updatedFila;
-    } catch (error) {
-      throw new NotFoundException('La fila no fue encontrada');
-    }
   }
 
   @Delete(':id')
-  async deleteFila(@Param('id') id: string) {
-    return this.filaService.deleteFila(id);
+  async delete(@Param('id', ParseIntPipe) id: string) {
+    return this.filaService.delete(id);
   }
 }

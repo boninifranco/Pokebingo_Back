@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, Res, HttpStatus, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpCode, Res, HttpStatus, Put, ParseIntPipe } from '@nestjs/common';
 import { SalaService } from './sala.service';
 import { CreateSalaDto } from './dto/create-sala.dto';
 import { UpdateSalaDto } from './dto/update-sala.dto';
@@ -22,31 +22,20 @@ export class SalaController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Sala> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Sala> {
     const sala = await this.salaService.findOne(id);
-    if (sala) {
-      res.status(HttpStatus.FOUND).json(sala);
-      return sala;
-    }
-    res.status(HttpStatus.NOT_FOUND).json({ message: 'sala no existe' });
+    return sala;
   }
   
   @Put(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() UpdateSalaDto: UpdateSalaDto): Promise<Sala> {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() UpdateSalaDto: UpdateSalaDto): Promise<Sala> {
     const sala = await this.salaService.update(id, UpdateSalaDto);
-    if (sala) {
-      res.status(HttpStatus.FOUND).json(sala);
-      return sala;
-    }
-    res.status(HttpStatus.NOT_FOUND).json({ error: 'sala no existe' });
+    return sala;
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number){
+  async remove(@Param('id', ParseIntPipe) id: number){
     const sala = await this.salaService.remove(id);
-    if(sala){
-      res.status(HttpStatus.FOUND).json(sala);      
-    }
-    res.status(HttpStatus.NOT_FOUND).json({error:`chat no existe`})
+    return sala;
   }
 }
