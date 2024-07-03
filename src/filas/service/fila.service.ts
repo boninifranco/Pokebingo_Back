@@ -6,63 +6,64 @@ import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class FilaService {
-  private readonly BASE_URL = 'http://localhost:3030/filas';
 
   constructor(@InjectRepository(Fila) private readonly filaRepository : Repository<Fila>){}
-  async getAllFilas(): Promise<Fila[]> {
-    let filas: Fila[] = await this.filaRepository.find();
-    return filas;
-  }
 
-  async getFilaById(id: string): Promise<Fila> {
-    let criterio : FindOneOptions = {where: { filaId: id }};
-    let fila : Fila = await this.filaRepository.findOne(criterio);
-    return fila;
-  }
-
-  async createFila(createFilaDto: CreateFilaDto): Promise<Fila> {
+  async findAll(): Promise<Fila[]> {
     try{
-      let fila:Fila = await this.filaRepository.save(new Fila(
-        createFilaDto.filaAciertos
-      ));
-      if (fila)
+      let filas: Fila[] = await this.filaRepository.find();
+      if (filas.length != 0) return filas;
+      else throw new Error('No se encontraron filas')
+  } catch(error){
+    throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: '+error}, HttpStatus.NOT_FOUND);
+  }
+}
+
+  async findOne(id: string): Promise<Fila> {
+    try{
+      let criterio : FindOneOptions = {where: { filaId: id }};
+      let fila : Fila = await this.filaRepository.findOne(criterio);
+      if (fila) return fila;
+      else throw new Error (`No se encontró la fila: ${id}`)
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: '+error}, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async create(createFilaDto: CreateFilaDto): Promise<Fila> {
+    try{
+      let fila: Fila = await this.filaRepository.save(new Fila(createFilaDto.filaAciertos));
+      if (fila) return fila;
+      else throw new Error('No se pudo crear la fila');
+    } catch (error){
+      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: '+error}, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async update(id: string, updateFilaDto: Partial<CreateFilaDto>): Promise<Fila> {
+    try {
+      let criterio : FindOneOptions = {where: {filaId: id}};
+      let fila : Fila = await this.filaRepository.findOne(criterio);
+      if (!fila) throw new Error('No se encuentra la fila');
+      else
+        fila.setAciertos(updateFilaDto.filaAciertos);     
+        fila = await this.filaRepository.save(fila);
         return fila;
-      else
-      throw new Error('No se pudo crear la fila');
     } catch (error){
-      throw new HttpException({status : HttpStatus.NOT_FOUND,
-        error: 'Error en la creación de la fila'+error}, HttpStatus.NOT_FOUND);
+      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: '+error}, HttpStatus.NOT_FOUND);
     }
   }
 
-  async updateFila(id: string, updateFilaDto: Partial<CreateFilaDto>): Promise<Fila> {
+  async delete(id: string): Promise<boolean> {
     try {
       let criterio : FindOneOptions = {where: {filaId: id}};
       let fila : Fila = await this.filaRepository.findOne(criterio);
-      if (!fila)
-        throw new Error('No se encuentra la fila');
+      if (!fila) throw new Error('No se encuentra la fila');
       else
-      fila.setAciertos(updateFilaDto.filaAciertos);     
-      fila = await this.filaRepository.save(fila);
-      return fila;
-    } catch (error){
-      throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error:'Error en la actualización de la fila' +error},HttpStatus.NOT_FOUND);
-    }
-  }
-
-  async deleteFila(id: string): Promise<boolean> {
-    try {
-      let criterio : FindOneOptions = {where: {filaId: id}};
-      let fila : Fila = await this.filaRepository.findOne(criterio);
-      if (!fila)
-      throw new Error('No se encuentra la fila');
-      else
-      await this.filaRepository.delete(id);
-      return true;
+        await this.filaRepository.delete(id);
+        return true;
       } catch (error) {
-      throw new HttpException( { status : HttpStatus.NOT_FOUND,
-      error : 'Error en la eliminacion de la fila '+error}, HttpStatus.NOT_FOUND);
+        throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: '+error}, HttpStatus.NOT_FOUND);
       }
     }
 }

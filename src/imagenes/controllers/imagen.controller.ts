@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Res } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { ImagenService } from '../service/imagen.service';
-import { Response } from 'express';
 import { CreateImagenDto } from '../dto/create-imagen.dto'
 import { UpdateImagenDto } from '../dto/update-imagen.dto'
 import { Imagen } from '../entities/imagen.entity';
@@ -10,55 +9,32 @@ export class ImagenController {
   constructor(private readonly imagenService: ImagenService) {}
 
   @Get()
-  async findAll(@Res() res: Response): Promise<Imagen[]> {
-    try {
-      const imagenes = await this.imagenService.findAll();
-      res.status(200).json(imagenes);
-      return imagenes;
-    } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor' });
-    }
+  @HttpCode(HttpStatus.OK)
+  findAll(): Promise<Imagen[]> {
+    return this.imagenService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() res: Response): Promise<Imagen> {
-    try {
-      const imagen = await this.imagenService.findOne(id);
-      if (!imagen) {
-        res.status(404).json({ error: 'Imagen no encontrada' });
-      } else {
-        res.status(200).json(imagen);
-        return imagen;
-      }
-    } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor' });
-    }
+  async findOne(@Param('id', ParseIntPipe) id: string): Promise<Imagen> {
+    const imagen = await this.imagenService.findOne(id);
+    return imagen;
   }
 
   @Post()
-  async create(@Body() createImagenDto: CreateImagenDto, @Res() res: Response): Promise<Imagen> {
-    try {
-      const newImagen = await this.imagenService.create(createImagenDto);
-      res.status(201).json(newImagen);
-      return newImagen;
-    } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor' });
-    }
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() createImagenDto: CreateImagenDto): Promise<Imagen> {
+    return this.imagenService.create(createImagenDto);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateImagenDto: UpdateImagenDto, @Res() res: Response): Promise<Imagen> {
-    try {
-      const updatedImagen = await this.imagenService.update(id, updateImagenDto);
-      res.status(200).json(updatedImagen);
-      return updatedImagen;
-    } catch (error) {
-      res.status(500).json({ error: 'Error interno del servidor' });
-    }
+  async update(@Param('id', ParseIntPipe) id: string, @Body() updateImagenDto: UpdateImagenDto): Promise<Imagen> {
+    const updatedImagen = await this.imagenService.update(id, updateImagenDto);
+    return updatedImagen;
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string){
-    return this.imagenService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: string){
+    const deleteImagen = this.imagenService.remove(id);
+    return deleteImagen;
   }
 }
