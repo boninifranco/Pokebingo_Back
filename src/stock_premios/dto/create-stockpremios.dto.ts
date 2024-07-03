@@ -3,7 +3,7 @@ import { Premios } from "src/premios/entities/premios.entity";
 
 export class CreateStockPremiosDto {
     @IsInt()
-    premio: Premios;
+    premio: number;
     @IsInt()
     cantidad: number;
 }

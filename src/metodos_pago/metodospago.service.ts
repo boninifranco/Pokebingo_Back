@@ -20,19 +20,19 @@ export class MetodosPagoService {
       return this.metodosPagoRepository.save(metodosPago); 
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'No se pudo crear el metodo de pago'+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
   async findAll(): Promise<MetodosPago[]> {
     try {
       const metodosPago = await this.metodosPagoRepository.find();
-      if(!metodosPago) throw new BadRequestException(`No se encuentran métodos de pago`);
+      if(metodosPago.length===0) throw new BadRequestException(`No se encuentran métodos de pago en la base de datos`);
       return metodosPago;
       
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición'+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
@@ -44,7 +44,7 @@ export class MetodosPagoService {
       return metodoPago;      
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición'+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }    
   }
 
@@ -58,20 +58,20 @@ export class MetodosPagoService {
     return metodoPago;      
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición'+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
-  async remove(id: number): Promise<MetodosPago> {
+  async remove(id: number){
     try {
       const criterio: FindOneOptions = {where:{id:id}};
       const metodoPago = await this.metodosPagoRepository.findOne(criterio);
       if(!metodoPago) throw new BadRequestException(`No se encontro el método de pago con id ${id}`)
       await this.metodosPagoRepository.delete(metodoPago);
-      return metodoPago
+      return `Se ha eliminado el metodo de pago con id ${id}`
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición'+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
 import { PremiosService } from './premios.service';
 import { CreatePremiosDto } from './dto/create-premios.dto';
 import { UpdatePremiosDto } from './dto/update-premios.dto';
@@ -22,7 +22,7 @@ export class PremiosController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number): Promise<Premios> {
+  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number): Promise<Premios> {
     const premios = await this.premiosService.findOne(id);
     if(premios){
       res.status(HttpStatus.FOUND).json(premios);
@@ -32,7 +32,7 @@ export class PremiosController {
   }
 
   @Patch(':id')
-  async update(@Res() res: Response, @Param('id') id: number, @Body() updatePremiosDto: UpdatePremiosDto): Promise<Premios> {
+  async update(@Res() res: Response, @Param('id', ParseIntPipe) id: number, @Body() updatePremiosDto: UpdatePremiosDto): Promise<Premios> {
     const premios = await this.premiosService.update(id, updatePremiosDto);
     if (premios){
       res.status(HttpStatus.FOUND).json(premios);
@@ -42,7 +42,7 @@ export class PremiosController {
   }
 
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id') id: number){
+  async remove(@Res() res: Response, @Param('id',ParseIntPipe) id: number){
     const premios = await this.premiosService.remove(id);
     if(premios){
       res.status(HttpStatus.FOUND).json(premios);      

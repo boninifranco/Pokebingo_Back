@@ -11,25 +11,30 @@ export class UsuarioService {
       private readonly usuarioRepository: Repository<Usuario>){}
 
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
+    const criterio: FindOneOptions = {where:{dni: createUsuarioDto.dni}};
+    console.log(criterio)
+    const isUsuario = await this.usuarioRepository.findOne(criterio);
+    console.log(isUsuario)
+    if(isUsuario) throw new BadRequestException(`El usuario con dni ${createUsuarioDto.dni} ya existe`)
     try {
       const nuevoUsuario = this.usuarioRepository.create(createUsuarioDto)
     return this.usuarioRepository.save(nuevoUsuario)
     } catch (error) {
       throw new HttpException( { status : HttpStatus.NOT_FOUND,
-        error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);
+        error : `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND);
     } 
   }
 
   async findAll(): Promise<Usuario[]> {
         try {
-          const usuarios = this.usuarioRepository.find();
-          if((await usuarios).length==0){
+          const usuarios = await this.usuarioRepository.find();
+          if(usuarios.length==0){
             throw new BadRequestException(`No existen usuarios en la base de datos`)
           }
-          return usuarios          
+          return usuarios;          
         } catch (error) {
             throw new HttpException( { status : HttpStatus.NOT_FOUND,
-            error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);          
+            error : `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND);          
         }        
   };
 
@@ -42,7 +47,7 @@ export class UsuarioService {
         return usuario;        
       } catch (error) {
         throw new HttpException( { status : HttpStatus.NOT_FOUND,
-          error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);
+          error : `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND);
       }            
   };
   
@@ -64,11 +69,11 @@ export class UsuarioService {
       return usuario;      
     } catch (error) {
       throw new HttpException( { status : HttpStatus.NOT_FOUND,
-        error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);      
+        error : `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND);      
     }      
   };
 
-  async remove(id: number):Promise<Usuario> {    
+  async remove(id: number) {    
     try {
       const criterio : FindOneOptions = { where: { id: id } }
       let usuario = await this.usuarioRepository.findOne(criterio);
@@ -77,10 +82,10 @@ export class UsuarioService {
       }else{
        await this.usuarioRepository.delete(id)
       }
-      return usuario;      
+      return `Se ha eliminado el usuario con id ${id} (${usuario.apellido}, ${usuario.nombre})`;      
     } catch (error) {
       throw new HttpException( { status : HttpStatus.NOT_FOUND,
-        error : 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND);
+        error : `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND);
   };   
   }
 }

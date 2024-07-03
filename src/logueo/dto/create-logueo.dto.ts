@@ -4,7 +4,7 @@ import { Registro } from "src/registro/entities/registro.entity";
 export class CreateLogueoDto {
 
     @IsInt()       
-    idUsuario:Registro;
+    idUsuario:number;
 
     @IsBoolean()
     logueado:boolean;

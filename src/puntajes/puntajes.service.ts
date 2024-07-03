@@ -15,18 +15,18 @@ private readonly puntajesRepository : Repository<Puntajes>){};
       return this.puntajesRepository.save(puntaje);
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'No se puede crear el puntaje'+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
   async findAll(): Promise<Puntajes[]> {
     try {
       const puntajes = await this.puntajesRepository.find();
-      if(!puntajes) throw new BadRequestException(`No se encuentan puntajes en la base de datos`);
+      if(puntajes.length===0) throw new BadRequestException(`No se encuentan puntajes en la base de datos`);
       return puntajes;
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }    
   }
 
@@ -38,7 +38,7 @@ private readonly puntajesRepository : Repository<Puntajes>){};
       return puntaje;
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
@@ -52,7 +52,7 @@ private readonly puntajesRepository : Repository<Puntajes>){};
       return puntaje;
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }
   }
 
@@ -61,10 +61,10 @@ private readonly puntajesRepository : Repository<Puntajes>){};
       const criterio: FindOneOptions = {where: {id : id}};
       const puntaje = await this.puntajesRepository.findOne(criterio);
       await this.puntajesRepository.delete(puntaje);
-      return puntaje;      
+      return `Se ha eliminado el puntaje con id ${id}`;      
     } catch (error) {
       throw new HttpException({status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error al enviar la petición '+ error}, HttpStatus.NOT_FOUND)      
+        error: `Se produjo un error al enviar la petición ${error}`}, HttpStatus.NOT_FOUND)      
     }        
   }
 }
