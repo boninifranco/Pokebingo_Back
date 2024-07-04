@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode, UseGuards} from '@nestjs/common';
 import { FilaService } from '../service/fila.service';
 import { CreateFilaDto } from '../dto/create-fila.dto';
 import { UpdateFilaDto } from '../dto/update-fila.dto';
 import { Fila } from '../entities/fila.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('filas')
 export class FilaController {
@@ -35,6 +36,7 @@ export class FilaController {
     return updatedFila;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: string) {
     return this.filaService.delete(id);

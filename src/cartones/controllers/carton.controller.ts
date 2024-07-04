@@ -1,8 +1,9 @@
-import {Controller, Get, Post, Put, Delete, Body, Param, HttpStatus, ParseIntPipe, HttpCode} from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Body, Param, HttpStatus, ParseIntPipe, HttpCode, UseGuards} from '@nestjs/common';
 import { CartonService } from '../servicies/carton.service';
 import { CreateCartonDto } from '../dto/create-carton.dto';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { Carton } from '../entities/carton.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('cartones')
 export class CartonController {
@@ -35,6 +36,7 @@ export class CartonController {
     return updatedCarton;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return this.cartonService.delete(id);

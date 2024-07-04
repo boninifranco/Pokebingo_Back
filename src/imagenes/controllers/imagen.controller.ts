@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, ParseIntPipe} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, ParseIntPipe, UseGuards} from '@nestjs/common';
 import { ImagenService } from '../service/imagen.service';
 import { CreateImagenDto } from '../dto/create-imagen.dto';
 import { UpdateImagenDto } from '../dto/update-imagen.dto';
 import { Imagen } from '../entities/imagen.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('imagenes')
 export class ImagenController {
@@ -35,6 +36,7 @@ export class ImagenController {
     return updatedImagen;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: string) {
     const deleteImagen = this.imagenService.remove(id);

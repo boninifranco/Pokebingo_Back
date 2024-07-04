@@ -19,9 +19,7 @@ export class Registro {
   administrador: boolean;
 
   @OneToMany(() => Logueo, (logueo) => logueo.idUsuario, { cascade: true })
-  @OneToOne(() => Desempenio, (desempenio) => desempenio.jugador, {
-    cascade: true,
-  })
+  @OneToOne(() => Desempenio, (desempenio) => desempenio.jugador, { cascade: true})
   @OneToOne(
     () => Usuario,
 

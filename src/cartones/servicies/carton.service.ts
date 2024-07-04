@@ -64,7 +64,8 @@ export class CartonService {
         throw new Error('Partida no encontrada');
       }
       const carton = this.cartonRepository.create({
-        partida: partida,
+        partida: createCartonDto.idPartida,
+        idUsuario: createCartonDto.idUsuario
       });
       const nuevoCarton = await this.cartonRepository.save(carton);
       if (nuevoCarton) return nuevoCarton;
