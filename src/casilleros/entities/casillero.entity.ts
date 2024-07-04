@@ -8,18 +8,21 @@ export class Casillero {
       casilleroId: number;
     @Column()
     salio: boolean;    
-    
-    //relacion de muchos casilleros con una fila
-    @ManyToOne(()=> Fila, (fila)=> fila.casilleros)
-    fila: Fila;
-    
-    @OneToOne(()=> Imagen)
-    @JoinColumn()
+      
+    @ManyToOne(() => Fila, fila => fila.casilleros, {onDelete: 'CASCADE',})
+    @JoinColumn({name: 'filaId'})
+    public fila: Fila;
+
+    @OneToOne(() => Imagen, imagen => imagen.casillero ,{cascade: true, onDelete: 'CASCADE'  })
     imagen: Imagen;
 
-    constructor(salio: boolean){
+    constructor(salio: boolean, fila: Fila){
       this.salio = false;
+      if (fila) {
+        this.fila = fila;
     }
+    }
+
     public getSalio(): boolean {return this.salio};
     public setSalio(salio: boolean): void {this.salio = salio};
   }

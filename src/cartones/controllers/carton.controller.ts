@@ -16,7 +16,7 @@ export class CartonController {
 
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number):Promise<Carton> {
-    const carton = await this.cartonService.findById(id);
+    const carton = await this.cartonService.findOne(id);
     return carton;
   }
 

@@ -16,6 +16,7 @@ export class Partida {
     @OneToOne(() => Sala, sala => sala.partida,{onDelete: 'CASCADE',})
     @JoinColumn({ name: 'salaId' })
     public sala: Sala;
+    
     @OneToMany(()=> Carton, (carton) => carton.partida)
     cartones: Carton[];
 

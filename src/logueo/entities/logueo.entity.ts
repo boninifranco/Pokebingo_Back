@@ -21,5 +21,7 @@ export class Logueo {
     )
     @JoinColumn({name:'idUsuario'})
     idUsuario:number;
+
+    
        
 }

@@ -13,7 +13,7 @@ export class Chat {
     @JoinColumn({name: 'salaId'})
     public sala: Sala;
 
-    constructor(mensaje: string, sala?: Sala) {
+    constructor(mensaje: string, sala: Sala) {
         this.mensaje = mensaje;
         if (sala) {
             this.sala = sala;
