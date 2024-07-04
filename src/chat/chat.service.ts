@@ -10,26 +10,30 @@ import { Sala } from 'src/sala/entities/sala.entity';
 export class ChatService {
   constructor(
     @InjectRepository(Chat) private readonly chatRepository: Repository<Chat>,
-    @InjectRepository(Sala) private readonly salaRepository: Repository<Sala>
+    @InjectRepository(Sala) private readonly salaRepository: Repository<Sala>,
   ) {}
 
   async create(createChatDto: CreateChatDto): Promise<Chat> {
-    try{
-    const sala = await this.salaRepository.findOne({ where: { salaId: createChatDto.salaId } });
-    if (!sala) {
-      throw new HttpException('Sala no encontrada', HttpStatus.NOT_FOUND);
-    }
+    try {
+      const sala = await this.salaRepository.findOne({
+        where: { salaId: createChatDto.salaId },
+      });
+      if (!sala) {
+        throw new HttpException('Sala no encontrada', HttpStatus.NOT_FOUND);
+      }
 
-    const chat = new Chat(createChatDto.mensaje, sala);
-    return await this.chatRepository.save(chat);
-  } catch (error){
-    throw new HttpException(
-      {
-        status: HttpStatus.NOT_FOUND,
-        error: 'Se produjo un error: ' + error,
-      },
-      HttpStatus.NOT_FOUND,
-    )}
+      const chat = new Chat(createChatDto.mensaje, sala);
+      if (chat) return await this.chatRepository.save(chat);
+      else throw new Error('No se pudo crear el chat');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async findAll(): Promise<Chat[]> {
@@ -38,7 +42,13 @@ export class ChatService {
       if (chats.length != 0) return chats;
       else throw new Error('No se encontraron chats');
     } catch (error) {
-      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: ' + error}, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
@@ -49,7 +59,13 @@ export class ChatService {
       if (chat) return chat;
       else throw new Error(`No se encontró el chat: ${id}`);
     } catch (error) {
-      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: ' + error}, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
@@ -64,21 +80,33 @@ export class ChatService {
         return chat;
       }
     } catch (error) {
-      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: ' + error}, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: number) {
     try {
       const criterio = { where: { chatId: id } };
       const chat: Chat = await this.chatRepository.findOne(criterio);
       if (!chat) throw new Error(`No se encuentra el chat: ${id}`);
       else {
         await this.chatRepository.delete(id);
-        return true;
+        return `Se ha eliminado el chat: ${id}`;
       }
     } catch (error) {
-      throw new HttpException({status: HttpStatus.NOT_FOUND, error: 'Se produjo un error: ' + error}, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 }

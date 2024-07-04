@@ -1,5 +1,6 @@
+import { Carton } from "src/cartones/entities/carton.entity";
 import { Casillero } from "src/casilleros/entities/casillero.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('filas')
 export class Fila {
@@ -8,12 +9,19 @@ export class Fila {
     @Column()
     aciertos: number;
     
-    //relacion de una fila con muchos casilleros
-    @OneToMany(()=> Casillero, (casilleros)=> casilleros.fila)
+    @ManyToOne(() => Carton, carton => carton.fila, {onDelete: 'CASCADE',})
+    @JoinColumn({name: 'cartonId'})
+    public carton: Carton;
+
+    @OneToMany(()=> Casillero, (casilleros)=> casilleros.fila, { cascade: true, onDelete: 'CASCADE'  })
+    @JoinColumn({ name: 'casilleroId' })
     casilleros: Casillero[];
 
-    constructor(aciertos: number) {
-      this.aciertos = aciertos;
+    constructor(aciertos?: number, carton?: Carton) {
+      this.aciertos = 0;
+      if (carton) {
+        this.carton = carton;
+    }
     }
 
     public getAciertos(): number {return this.aciertos};
