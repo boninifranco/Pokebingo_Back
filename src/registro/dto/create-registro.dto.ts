@@ -1,13 +1,8 @@
-import { IsInt, IsOptional, IsString, Min, isInt } from "class-validator";
+import { IsBoolean, IsInt, IsOptional, IsString, Min, isBoolean, isInt } from "class-validator";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Registro } from "../entities/registro.entity";
 
 export class CreateRegistroDto {
-
-    
-    //@IsOptional()
-    //@IsInt()
-    //id:number;
 
     @IsInt()    
     usuarioId: number;
@@ -16,6 +11,9 @@ export class CreateRegistroDto {
     email: string;
 
     @IsString()
-    contrasena:string;   
+    contrasenia:string;
+    
+    @IsBoolean()
+    administrador:boolean;
     
 }

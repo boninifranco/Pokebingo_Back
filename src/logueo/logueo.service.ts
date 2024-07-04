@@ -3,7 +3,7 @@ import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Logueo } from './entities/logueo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOneOptions, FindManyOptions } from 'typeorm';
+import { Repository, FindOneOptions} from 'typeorm';
 import { RegistroService } from '../registro/registro.service';
 import { error } from 'console';
 
@@ -16,16 +16,15 @@ export class LogueoService {
   
   async create(createLogueoDto: CreateLogueoDto):Promise<Logueo> {
     const isRegistro = await this.registroService.findOneId(Number(createLogueoDto.idUsuario));
-    if(!isRegistro) throw new error(`No existe registro del usuario con id ${createLogueoDto.idUsuario}`);
-    //const criterioLogueo: FindOneOptions = {where:{idUsuario: createLogueoDto.idUsuario}}
-    //const isLogueado = await this.logueoRepository.findOne(criterioLogueo);
-    //const criterioLogueoTrue: FindOneOptions = {where:{logueado: true}};
-    //const logueoTrue = isLogueado.logueado;
-    //if(isLogueado &&) throw new BadRequestException(`El usuario con id ${createLogueoDto.idUsuario} ya esta logueado`)
+    if(!isRegistro) throw new error(`No existe registro del usuario con id ${createLogueoDto.idUsuario}`);    
     const usuarioLogueado = await this.findLogueoTrue(createLogueoDto.idUsuario);
     if(usuarioLogueado) throw new BadRequestException(`El usuario con Id ${createLogueoDto.idUsuario} ya se encuentra logueado`)
     try {
-      const nuevoLogueo: Logueo= this.logueoRepository.create(createLogueoDto);
+      let {logout,idUsuario}=createLogueoDto
+      let login = new Date();
+      logout = "";
+      const logueoDto = {login,idUsuario,logout};
+      const nuevoLogueo: Logueo= this.logueoRepository.create(logueoDto);
       return this.logueoRepository.save(nuevoLogueo);      
     } catch (error) {
       throw new HttpException( { status : HttpStatus.NOT_FOUND,
@@ -66,7 +65,7 @@ export class LogueoService {
       let logueo = await this.logueoRepository.findOne(criterio);
       if(!logueo) throw new BadRequestException(`No se encuentra el logueo con id ${id}`);
       logueo.idUsuario = (updateLogueoDto.idUsuario);
-      logueo.login = (updateLogueoDto.login);
+      //logueo.login = (updateLogueoDto.login);
       logueo.logout = (updateLogueoDto.logout);
       logueo.logueado = (updateLogueoDto.logueado);
       await this.logueoRepository.update(id,logueo)
@@ -76,6 +75,25 @@ export class LogueoService {
         error: `Se produjo un error al enviar la petición ${error}`},HttpStatus.NOT_FOUND)
       }
     }
+
+  /*async deslogueo(id: number):Promise<Logueo> {
+
+      try {
+        const criterio : FindOneOptions = {where: { id:id }};
+        let logueo = await this.logueoRepository.findOne(criterio);
+        if(!logueo) throw new BadRequestException(`No se encuentra el logueo con id ${id}`);
+        //logueo.idUsuario = (updateLogueoDto.idUsuario);
+        //logueo.login = (updateLogueoDto.login);
+
+        logueo.logout = new Date();
+        //logueo.logueado = (updateLogueoDto.logueado);
+        await this.logueoRepository.update(id,logueo)
+        return logueo;
+      } catch (error) {
+        throw new HttpException({status : HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al enviar la petición ${error}`},HttpStatus.NOT_FOUND)
+        }
+      }*/
   
   async remove(id: number) {
     try {
@@ -97,7 +115,6 @@ export class LogueoService {
     .where('logueo.idUsuario = :idUsuario',{idUsuario})
     .andWhere('logueo.logueado = :logueado', {logueado:true})
     .getOne()
-
     return usuarioIdLogueado;
   }
 }

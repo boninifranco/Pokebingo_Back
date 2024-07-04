@@ -18,6 +18,7 @@ import { PuntajesModule } from './puntajes/puntajes.module';
 import { CasilleroModule } from './casilleros/casillero.module';
 import { FilaModule } from './filas/fila.module';
 import { ImagenModule } from './imagenes/imagen.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
    imports:[
@@ -47,7 +48,8 @@ import { ImagenModule } from './imagenes/imagen.module';
     CartonModule,
     CasilleroModule,
     FilaModule,
-    ImagenModule
+    ImagenModule,
+    AuthModule
    ],
   controllers: [AppController],
   providers: [AppService],

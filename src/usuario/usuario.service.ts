@@ -1,6 +1,6 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, FindOptions, Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
@@ -11,8 +11,7 @@ export class UsuarioService {
       private readonly usuarioRepository: Repository<Usuario>){}
 
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-    const criterio: FindOneOptions = {where:{dni: createUsuarioDto.dni}};
-    console.log(criterio)
+    const criterio: FindOneOptions = {where:{dni: createUsuarioDto.dni}};    
     const isUsuario = await this.usuarioRepository.findOne(criterio);
     console.log(isUsuario)
     if(isUsuario) throw new BadRequestException(`El usuario con dni ${createUsuarioDto.dni} ya existe`)
@@ -61,8 +60,7 @@ export class UsuarioService {
         usuario.apellido=(updateUsuarioDto.apellido)
         usuario.nombre = (updateUsuarioDto.nombre)
         usuario.direccion = (updateUsuarioDto.direccion)
-        usuario.celular = (updateUsuarioDto.celular)
-        usuario.administrador = (updateUsuarioDto.administrador)
+        usuario.celular = (updateUsuarioDto.celular)        
         console.log(usuario)
         await this.usuarioRepository.update(id,usuario)
       }

@@ -16,7 +16,5 @@ export class CreateUsuarioDto{
     @IsOptional()
     @IsString()
     direccion?:string;
-
-    @IsBoolean()
-    administrador:boolean;     
+    
 }

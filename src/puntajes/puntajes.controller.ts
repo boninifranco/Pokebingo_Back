@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { PuntajesService } from './puntajes.service';
 import { CreatePuntajesDto } from './dto/create-puntajes.dto';
 import { UpdatePuntajesDto } from './dto/update-puntajes.dto';
 import { Response } from 'express';
 import { Puntajes } from './entities/puntajes.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('puntajes')
 export class PuntajesController {
@@ -42,7 +43,7 @@ export class PuntajesController {
   }
 
   
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id',ParseIntPipe) id: number, @Res() res:Response) {
     const isPuntaje = await this.puntajesService.remove(id);

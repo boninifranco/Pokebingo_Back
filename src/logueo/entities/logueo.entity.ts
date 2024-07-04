@@ -7,13 +7,14 @@ export class Logueo {
     id: number;    
     
     @Column()
-    logueado: boolean;
+    logueado: boolean = true;
     
-    @Column()
-    login: string;    
+    @Column({type:'timestamp'})
+    login: Date;    
     
+    //@Column({type:'timestamp'})
     @Column()
-    logout: string;    
+    logout?: string;    
     
     @ManyToOne(type=>Registro, registro=>registro.id,
         {onDelete:'CASCADE'}
