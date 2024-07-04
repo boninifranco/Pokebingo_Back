@@ -30,8 +30,7 @@ import { AuthModule } from './auth/auth.module';
        password: 'Password',
        database: 'bingo',
        entities: ['dist/**/**.entity{.ts,.js}'],
-       synchronize: true,
-       //logging: true
+       synchronize: true
      }),
     UsuarioModule,
     LogueoModule,

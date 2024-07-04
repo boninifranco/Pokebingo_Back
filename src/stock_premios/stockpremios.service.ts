@@ -73,7 +73,7 @@ export class StockPremiosService {
       const stockPremios = await this.stockPremiosRepository.findOne(criterio);
       if (!stockPremios)
         throw new BadRequestException(
-          `No se encontraró el stockPremio con id ${id} en la base de datos`,
+          `No se encontró el stockPremio con id ${id} en la base de datos`,
         );
       return stockPremios;
     } catch (error) {
@@ -119,7 +119,7 @@ export class StockPremiosService {
       const stockPremios = await this.stockPremiosRepository.findOne(criterio);
       if (!stockPremios)
         throw new BadRequestException(
-          `No se encontraró el stockPremio con id ${id} en la base de datos`,
+          `No se encontró el stockPremio con id ${id} en la base de datos`,
         );
       await this.stockPremiosRepository.delete(id);
       return `Se ha eliminado el stock premios con id ${id}`;
@@ -138,7 +138,6 @@ export class StockPremiosService {
     const premioId = await this.stockPremiosRepository
       .createQueryBuilder('stockPremios')
       .where('stockPremios.premio = :premio', { premio })
-      //.andWhere('logueo.logueado = :logueado', {logueado:true})
       .getOne();
 
     return premioId;

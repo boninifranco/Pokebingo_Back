@@ -88,7 +88,6 @@ export class CartonService {
       if (!carton) throw new Error(`No se encuentra el cartón: ${id}`);
       carton.setaciertos(updateCartonDto.aciertos);
       carton.idUsuario = updateCartonDto.idUsuario;
-      // carton.setidUsuario(updateCartonDto.idUsuario);
       carton = await this.cartonRepository.save(carton);
       return carton;
     } catch (error) {

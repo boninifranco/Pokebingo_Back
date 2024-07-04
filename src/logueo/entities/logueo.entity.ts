@@ -28,11 +28,4 @@ export class Logueo {
   @OneToOne((type) => Partida, (partida) => partida.partidaId)
   @JoinColumn({ name: 'idPartida' })
   idPartida: number;
-
-  
-  
-  //@OneToMany(() => Carton, carton => carton.idUsuario, {cascade:false})
-    //@JoinColumn()
-    //public carton : Carton[];
-    //carton: number       
 }
