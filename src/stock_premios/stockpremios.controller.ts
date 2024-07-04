@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { StockPremiosService } from './stockpremios.service';
 import { CreateStockPremiosDto } from './dto/create-stockpremios.dto';
 import { UpdateStockPremiosDto } from './dto/update-stockpremios.dto';
 import { Response } from 'express';
 import { StockPremios } from './entities/stockpremios.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('stockPremios')
 export class StockPremiosController {
@@ -45,6 +46,7 @@ export class StockPremiosController {
     return this.stockPremiosService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response){
     const isStockPremio = await this.stockPremiosService.remove(id);

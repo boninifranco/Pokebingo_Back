@@ -6,12 +6,17 @@ export class CreateDesempenioDto {
     @IsInt()    
     jugador:number;
 
-    @IsInt()    
+    
+    @IsInt()
+    @Min(0)    
     puntos:number;
 
-    @IsInt()    
+    @IsInt()
+    @Min(0)    
     creditos:number;
 
+    @IsOptional()
     @IsInt()
+    @Min(0)    
     cartonesComprados?:number
 }

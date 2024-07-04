@@ -1,9 +1,10 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Res,} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Res, UseGuards,} from '@nestjs/common';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/create-registro.dto';
 import { UpdateRegistroDto } from './dto/update-registro.dto';
 import { Registro } from './entities/registro.entity';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('registro')
 export class RegistroController {
@@ -45,6 +46,7 @@ export class RegistroController {
     res.status(HttpStatus.NOT_FOUND).json({message:`El registro con id ${id} no se encontró`})
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number){
     const registro = await this.registroService.remove(id);

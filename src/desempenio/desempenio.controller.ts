@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Res} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Res, UseGuards} from '@nestjs/common';
 import { DesempenioService } from './desempenio.service';
 import { CreateDesempenioDto } from './dto/create-desempenio.dto';
 import { UpdateDesempenioDto } from './dto/update-desempenio.dto';
 import { Response } from 'express';
 import { Desempenio } from './entities/desempenio.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('desempenio')
 export class DesempenioController {
@@ -40,7 +41,7 @@ export class DesempenioController {
     }
     res.status(HttpStatus.NOT_FOUND).json({message:`El desempenio con id ${id} no se encontró`}) ;
   }
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const isDesempenio = await this.desempenioService.remove(id);

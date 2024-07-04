@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res, HttpStatus, HttpCode, Put} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res, HttpStatus, HttpCode, Put, UseGuards} from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -21,7 +22,8 @@ export class UsuarioController {
     return this.usuarioService.findAll();
   }
 
-  @Get(':id')  
+  @Get(':id')
+  @HttpCode(HttpStatus.FOUND)  
   async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Usuario>{
     const usuario = await this.usuarioService.findOne(id)
     
@@ -42,6 +44,7 @@ export class UsuarioController {
     res.status(HttpStatus.NOT_FOUND).json({message: `Usuario con id ${id} no encontrado`});    
   };
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response,@Param('id', ParseIntPipe) id: number) {
     const usuarioDelete = await this.usuarioService.remove(id)

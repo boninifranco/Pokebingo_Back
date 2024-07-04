@@ -6,8 +6,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn
 
 @Entity()
 @Unique(['usuarioId'])
-export class Registro {
-    
+export class Registro {    
     
     @PrimaryGeneratedColumn('increment')
     id: number;
@@ -16,10 +15,10 @@ export class Registro {
     email: string;
 
     @Column()
-    contrasena: string;
-    
-    
-        
+    contrasenia: string;
+
+    @Column('boolean')
+    administrador:boolean;
     
     @OneToMany(()=>Logueo,
     (logueo)=>logueo.idUsuario,
@@ -27,9 +26,7 @@ export class Registro {
 
     @OneToOne(()=>Desempenio,
     (desempenio)=>desempenio.jugador,
-    {cascade: true})
-    //@Column()
-    //usuarioId:Usuario;
+    {cascade: true})    
     
     @OneToOne(()=>Usuario,
     
@@ -38,7 +35,6 @@ export class Registro {
     {onDelete:'CASCADE'}
     )
     @JoinColumn({name:'usuarioId'})
-    usuarioId: number
-    
+    usuarioId: number    
 }
    
