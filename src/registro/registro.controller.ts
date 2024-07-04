@@ -1,4 +1,6 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Res, UseGuards,} from '@nestjs/common';
+import {
+  Controller,  Get,  Post,  Body,  Patch,  Param,  Delete,  ParseIntPipe,  HttpCode,
+  HttpStatus,  Res,  UseGuards,} from '@nestjs/common';
 import { RegistroService } from './registro.service';
 import { CreateRegistroDto } from './dto/create-registro.dto';
 import { UpdateRegistroDto } from './dto/update-registro.dto';
@@ -23,13 +25,18 @@ export class RegistroController {
   }
 
   @Get(':id')
-  async findOne(@Res() res: Response,@Param('id', ParseIntPipe) id: number):Promise<Registro>{
+  async findOne(
+    @Res() res: Response,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Registro> {
     const registro = await this.registroService.findOneId(id);
-    if(registro){
+    if (registro) {
       res.status(HttpStatus.FOUND).json(registro);
-      return registro;      
+      return registro;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El registro con id ${id} no se encontró`})
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El registro con id ${id} no se encontró` });
   }
 
   @Patch(':id')
@@ -37,22 +44,26 @@ export class RegistroController {
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRegistroDto: UpdateRegistroDto,
-  ):Promise<Registro> {
+  ): Promise<Registro> {
     const registro = await this.registroService.update(id, updateRegistroDto);
-    if(registro){
-      res.status(HttpStatus.FOUND).json(registro)
+    if (registro) {
+      res.status(HttpStatus.FOUND).json(registro);
       return registro;
-    } 
-    res.status(HttpStatus.NOT_FOUND).json({message:`El registro con id ${id} no se encontró`})
+    }
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El registro con id ${id} no se encontró` });
   }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number){
+  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const registro = await this.registroService.remove(id);
-    if(registro){
-      res.status(HttpStatus.FOUND).json(registro);      
+    if (registro) {
+      res.status(HttpStatus.FOUND).json(registro);
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El registro con id ${id} no se encontró`})
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El registro con id ${id} no se encontró` });
   }
 }

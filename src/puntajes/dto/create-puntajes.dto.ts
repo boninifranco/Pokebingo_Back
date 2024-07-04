@@ -1,10 +1,9 @@
 import { IsInt, IsString } from 'class-validator';
 
 export class CreatePuntajesDto {
+  @IsString()
+  descripcion: string;
 
-    @IsString()
-    descripcion: string;
-
-    @IsInt()
-    puntos: number;
+  @IsInt()
+  puntos: number;
 }

@@ -7,14 +7,9 @@ import { Logueo } from 'src/logueo/entities/logueo.entity';
 import { UsuarioModule } from 'src/usuario/usuario.module';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      Registro,Logueo
-    ]),
-    UsuarioModule
-  ],
+  imports: [TypeOrmModule.forFeature([Registro, Logueo]), UsuarioModule],
   controllers: [RegistroController],
   providers: [RegistroService],
-  exports: [RegistroService]
+  exports: [RegistroService],
 })
 export class RegistroModule {}

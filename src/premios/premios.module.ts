@@ -6,13 +6,9 @@ import { Premios } from './entities/premios.entity';
 import { StockPremios } from 'src/stock_premios/entities/stockpremios.entity';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      Premios,StockPremios
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Premios, StockPremios])],
   controllers: [PremiosController],
   providers: [PremiosService],
-  exports: [PremiosService]
+  exports: [PremiosService],
 })
 export class PremiosModule {}

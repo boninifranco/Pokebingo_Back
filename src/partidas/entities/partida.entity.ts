@@ -1,4 +1,5 @@
 import { Carton } from "src/cartones/entities/carton.entity";
+import { Logueo } from "src/logueo/entities/logueo.entity";
 import { Sala } from "src/sala/entities/sala.entity";
 import { Column, ColumnTypeUndefinedError, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -19,6 +20,13 @@ export class Partida {
     
     @OneToMany(()=> Carton, (carton) => carton.partida)
     cartones: Carton[];
+
+    @OneToMany(type=>Logueo, logueo=>logueo.idPartida)
+    logueos: Logueo[];
+
+    
+    
+
 
     constructor(horaInicio: string, cantidadCartones: number, estadoPartida: boolean){
         this.horaInicio = horaInicio;

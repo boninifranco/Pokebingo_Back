@@ -1,9 +1,8 @@
-import { IsInt } from "class-validator";
-import { Premios } from "src/premios/entities/premios.entity";
+import { IsInt } from 'class-validator';
 
 export class CreateStockPremiosDto {
-    @IsInt()
-    premio: number;
-    @IsInt()
-    cantidad: number;
+  @IsInt()
+  premio: number;
+  @IsInt()
+  cantidad: number;
 }
