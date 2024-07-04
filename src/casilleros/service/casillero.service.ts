@@ -56,7 +56,9 @@ export class CasilleroService {
       if (!fila) {
         throw new Error('Fila no encontrada');
       }
-      const casillero = this.casilleroRepository.create({ fila: fila });
+      const casillero = this.casilleroRepository.create({
+        fila: createCasilleroDto.filaId,
+        imagen: createCasilleroDto.imagen });
       const nuevoCasillero = await this.casilleroRepository.save(casillero);
       if (nuevoCasillero) return nuevoCasillero;
       else throw new Error('No se pudo crear el casillero');

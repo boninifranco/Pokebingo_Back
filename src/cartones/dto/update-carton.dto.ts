@@ -6,6 +6,6 @@ export class UpdateCartonDto extends PartialType(CreateCartonDto) {
   @IsInt()
   aciertos: number;
 
-  @IsInt()
-  idUsuario: number;
+  //@IsInt()
+  //idUsuario: number;
 }

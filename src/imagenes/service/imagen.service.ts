@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import fetch from 'node-fetch';
 import { CreateImagenDto } from '../dto/create-imagen.dto';
 import { Imagen } from '../entities/imagen.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -50,26 +49,18 @@ export class ImagenService {
   }
 
   async create(createImagenDto: CreateImagenDto): Promise<Imagen> {
-    try {
-      const casillero = await this.casilleroRepository.findOne({
-        where: { casilleroId: createImagenDto.casilleroId },
-      });
-      if (!casillero) {
-        throw new HttpException(
-          'Casillero no encontrado',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      let imagen: Imagen = await this.imagenRepository.save(
-        new Imagen(createImagenDto.imagen, casillero),
-      );
-      if (imagen) return imagen;
-      else throw new Error('No se pudo crear la imagen');
+    try {      
+        const imagen = this.imagenRepository.create({        
+          imagen: createImagenDto.imagen });
+        const newImagen =  await this.imagenRepository.save(imagen);
+        if (newImagen) return newImagen;
+        else throw new Error('No se pudo crear la imagen');     
+      
     } catch (error) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: 'Se produjo un error: ' + error,
+          error: 'Se produjo un errorrrr: ' + error,
         },
         HttpStatus.NOT_FOUND,
       );

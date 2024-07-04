@@ -1,8 +1,9 @@
-import {Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode} from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode, UseGuards} from '@nestjs/common';
 import { CasilleroService } from '../service/casillero.service';
 import { CreateCasilleroDto } from '../dto/create-casillero.dto';
 import { UpdateCasilleroDto } from '../dto/update-casillero.dto';
 import { Casillero } from '../entities/casillero.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('casilleros')
 export class CasilleroController {
@@ -42,6 +43,7 @@ export class CasilleroController {
     return casillero;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteCasillero(@Param('id', ParseIntPipe) id: string) {
     return this.casilleroService.delete(id);

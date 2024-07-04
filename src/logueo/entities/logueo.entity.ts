@@ -17,6 +17,8 @@ export class Logueo {
   @Column()
   logout?: string;
 
+  @OneToMany(() => Carton, (carton) => carton.cartonId, { cascade: true })
+
   @ManyToOne((type) => Registro, (registro) => registro.id, {
     onDelete: 'CASCADE',
   })
@@ -26,9 +28,11 @@ export class Logueo {
   @OneToOne((type) => Partida, (partida) => partida.partidaId)
   @JoinColumn({ name: 'idPartida' })
   idPartida: number;
-    @OneToMany(type => Carton,
-        carton => carton.idUsuario)
-        @JoinColumn()
-        public carton : Carton[];
-       
+
+  
+  
+  //@OneToMany(() => Carton, carton => carton.idUsuario, {cascade:false})
+    //@JoinColumn()
+    //public carton : Carton[];
+    //carton: number       
 }

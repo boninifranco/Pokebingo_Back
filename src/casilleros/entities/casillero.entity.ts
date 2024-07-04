@@ -1,25 +1,21 @@
 import { Fila } from 'src/filas/entities/fila.entity';
-import { Imagen } from 'src/imagenes/entities/imagen.entity';
-import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity('casilleros')
 export class Casillero {
   @PrimaryGeneratedColumn('increment')
   casilleroId: number;
   @Column()
-  salio: boolean;
+  salio: boolean;  
 
-  @ManyToOne(() => Fila, (fila) => fila.casilleros, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Fila, (fila) => fila.filaId, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'filaId' })
-  public fila: Fila;
+  public fila: number;
+  
+  @Column()
+  imagen: string;
 
-  @OneToOne(() => Imagen, (imagen) => imagen.casillero, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  imagen: Imagen;
-
-  constructor(salio: boolean, fila: Fila) {
+  constructor(salio: boolean, fila: number) {
     this.salio = false;
     if (fila) {
       this.fila = fila;

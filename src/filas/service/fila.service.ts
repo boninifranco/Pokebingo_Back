@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import {  HttpException,  HttpStatus,  Injectable } from '@nestjs/common';
 import { CreateFilaDto } from '../dto/create-fila.dto';
 import { Fila } from '../entities/fila.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -65,7 +60,7 @@ export class FilaService {
         throw new Error('Cartón no encontrado');
       }
       const fila = this.filaRepository.create({
-        carton: carton,
+        carton: createFilaDto.cartonId,
       });
       const nuevaFila = await this.filaRepository.save(fila);
       if (nuevaFila) return nuevaFila;

@@ -9,18 +9,13 @@ export class Fila {
   @Column()
   aciertos: number;
 
+  @OneToMany(() => Casillero, (casilleros) => casilleros.fila, {cascade: true})
+
   @ManyToOne(() => Carton, (carton) => carton.fila, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cartonId' })
-  public carton: Carton;
+  public carton: number;
 
-  @OneToMany(() => Casillero, (casilleros) => casilleros.fila, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'casilleroId' })
-  casilleros: Casillero[];
-
-  constructor(aciertos?: number, carton?: Carton) {
+  constructor(aciertos?: number, carton?: number) {
     this.aciertos = 0;
     if (carton) {
       this.carton = carton;
