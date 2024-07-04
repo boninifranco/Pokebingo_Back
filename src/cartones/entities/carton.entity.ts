@@ -18,7 +18,6 @@ export class Carton {
 
   @OneToOne(() => Logueo, (logueo) => logueo.id)
   @JoinColumn({ name: 'idUsuario' })
-  //public idUsuario: number;
 
   @OneToMany(() => Fila, (fila) => fila.carton, {
     cascade: true,
@@ -30,7 +29,6 @@ export class Carton {
 
   constructor(aciertos: number, idUsuario: number) {
     this.aciertos = 0;
-    //this.idUsuario = 0;
   }
 
   public getaciertos(): number {
@@ -39,12 +37,5 @@ export class Carton {
   public setaciertos(aciertos: number): void {
     this.aciertos = aciertos;
   }
-  //public getidUsuario(): number {
-    //return this.idUsuario;
-   // return
   }
-  //public setidUsuario(idUsuario: number): void {
-    //this.idUsuario = idUsuario;
-    //return
-  //}
 
