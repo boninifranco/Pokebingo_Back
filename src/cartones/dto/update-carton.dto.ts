@@ -5,7 +5,4 @@ import { CreateCartonDto } from './create-carton.dto';
 export class UpdateCartonDto extends PartialType(CreateCartonDto) {
   @IsInt()
   aciertos: number;
-
-  //@IsInt()
-  //idUsuario: number;
 }
