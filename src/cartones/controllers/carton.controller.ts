@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, HttpStatus, ParseIntPipe, Patch, HttpCode } from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Body, Param, HttpStatus, ParseIntPipe, HttpCode} from '@nestjs/common';
 import { CartonService } from '../servicies/carton.service';
 import { CreateCartonDto } from '../dto/create-carton.dto';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
@@ -15,7 +15,7 @@ export class CartonController {
   }
 
   @Get(':id')
-  async findById(@Param('id', ParseIntPipe) id: number):Promise<Carton> {
+  async findById(@Param('id', ParseIntPipe) id: number): Promise<Carton> {
     const carton = await this.cartonService.findOne(id);
     return carton;
   }
@@ -27,13 +27,16 @@ export class CartonController {
   }
 
   @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateCartonDto: UpdateCartonDto):Promise<Carton> {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCartonDto: UpdateCartonDto,
+  ): Promise<Carton> {
     const updatedCarton = await this.cartonService.update(id, updateCartonDto);
     return updatedCarton;
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number){
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return this.cartonService.delete(id);
   }
 }

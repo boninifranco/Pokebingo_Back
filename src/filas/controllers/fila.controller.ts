@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, NotFoundException, ParseIntPipe, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode} from '@nestjs/common';
 import { FilaService } from '../service/fila.service';
 import { CreateFilaDto } from '../dto/create-fila.dto';
 import { UpdateFilaDto } from '../dto/update-fila.dto';
@@ -15,21 +15,24 @@ export class FilaController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: string):Promise<Fila> {
+  async findOne(@Param('id', ParseIntPipe) id: string): Promise<Fila> {
     const fila = await this.filaService.findOne(id);
     return fila;
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createFilaDto: CreateFilaDto):Promise<Fila> {
+  create(@Body() createFilaDto: CreateFilaDto): Promise<Fila> {
     return this.filaService.create(createFilaDto);
   }
 
   @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: string, @Body() updateFilaDto: UpdateFilaDto):Promise<Fila> {
-      const updatedFila = await this.filaService.update(id, updateFilaDto);
-      return updatedFila;
+  async update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateFilaDto: UpdateFilaDto,
+  ): Promise<Fila> {
+    const updatedFila = await this.filaService.update(id, updateFilaDto);
+    return updatedFila;
   }
 
   @Delete(':id')

@@ -5,6 +5,7 @@ import { CreateCartonDto } from '../dto/create-carton.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Partida } from 'src/partidas/entities/partida.entity';
+import { Logueo } from 'src/logueo/entities/logueo.entity';
 
 @Injectable()
 export class CartonService {
@@ -13,6 +14,8 @@ export class CartonService {
     private readonly cartonRepository: Repository<Carton>,
     @InjectRepository(Partida)
     private readonly partidaRepository: Repository<Partida>,
+    @InjectRepository(Logueo)
+    private readonly logueoRepository: Repository<Logueo>,
   ) {}
 
   public async findAll(): Promise<Carton[]> {
@@ -54,7 +57,7 @@ export class CartonService {
 
   async create(createCartonDto: CreateCartonDto): Promise<Carton> {
     try {
-      const partida = await this.partidaRepository.findOne({
+      let partida = await this.partidaRepository.findOne({
         where: { partidaId: createCartonDto.idPartida },
       });
       if (!partida) {
@@ -82,7 +85,9 @@ export class CartonService {
       let criterio: FindOneOptions = { where: { cartonId: id } };
       let carton: Carton = await this.cartonRepository.findOne(criterio);
       if (!carton) throw new Error(`No se encuentra el cartón: ${id}`);
-      else carton.setaciertos(updateCartonDto.aciertos);
+      carton.setaciertos(updateCartonDto.aciertos);
+      carton.idUsuario = updateCartonDto.idUsuario;
+      // carton.setidUsuario(updateCartonDto.idUsuario);
       carton = await this.cartonRepository.save(carton);
       return carton;
     } catch (error) {
