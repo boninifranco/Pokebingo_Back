@@ -6,11 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([Usuario])
-  ],
+  imports: [TypeOrmModule.forFeature([Usuario])],
   controllers: [UsuarioController],
   providers: [UsuarioService],
-  exports: [UsuarioService]
+  exports: [UsuarioService],
 })
 export class UsuarioModule {}

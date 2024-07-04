@@ -1,12 +1,11 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateLogueoDto } from './create-logueo.dto';
-import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import {  IsBoolean, IsInt} from 'class-validator';
 
 export class UpdateLogueoDto extends PartialType(CreateLogueoDto) {
-    @IsBoolean()
-    logueado:boolean;
+  @IsBoolean()
+  logueado: boolean;
 
-    //@IsDate()
-    //@IsOptional()
-    //logout?: Date | null;
+  @IsInt()
+  idPartida?: number;
 }
