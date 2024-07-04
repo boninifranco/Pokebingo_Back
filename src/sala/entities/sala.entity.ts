@@ -1,6 +1,6 @@
 import { Chat } from 'src/chat/entities/chat.entity';
 import { Partida } from 'src/partidas/entities/partida.entity';
-import {Entity,JoinColumn,OneToMany,OneToOne,PrimaryGeneratedColumn,} from 'typeorm';
+import {Entity,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryGeneratedColumn,} from 'typeorm';
 
 @Entity('sala')
 export class Sala {

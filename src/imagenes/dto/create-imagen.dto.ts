@@ -1,10 +1,9 @@
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsString } from 'class-validator';
 
 export class CreateImagenDto {
-  @IsInt()
-    imagenId: number;
-
   @IsString()
-    imagen: string;
-  }
-  
+  imagen: string;
+
+  @IsInt()
+  casilleroId: number;
+}
