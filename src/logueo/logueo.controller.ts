@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { LogueoService } from './logueo.service';
 import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Response } from 'express';
 import { Logueo } from './entities/logueo.entity';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('logueo')
 export class LogueoController {
@@ -42,8 +43,17 @@ export class LogueoController {
     }
     res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró en el patch`})
   }
+  /*@Patch('/deslogueo/:id')
+  async deslogueo(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Logueo> {
+    const logueo = await this.logueoService.deslogueo(+id);
+      if(logueo){
+      res.status(HttpStatus.FOUND).json(logueo);
+      return logueo;
+      }
+    res.status(HttpStatus.NOT_FOUND).json({message: `El logueo con id ${id} no se encontró en el patch`})
+  }*/
   
-
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number): Promise<Logueo> {
     const logueo = await this.logueoService.remove(id);

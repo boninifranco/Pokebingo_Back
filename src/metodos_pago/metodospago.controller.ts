@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { MetodosPagoService } from './metodospago.service';
 import { CreateMetodosPagoDto } from './dto/create-metodos_pago.dto';
 import { UpdateMetodosPagoDto } from './dto/update-metodos_pago.dto';
 import { MetodosPago } from './entities/metodospago.entity';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth/auth.guard';
 
 @Controller('metodospago')
 export class MetodosPagoController {
@@ -40,7 +41,7 @@ export class MetodosPagoController {
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: "Método no existe"});
   }
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const metodoPago = await this.metodosPagoService.remove(id)

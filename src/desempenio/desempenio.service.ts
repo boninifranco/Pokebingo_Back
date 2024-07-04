@@ -19,10 +19,8 @@ export class DesempenioService {
   async create(createDesempenioDto: CreateDesempenioDto): Promise<Desempenio> {
     const isRegistro = await this.registroService.findOneId(createDesempenioDto.jugador);
     if(!isRegistro) throw new error(`No existe registro del usuario con id ${createDesempenioDto.jugador}`);
-
     const isDesempenio = await this.findDesempenioUsuario(createDesempenioDto.jugador)
-    /*const criterio: FindOneOptions = {where:{jugador: createDesempenioDto.jugador}};
-    const isDesempenio = await this.desempenioRepository.findOne(criterio);*/
+    
     if(isDesempenio)throw new BadRequestException(`Ya existe desempeño para el jugador con id ${createDesempenioDto.jugador}`)
     try {
       const newDesempenio: Desempenio = this.desempenioRepository.create(createDesempenioDto)
@@ -91,8 +89,7 @@ export class DesempenioService {
   async findDesempenioUsuario(jugadorId:number):Promise<Desempenio>{
 
     const desempenioUsuario =  await this.desempenioRepository.createQueryBuilder('desempenio')
-    .where('desempenio.jugadorId = :jugadorId',{jugadorId})
-    //.andWhere('logueo.logueado = :logueado', {logueado:true})
+    .where('desempenio.jugadorId = :jugadorId',{jugadorId})    
     .getOne()
 
     return desempenioUsuario;
