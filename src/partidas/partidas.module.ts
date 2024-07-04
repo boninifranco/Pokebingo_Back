@@ -7,11 +7,7 @@ import { Carton } from 'src/cartones/entities/carton.entity';
 import { Sala } from 'src/sala/entities/sala.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Partida, Carton, Sala
-    ])
-  ],
+  imports: [TypeOrmModule.forFeature([Partida, Carton, Sala])],
   controllers: [PartidasController],
   providers: [PartidasService],
 })

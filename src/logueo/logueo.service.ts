@@ -3,7 +3,7 @@ import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Logueo } from './entities/logueo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOneOptions } from 'typeorm';
+import { Repository, FindOneOptions, FindManyOptions} from 'typeorm';
 import { RegistroService } from '../registro/registro.service';
 import { error } from 'console';
 
@@ -68,7 +68,7 @@ export class LogueoService {
 
   async findOne(id: number): Promise<Logueo> {
     try {
-      const criterio: FindOneOptions = { where: { id: id } };
+      const criterio :FindOneOptions = {relations: ['carton' ], where:{id:id}}
       const logueo = await this.logueoRepository.findOne(criterio);
       if (!logueo)
         throw new BadRequestException(

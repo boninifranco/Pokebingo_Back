@@ -6,9 +6,7 @@ import { Chat } from './entities/chat.entity';
 import { Sala } from 'src/sala/entities/sala.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Chat, Sala])
-  ],
+  imports: [TypeOrmModule.forFeature([Chat, Sala])],
   controllers: [ChatController],
   providers: [ChatService],
 })

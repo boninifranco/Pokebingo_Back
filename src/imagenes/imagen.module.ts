@@ -6,11 +6,7 @@ import { Imagen } from './entities/imagen.entity';
 import { Casillero } from 'src/casilleros/entities/casillero.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Imagen, Casillero
-    ])
-  ],
+  imports: [TypeOrmModule.forFeature([Imagen, Casillero])],
   controllers: [ImagenController],
   providers: [ImagenService],
 })

@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, Res, HttpStatus, Put, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpCode, HttpStatus, Put, ParseIntPipe} from '@nestjs/common';
 import { SalaService } from './sala.service';
 import { CreateSalaDto } from './dto/create-sala.dto';
 import { UpdateSalaDto } from './dto/update-sala.dto';
 import { Sala } from './entities/sala.entity';
-import { Response } from 'express';
 
 @Controller('sala')
 export class SalaController {
@@ -26,15 +25,18 @@ export class SalaController {
     const sala = await this.salaService.findOne(id);
     return sala;
   }
-  
+
   @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() UpdateSalaDto: UpdateSalaDto): Promise<Sala> {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() UpdateSalaDto: UpdateSalaDto,
+  ): Promise<Sala> {
     const sala = await this.salaService.update(id, UpdateSalaDto);
     return sala;
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number){
+  async remove(@Param('id', ParseIntPipe) id: number) {
     const sala = await this.salaService.remove(id);
     return sala;
   }

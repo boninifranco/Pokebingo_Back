@@ -1,5 +1,3 @@
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsString } from 'class-validator';
 
-export class CreateSalaDto {
-
-}
+export class CreateSalaDto {}
