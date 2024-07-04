@@ -1,10 +1,9 @@
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsString } from 'class-validator';
 
 export class CreateChatDto {
+  @IsString()
+  mensaje: string;
 
-    @IsString()
-    mensaje: string;
-
-    @IsInt()
-    salaId: number;
+  @IsInt()
+  salaId: number;
 }

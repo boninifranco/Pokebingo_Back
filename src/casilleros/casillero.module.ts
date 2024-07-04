@@ -7,11 +7,7 @@ import { Fila } from 'src/filas/entities/fila.entity';
 import { Imagen } from 'src/imagenes/entities/imagen.entity';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      Casillero, Fila, Imagen
-    ])
-  ],
+  imports: [TypeOrmModule.forFeature([Casillero, Fila, Imagen])],
   controllers: [CasilleroController],
   providers: [CasilleroService],
 })

@@ -1,6 +1,7 @@
-import { Partida } from 'src/partidas/entities/partida.entity';
-import { Registro } from 'src/registro/entities/registro.entity';
-import {  Column,  Entity,  JoinColumn,  ManyToOne,  OneToOne,  PrimaryGeneratedColumn,} from 'typeorm';
+import { Carton } from "src/cartones/entities/carton.entity";
+import { Partida } from "src/partidas/entities/partida.entity";
+import { Registro } from "src/registro/entities/registro.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Logueo {
@@ -25,4 +26,9 @@ export class Logueo {
   @OneToOne((type) => Partida, (partida) => partida.partidaId)
   @JoinColumn({ name: 'idPartida' })
   idPartida: number;
+    @OneToMany(type => Carton,
+        carton => carton.idUsuario)
+        @JoinColumn()
+        public carton : Carton[];
+       
 }

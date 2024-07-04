@@ -1,16 +1,22 @@
 import { Chat } from 'src/chat/entities/chat.entity';
 import { Partida } from 'src/partidas/entities/partida.entity';
-import {Entity,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryGeneratedColumn,} from 'typeorm';
+import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity('sala')
 export class Sala {
   @PrimaryGeneratedColumn('increment')
   salaId: number;
 
-  @OneToMany(() => Chat, (chat) => chat.sala, { cascade: true, onDelete: 'CASCADE'  })
+  @OneToMany(() => Chat, (chat) => chat.sala, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'chatId' })
   public chat: Chat[];
 
-  @OneToOne(() => Partida, partida => partida.sala,{cascade: true, onDelete: 'CASCADE'  })
+  @OneToOne(() => Partida, (partida) => partida.sala, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   partida: Partida;
 }

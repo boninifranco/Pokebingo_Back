@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, ParseIntPipe} from '@nestjs/common';
 import { ImagenService } from '../service/imagen.service';
-import { CreateImagenDto } from '../dto/create-imagen.dto'
-import { UpdateImagenDto } from '../dto/update-imagen.dto'
+import { CreateImagenDto } from '../dto/create-imagen.dto';
+import { UpdateImagenDto } from '../dto/update-imagen.dto';
 import { Imagen } from '../entities/imagen.entity';
 
 @Controller('imagenes')
@@ -27,13 +27,16 @@ export class ImagenController {
   }
 
   @Put(':id')
-  async update(@Param('id', ParseIntPipe) id: string, @Body() updateImagenDto: UpdateImagenDto): Promise<Imagen> {
+  async update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateImagenDto: UpdateImagenDto,
+  ): Promise<Imagen> {
     const updatedImagen = await this.imagenService.update(id, updateImagenDto);
     return updatedImagen;
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: string){
+  async remove(@Param('id', ParseIntPipe) id: string) {
     const deleteImagen = this.imagenService.remove(id);
     return deleteImagen;
   }

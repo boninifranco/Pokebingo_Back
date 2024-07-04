@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Res, HttpStatus, NotFoundException, ParseIntPipe, HttpCode } from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode} from '@nestjs/common';
 import { CasilleroService } from '../service/casillero.service';
 import { CreateCasilleroDto } from '../dto/create-casillero.dto';
 import { UpdateCasilleroDto } from '../dto/update-casillero.dto';
@@ -10,25 +10,35 @@ export class CasilleroController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAllCasilleros():Promise <Casillero[]> {
+  getAllCasilleros(): Promise<Casillero[]> {
     return this.casilleroService.findAll();
   }
 
   @Get(':id')
-  async getCasilleroById(@Param('id', ParseIntPipe) id: string):Promise<Casillero> {
+  async getCasilleroById(
+    @Param('id', ParseIntPipe) id: string,
+  ): Promise<Casillero> {
     const casillero = await this.casilleroService.findOne(id);
     return casillero;
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createCasillero(@Body() createCasilleroDto: CreateCasilleroDto):Promise<Casillero> {
+  createCasillero(
+    @Body() createCasilleroDto: CreateCasilleroDto,
+  ): Promise<Casillero> {
     return this.casilleroService.create(createCasilleroDto);
   }
 
   @Put(':id')
-  async updateCasillero(@Param('id', ParseIntPipe) id: string, @Body() updateCasilleroDto: UpdateCasilleroDto):Promise<Casillero> {
-    const casillero = await this.casilleroService.update(id, updateCasilleroDto);
+  async updateCasillero(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateCasilleroDto: UpdateCasilleroDto,
+  ): Promise<Casillero> {
+    const casillero = await this.casilleroService.update(
+      id,
+      updateCasilleroDto,
+    );
     return casillero;
   }
 

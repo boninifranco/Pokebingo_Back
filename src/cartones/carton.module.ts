@@ -5,14 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Carton } from './entities/carton.entity';
 import { Partida } from 'src/partidas/entities/partida.entity';
 import { Fila } from 'src/filas/entities/fila.entity';
+import { Logueo } from 'src/logueo/entities/logueo.entity';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      Carton, Partida, Fila
-    ])
-  ],
-  controllers: [CartonController], 
-  providers: [CartonService], 
+  imports: [TypeOrmModule.forFeature([Carton, Partida, Fila, Logueo])],
+  controllers: [CartonController],
+  providers: [CartonService],
 })
-export class CartonModule {} 
+export class CartonModule {}
