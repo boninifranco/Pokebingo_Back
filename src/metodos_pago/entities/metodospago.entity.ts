@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class MetodosPago {
-    @PrimaryGeneratedColumn()
-    id: number;
-    @Column()
-    descripcion: string;
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  descripcion: string;
 }

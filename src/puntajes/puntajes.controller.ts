@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, ParseIntPipe, UseGuards } from '@nestjs/common';
+import {  Controller,  Get,  Post,  Body,  Patch,  Param,  Delete,  HttpCode,
+  HttpStatus,  Res,  ParseIntPipe,  UseGuards,} from '@nestjs/common';
 import { PuntajesService } from './puntajes.service';
 import { CreatePuntajesDto } from './dto/create-puntajes.dto';
 import { UpdatePuntajesDto } from './dto/update-puntajes.dto';
@@ -23,34 +24,45 @@ export class PuntajesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response):Promise<Puntajes> {
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ): Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.findOne(id);
-    if(isPuntaje){
-      res.status(HttpStatus.FOUND).json(isPuntaje)
+    if (isPuntaje) {
+      res.status(HttpStatus.FOUND).json(isPuntaje);
       return isPuntaje;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El puntaje con id ${id} no existe`})
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El puntaje con id ${id} no existe` });
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updatePuntajesDto: UpdatePuntajesDto, @Res() res: Response ):Promise<Puntajes> {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePuntajesDto: UpdatePuntajesDto,
+    @Res() res: Response,
+  ): Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.update(+id, updatePuntajesDto);
-    if(isPuntaje){
-      res.status(HttpStatus.FOUND).json(isPuntaje)
+    if (isPuntaje) {
+      res.status(HttpStatus.FOUND).json(isPuntaje);
       return isPuntaje;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El puntaje con id ${id} no existe`})
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El puntaje con id ${id} no existe` });
   }
 
-  
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Param('id',ParseIntPipe) id: number, @Res() res:Response) {
+  async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const isPuntaje = await this.puntajesService.remove(id);
-    if(isPuntaje){
-      res.status(HttpStatus.FOUND).json(isPuntaje)     
+    if (isPuntaje) {
+      res.status(HttpStatus.FOUND).json(isPuntaje);
     }
-    res.status(HttpStatus.NOT_FOUND).json({message:`El puntaje con id ${id} no existe`})
-    
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El puntaje con id ${id} no existe` });
   }
 }

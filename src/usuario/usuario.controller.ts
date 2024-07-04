@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res, HttpStatus, HttpCode, Put, UseGuards} from '@nestjs/common';
+import {  Controller,  Get,  Post,  Body,  Patch,  Param,  Delete,  ParseIntPipe,
+  Res,  HttpStatus,  HttpCode, UseGuards,} from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -14,7 +15,7 @@ export class UsuarioController {
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
     return this.usuarioService.create(createUsuarioDto);
-  };
+  }
 
   @Get()
   @HttpCode(HttpStatus.FOUND)
@@ -23,35 +24,51 @@ export class UsuarioController {
   }
 
   @Get(':id')
-  @HttpCode(HttpStatus.FOUND)  
-  async findOne(@Res() res: Response, @Param('id', ParseIntPipe) id: number):Promise<Usuario>{
-    const usuario = await this.usuarioService.findOne(id)
-    
-    if(usuario){
+  @HttpCode(HttpStatus.FOUND)
+  async findOne(
+    @Res() res: Response,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Usuario> {
+    const usuario = await this.usuarioService.findOne(id);
+
+    if (usuario) {
       res.status(HttpStatus.FOUND).json(usuario);
-      return usuario;      
+      return usuario;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message: `Usuario con id ${id} no encontrado`});
-  };
-  
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `Usuario con id ${id} no encontrado` });
+  }
+
   @Patch(':id')
-  async update(@Res() res: Response,@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto):Promise<Usuario> {
-    const usuarioUpdate = await this.usuarioService.update(id, updateUsuarioDto);
-    if(usuarioUpdate){
+  async update(
+    @Res() res: Response,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUsuarioDto: UpdateUsuarioDto,
+  ): Promise<Usuario> {
+    const usuarioUpdate = await this.usuarioService.update(
+      id,
+      updateUsuarioDto,
+    );
+    if (usuarioUpdate) {
       res.status(HttpStatus.FOUND).json(usuarioUpdate);
-      return usuarioUpdate;      
+      return usuarioUpdate;
     }
-    res.status(HttpStatus.NOT_FOUND).json({message: `Usuario con id ${id} no encontrado`});    
-  };
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `Usuario con id ${id} no encontrado` });
+  }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Res() res: Response,@Param('id', ParseIntPipe) id: number) {
-    const usuarioDelete = await this.usuarioService.remove(id)
-    if(usuarioDelete){
-      res.status(HttpStatus.FOUND).json(usuarioDelete);      
-    }else{
-      res.status(HttpStatus.NOT_FOUND).json({message: `Usuario con id ${id} no encontrado`})}   
-    ;
+  async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
+    const usuarioDelete = await this.usuarioService.remove(id);
+    if (usuarioDelete) {
+      res.status(HttpStatus.FOUND).json(usuarioDelete);
+    } else {
+      res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ message: `Usuario con id ${id} no encontrado` });
+    }
   }
 }

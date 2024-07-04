@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Puntajes {
-    @PrimaryGeneratedColumn()
-    id: number;
-    @Column()
-    descripcion: string;
-    @Column()
-    puntos: number;
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  descripcion: string;
+  @Column()
+  puntos: number;
 }

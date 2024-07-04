@@ -5,11 +5,7 @@ import { MetodosPago } from './entities/metodospago.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([
-      MetodosPago
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([MetodosPago])],
   controllers: [MetodosPagoController],
   providers: [MetodosPagoService],
 })
