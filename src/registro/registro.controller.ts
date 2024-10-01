@@ -66,4 +66,19 @@ export class RegistroController {
       .status(HttpStatus.NOT_FOUND)
       .json({ message: `El registro con id ${id} no se encontró` });
   }
+
+  @Post('/buscar')
+  async getByEmail(@Res() res: Response, @Body() body:{email:string, contrasenia:string} ){
+    const {email,contrasenia}=body
+    const user = await this.registroService.findUserEmail(email);//,contrasenia
+    if(user){
+      res.status(HttpStatus.FOUND).json(user)
+    }else{
+      res
+      .status(HttpStatus.NOT_FOUND)
+      .json({message:`No existe un usuario con el email o la contraseña indicadas`})
+
+
+    }
+  }
 }
