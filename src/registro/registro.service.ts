@@ -1,4 +1,9 @@
-import {  BadRequestException,  HttpException,  HttpStatus,  Injectable,} from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateRegistroDto } from './dto/create-registro.dto';
@@ -7,6 +12,7 @@ import { Registro } from './entities/registro.entity';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import { error } from 'console';
 import * as bcrypt from 'bcrypt';
+import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 
 @Injectable()
 export class RegistroService {
@@ -15,30 +21,22 @@ export class RegistroService {
     private readonly registroRepository: Repository<Registro>,
     private readonly usuarioService: UsuarioService,
   ) {}
-  async create(createRegistroDto: CreateRegistroDto): Promise<Registro> {
-    const isUsuario = await this.usuarioService.findOne(
-      createRegistroDto.usuarioId,
-    );
 
-    if (!isUsuario)
-      throw new error(
-        `No existe el usuario con id ${createRegistroDto.usuarioId}`,
-      );
-
-    const isRegistro = await this.findRegistroId(createRegistroDto.usuarioId);
-
-    if (isRegistro)
-      throw new BadRequestException(
-        `Ya existe un registro para el usuario con id ${createRegistroDto.usuarioId}`,
-      );
-
+  async create(
+    createRegistroDto: CreateRegistroDto,
+    createUsuarioDto: CreateUsuarioDto,
+  ): Promise<Registro> {
     try {
-      let { contrasenia, email, administrador, usuarioId } = createRegistroDto;
+      let { contrasenia, email } = createRegistroDto;
+      await this.findUserEmail(email);
       const hashPass = await this.hashPass(contrasenia);
       contrasenia = hashPass;
-      createRegistroDto = { contrasenia, email, administrador, usuarioId };
-      const nuevoRegistro: Registro =
-        this.registroRepository.create(createRegistroDto);
+      const nuevoUsuario = await this.usuarioService.create(createUsuarioDto);
+      const nuevoRegistro: Registro = this.registroRepository.create({
+        email,
+        contrasenia,
+        usuarioId: nuevoUsuario.id,
+      });
       return this.registroRepository.save(nuevoRegistro);
     } catch (error) {
       throw new HttpException(
@@ -104,9 +102,9 @@ export class RegistroService {
         //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
         .getOne();
 
-      if (!isUser)
+      if (isUser)
         throw new BadRequestException(
-          `No existe un registro para el email ${email}`,// y password ${contrasenia}
+          `Ya existe un registro para el email ${email}`,
         );
       return isUser;
     } catch (error) {

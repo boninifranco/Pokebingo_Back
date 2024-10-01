@@ -1,5 +1,5 @@
 import { Registro } from 'src/registro/entities/registro.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Usuario {
@@ -15,6 +15,8 @@ export class Usuario {
   celular: string;
   @Column('text')
   direccion: string;
-  @OneToOne(() => Registro, { onDelete: 'CASCADE' })
+  @OneToOne(() => Registro,(registro)=> registro.id,{ onDelete: 'CASCADE' },)
+  @JoinColumn({ name: 'registroId'})
   registro: number;
+
 }

@@ -7,6 +7,7 @@ import { UpdateRegistroDto } from './dto/update-registro.dto';
 import { Registro } from './entities/registro.entity';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
+import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 
 @Controller('registro')
 export class RegistroController {
@@ -14,8 +15,8 @@ export class RegistroController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createRegistroDto: CreateRegistroDto) {
-    return this.registroService.create(createRegistroDto);
+  create(@Body() createRegistroDto: CreateRegistroDto, createUsuarioDto: CreateUsuarioDto) {
+    return this.registroService.create(createRegistroDto, createUsuarioDto);
   }
 
   @Get()
