@@ -94,17 +94,19 @@ export class RegistroService {
       .getOne();
     return registroUsuarioId;
   }
-
-  async findUserEmail(email: string): Promise<Registro> {
+//, contrasenia:string
+  async findUserEmail(email:string): Promise<Registro> {
     try {
+      
       const isUser = await this.registroRepository
         .createQueryBuilder('registro')
         .where('registro.email = :email', { email })
+        //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
         .getOne();
 
       if (!isUser)
         throw new BadRequestException(
-          `No existe un registro para el email ${email}`,
+          `No existe un registro para el email ${email}`,// y password ${contrasenia}
         );
       return isUser;
     } catch (error) {

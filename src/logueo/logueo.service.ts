@@ -1,4 +1,4 @@
-import {  Injectable,  BadRequestException,  HttpException,  HttpStatus,} from '@nestjs/common';
+import {  Injectable,  BadRequestException,  HttpException,  HttpStatus, UnauthorizedException,} from '@nestjs/common';
 import { CreateLogueoDto } from './dto/create-logueo.dto';
 import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Logueo } from './entities/logueo.entity';
@@ -6,6 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOneOptions, FindManyOptions} from 'typeorm';
 import { RegistroService } from '../registro/registro.service';
 import { error } from 'console';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LogueoService {
@@ -13,30 +16,38 @@ export class LogueoService {
     @InjectRepository(Logueo)
     private readonly logueoRepository: Repository<Logueo>,
     private readonly registroService: RegistroService,
+    private jwtService: JwtService,
+    private readonly createLogueoDto: CreateLogueoDto,
+    
   ) {}
 
   async create(createLogueoDto: CreateLogueoDto): Promise<Logueo> {
-    const isRegistro = await this.registroService.findOneId(
-      Number(createLogueoDto.idUsuario),
-    );
-    if (!isRegistro)
-      throw new error(
-        `No existe registro del usuario con id ${createLogueoDto.idUsuario}`,
-      );
-    const usuarioLogueado = await this.findLogueoTrue(
-      createLogueoDto.idUsuario,
-    );
-    if (usuarioLogueado)
-      throw new BadRequestException(
-        `El usuario con Id ${createLogueoDto.idUsuario} ya se encuentra logueado`,
-      );
+    //const isRegistro = await this.registroService.findOneId(
+      //Number(createLogueoDto.idUsuario),
+    //);
+    //if (!isRegistro)
+      //throw new error(
+        //`No existe registro del usuario con id ${createLogueoDto.idUsuario}`,
+      //);
+    //const usuarioLogueado = await this.findLogueoTrue(
+      //createLogueoDto.idUsuario,
+    //);
+    //if (usuarioLogueado)
+      //throw new BadRequestException(
+        //`El usuario con Id ${createLogueoDto.idUsuario} ya se encuentra logueado`,
+      //);
     try {
-      let { logout, idUsuario } = createLogueoDto;
-      let login = new Date();
-      logout = '';
-      const logueoDto = { login, idUsuario, logout };
-      const nuevoLogueo: Logueo = this.logueoRepository.create(logueoDto);
-      return this.logueoRepository.save(nuevoLogueo);
+      
+     
+        let { logout ,idUsuario } = createLogueoDto;
+        let login = new Date();
+        logout = '';
+        const logueoDto = { login, idUsuario, logout };
+        const nuevoLogueo: Logueo = this.logueoRepository.create(logueoDto);
+        return this.logueoRepository.save(nuevoLogueo);
+      
+      
+      
     } catch (error) {
       throw new HttpException(
         {
@@ -135,5 +146,52 @@ export class LogueoService {
       .andWhere('logueo.logueado = :logueado', { logueado: true })
       .getOne();
     return usuarioIdLogueado;
+  }
+  async login(mail: string, pass: string): Promise<any> {
+    const user = await this.registroService.findUserEmail(mail);//,pass
+    const msj = user.administrador ? `administrador` : `usuario`;
+    const isMatch = await bcrypt.compare(pass, user?.contrasenia);
+    if (!isMatch) {
+      throw new UnauthorizedException();
+    }
+    const payload = { sub: user.id, email: user.email };
+    const idUsuario = user.id
+    console.log(idUsuario);
+    const usuarioLogueado = await this.findLogueoTrue(
+      idUsuario
+    );
+    if (usuarioLogueado)
+      throw new BadRequestException(
+        `El usuario con Id ${idUsuario} ya se encuentra logueado`,
+      );
+      try {
+      
+     
+        //let { logout ,idUsuario } = this.createLogueoDto;
+        let login = new Date();
+        const logout = '';
+        const logueoDto = { login, idUsuario, logout };
+        const nuevoLogueo: Logueo = this.logueoRepository.create(logueoDto);
+        
+        return this.logueoRepository.save(nuevoLogueo);        
+      
+      
+      
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al enviar la petición ${error}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }      
+
+    return {
+      logueado_como: msj,
+      access_token: await this.jwtService.signAsync(payload),
+      id: user.id
+    };    
+    
   }
 }

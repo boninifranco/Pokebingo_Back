@@ -6,6 +6,7 @@ import { UpdateLogueoDto } from './dto/update-logueo.dto';
 import { Response } from 'express';
 import { Logueo } from './entities/logueo.entity';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('logueo')
 export class LogueoController {
@@ -55,7 +56,7 @@ export class LogueoController {
       .json({ message: `El logueo con id ${id} no se encontró en el patch` });
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(
     @Res() res: Response,
@@ -69,5 +70,10 @@ export class LogueoController {
     res
       .status(HttpStatus.NOT_FOUND)
       .json({ message: `El logueo con id ${id} no se encontró` });
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  login(@Body() loginDto: LoginDto) {
+    return this.logueoService.login(loginDto.email, loginDto.password);
   }
 }

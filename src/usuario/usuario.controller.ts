@@ -21,6 +21,9 @@ export class UsuarioController {
   @HttpCode(HttpStatus.FOUND)
   findAll() {
     return this.usuarioService.findAll();
+    //console.log('hola')
+    //return {message: 'Hola desde el backend'}
+
   }
 
   @Get(':id')
