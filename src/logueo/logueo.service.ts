@@ -148,7 +148,7 @@ export class LogueoService {
     return usuarioIdLogueado;
   }
   async login(mail: string, pass: string): Promise<any> {
-    const user = await this.registroService.findUserEmail(mail);//,pass
+    const user = await this.registroService.findUserEmail1(mail);//,pass
     const msj = user.administrador ? `administrador` : `usuario`;
     const isMatch = await bcrypt.compare(pass, user?.contrasenia);
     if (!isMatch) {

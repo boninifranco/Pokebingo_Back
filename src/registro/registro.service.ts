@@ -118,6 +118,33 @@ export class RegistroService {
     }
   }
 
+  //, contrasenia:string
+  async findUserEmail1(email:string): Promise<Registro> {
+    try {
+
+      const isUser = await this.registroRepository
+        .createQueryBuilder('registro')
+        .where('registro.email = :email', { email })
+        //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
+        .getOne();
+
+      if (!isUser)      
+        throw new BadRequestException(
+          `No existe un registro para el email ${email}`,// y password ${contrasenia}
+         
+        );
+      return isUser;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al enviar la petición ${error}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
   async update(
     id: number,
     updateRegistroDto: UpdateRegistroDto,

@@ -5,15 +5,15 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'ty
 export class Usuario {
   @PrimaryGeneratedColumn('increment')
   id: number;
-  @Column()
+  @Column({default:''})
   apellido: string;
-  @Column()
+  @Column({default:''})
   nombre: string;
-  @Column('text')
+  @Column({default:''})
   dni: string;
-  @Column('text')
+  @Column({default:''})
   celular: string;
-  @Column('text')
+  @Column({default:''})
   direccion: string;
   @OneToOne(() => Registro,(registro)=> registro.id,{ onDelete: 'CASCADE' },)
   @JoinColumn({ name: 'registroId'})
