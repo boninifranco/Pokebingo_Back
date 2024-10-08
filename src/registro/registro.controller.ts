@@ -40,6 +40,39 @@ export class RegistroController {
       .json({ message: `El registro con id ${id} no se encontró` });
   }
 
+  @Get(':usuarioId/userId')
+  async findRegistroId(
+    @Res() res: Response,
+    @Param('usuarioId', ParseIntPipe) usuarioId: number,
+  ): Promise<Registro> {
+    const registro = await this.registroService.findRegistroId(usuarioId);
+    if (registro) {
+      res.status(HttpStatus.FOUND).json(registro);
+      return registro;
+    }
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El registro con id ${usuarioId} no se encontró` });
+  }
+
+  @Patch(':usuarioId/admin')
+  async updateAdmin(
+    @Res() res: Response,
+    @Param('usuarioId', ParseIntPipe) usuarioId: number,
+    @Body() updateRegistroDto: UpdateRegistroDto,
+  ): Promise<Registro> {
+    console.log(`Hola2!!`)
+    const registro = await this.registroService.updateAdmin(usuarioId, updateRegistroDto);
+    console.log(`hola de nuevo ${registro.usuarioId}`)
+    if (registro) {
+      res.status(HttpStatus.FOUND).json(registro);
+      return registro;
+    }
+    res
+      .status(HttpStatus.NOT_FOUND)
+      .json({ message: `El registro con id ${usuarioId} no se encontró` });
+  }
+
   @Patch(':id')
   async update(
     @Res() res: Response,

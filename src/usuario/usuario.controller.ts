@@ -43,12 +43,15 @@ export class UsuarioController {
       .json({ message: `Usuario con id ${id} no encontrado` });
   }
 
+  
+
   @Patch(':id')
   async update(
     @Res() res: Response,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUsuarioDto: UpdateUsuarioDto,
   ): Promise<Usuario> {
+    console.log('hola!!!')
     const usuarioUpdate = await this.usuarioService.update(
       id,
       updateUsuarioDto,
@@ -62,7 +65,7 @@ export class UsuarioController {
       .json({ message: `Usuario con id ${id} no encontrado` });
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const usuarioDelete = await this.usuarioService.remove(id);
