@@ -15,5 +15,5 @@ export class CreateUsuarioDto {
 
   @IsOptional()
   @IsString()
-  direccion?: string;
+  direccion: string;
 }
