@@ -147,6 +147,7 @@ export class LogueoService {
       .getOne();
     return usuarioIdLogueado;
   }
+  
   async login(mail: string, pass: string): Promise<any> {
     const user = await this.registroService.findUserEmail1(mail);//,pass
     const msj = user.administrador ? `administrador` : `usuario`;
@@ -154,7 +155,7 @@ export class LogueoService {
     if (!isMatch) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email};
     const idUsuario = user.id
     console.log(idUsuario);
     const usuarioLogueado = await this.findLogueoTrue(
@@ -172,8 +173,18 @@ export class LogueoService {
         const logout = '';
         const logueoDto = { login, idUsuario, logout };
         const nuevoLogueo: Logueo = this.logueoRepository.create(logueoDto);
+        const logueoOk = await this.logueoRepository.save(nuevoLogueo); 
         
-        return this.logueoRepository.save(nuevoLogueo);        
+        return {
+          //logueado_como: msj,
+          access_token: await this.jwtService.signAsync(payload),
+          id: user.id,
+          email: user.email,
+          admin: user.administrador,
+          idLogin: logueoOk.id
+          
+        }
+                  
       
       
       
@@ -187,11 +198,7 @@ export class LogueoService {
       );
     }      
 
-    return {
-      logueado_como: msj,
-      access_token: await this.jwtService.signAsync(payload),
-      id: user.id
-    };    
+      
     
   }
 }

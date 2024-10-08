@@ -76,6 +76,8 @@ export class UsuarioService {
     }
   }
 
+  
+
   async update(
     id: number,
     updateUsuarioDto: UpdateUsuarioDto,
@@ -90,6 +92,7 @@ export class UsuarioService {
       } else {
         usuario.apellido = updateUsuarioDto.apellido;
         usuario.nombre = updateUsuarioDto.nombre;
+        usuario.dni = updateUsuarioDto.dni;
         usuario.direccion = updateUsuarioDto.direccion;
         usuario.celular = updateUsuarioDto.celular;
         console.log(usuario);

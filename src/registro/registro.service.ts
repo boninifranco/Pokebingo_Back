@@ -170,6 +170,32 @@ export class RegistroService {
     }
   }
 
+  async updateAdmin(
+    usuarioId: number,
+    updateRegistroDto: UpdateRegistroDto,
+  ): Promise<Registro> {
+    try {
+      //const criterio: FindOneOptions = { where: { usuarioId: usuarioId } };
+      let registro = await this.findRegistroId(usuarioId);
+      console.log(`Esto es en registro service updateAdmin, usuarioId: ${registro.id} ${registro.administrador}`)
+      if (!registro)
+        throw new BadRequestException(`No existe el registro con id ${usuarioId}`);
+      //registro.email = updateRegistroDto.email;
+      //registro.contrasenia = updateRegistroDto.contrasenia;
+      registro.administrador = updateRegistroDto.administrador;
+      await this.registroRepository.update(registro.id, registro);
+      return registro;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al enviar la petición ${error}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
   async remove(id: number) {
     try {
       const criterio: FindOneOptions = { where: { id: id } };
