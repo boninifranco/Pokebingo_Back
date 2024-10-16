@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateRegistroDto } from './create-registro.dto';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class UpdateRegistroDto extends PartialType(CreateRegistroDto) {
   @IsString()
@@ -9,6 +9,7 @@ export class UpdateRegistroDto extends PartialType(CreateRegistroDto) {
   @IsString()
   contrasenia: string;
 
+  @IsOptional()
   @IsBoolean()
-  administrador: boolean;
+  administrador?: boolean;
 }

@@ -145,17 +145,15 @@ export class RegistroService {
     }
   }
 
-  async update(
-    id: number,
-    updateRegistroDto: UpdateRegistroDto,
-  ): Promise<Registro> {
+  async update(id: number,updateRegistroDto: UpdateRegistroDto,): Promise<Registro> {
     try {
       const criterio: FindOneOptions = { where: { id: id } };
       let registro = await this.registroRepository.findOne(criterio);
       if (!registro)
         throw new BadRequestException(`No existe el registro con id ${id}`);
       registro.email = updateRegistroDto.email;
-      registro.contrasenia = updateRegistroDto.contrasenia;
+      const hashPass = await this.hashPass(updateRegistroDto.contrasenia);
+      registro.contrasenia = hashPass;
       registro.administrador = updateRegistroDto.administrador;
       await this.registroRepository.update(id, registro);
       return registro;
