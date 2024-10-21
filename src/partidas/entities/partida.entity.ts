@@ -1,5 +1,6 @@
 import { Carton } from 'src/cartones/entities/carton.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
+import { Resultado } from 'src/resultados/entities/resultado.entity';
 import { Sala } from 'src/sala/entities/sala.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn,} from 'typeorm';
 
@@ -23,6 +24,8 @@ export class Partida {
 
   @OneToMany(() => Carton, (carton) => carton.partida)
   cartones: Carton[];
+
+  @OneToMany(type=> Resultado, resultado => resultado.partida)
 
   constructor(
     horaInicio: string,

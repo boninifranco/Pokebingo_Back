@@ -19,6 +19,7 @@ import { CasilleroModule } from './casilleros/casillero.module';
 import { FilaModule } from './filas/fila.module';
 import { ImagenModule } from './imagenes/imagen.module';
 import { AuthModule } from './auth/auth.module';
+import { ResultadosModule } from './resultados/resultados.module';
 
 @Module({
    imports:[
@@ -48,7 +49,8 @@ import { AuthModule } from './auth/auth.module';
     CasilleroModule,
     FilaModule,
     ImagenModule,
-    AuthModule
+    AuthModule,
+    ResultadosModule
    ],
   controllers: [AppController],
   providers: [AppService],
