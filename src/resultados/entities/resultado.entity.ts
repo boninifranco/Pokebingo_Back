@@ -1,4 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Partida } from "src/partidas/entities/partida.entity";
+import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('resultado')
 export class Resultado {
@@ -7,7 +9,14 @@ export class Resultado {
     resultadoId: number;
 
     @Column()
-    resultado: number;
+    resultado: string;
 
-    @OneToMany(type=> )
+    @ManyToOne(type=> Partida, partida => partida.resultados)
+    @JoinColumn({ name: 'partidaId' })
+    public partida: Partida;
+
+    @ManyToOne(type=> Usuario, usuario => usuario.resultados)
+    @JoinColumn({ name: 'usuarioId' })
+    public usuario: Usuario;
+    
 }

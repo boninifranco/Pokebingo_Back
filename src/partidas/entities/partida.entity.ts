@@ -26,6 +26,8 @@ export class Partida {
   cartones: Carton[];
 
   @OneToMany(type=> Resultado, resultado => resultado.partida)
+  @JoinColumn()
+  public resultados: Resultado[];
 
   constructor(
     horaInicio: string,

@@ -20,21 +20,21 @@ export class ResultadosController {
     return this.resultadosService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Resultado> {
-    const resultado = await this.resultadosService.findOne(id);
-    return resultado
-  }
+  // @Get(':id')
+  // async findOne(@Param('id', ParseIntPipe) id: number): Promise<Resultado> {
+  //   const resultado = await this.resultadosService.findOne(id);
+  //   return resultado
+  // }
 
-  @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateResultadoDto: UpdateResultadoDto): Promise<Resultado> {
-    const resultado = await this.resultadosService.update(id, updateResultadoDto);
-    return resultado
-  }
+  // @Patch(':id')
+  // async update(@Param('id', ParseIntPipe) id: number, @Body() updateResultadoDto: UpdateResultadoDto): Promise<Resultado> {
+  //   const resultado = await this.resultadosService.update(id, updateResultadoDto);
+  //   return resultado
+  // }
 
-  @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    const resultado = await this.resultadosService.remove(id);
-    return resultado
-  }
+  // @Delete(':id')
+  // async remove(@Param('id', ParseIntPipe) id: number) {
+  //   const resultado = await this.resultadosService.remove(id);
+  //   return resultado
+  // }
 }
