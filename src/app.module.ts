@@ -21,6 +21,7 @@ import { ImagenModule } from './imagenes/imagen.module';
 import { AuthModule } from './auth/auth.module';
 import { ImgSeleccionadasModule } from './img-seleccionadas/img-seleccionadas.module';
 import { MessagesWsModule } from './messages-ws/messages-ws.module';
+import { ResultadosModule } from './resultados/resultados.module';
 
 @Module({
    imports:[
@@ -54,6 +55,7 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
     AuthModule,
     ImgSeleccionadasModule,
     MessagesWsModule
+    ResultadosModule,
    ],
   controllers: [AppController],
   providers: [AppService],

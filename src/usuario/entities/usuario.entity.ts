@@ -1,5 +1,6 @@
 import { Registro } from 'src/registro/entities/registro.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Resultado } from 'src/resultados/entities/resultado.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Usuario {
@@ -18,5 +19,7 @@ export class Usuario {
   @OneToOne(() => Registro,(registro)=> registro.id,{ onDelete: 'CASCADE' },)
   @JoinColumn({ name: 'registroId'})
   registro: number;
-
+  @OneToMany(type=> Resultado, resultado => resultado.partida)
+  @JoinColumn()
+  public resultados: Resultado[];
 }

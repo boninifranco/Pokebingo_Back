@@ -1,6 +1,7 @@
 import { Carton } from 'src/cartones/entities/carton.entity';
 import { ImgSeleccionada } from 'src/img-seleccionadas/entities/img-seleccionada.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
+import { Resultado } from 'src/resultados/entities/resultado.entity';
 import { Sala } from 'src/sala/entities/sala.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn,} from 'typeorm';
 
@@ -29,7 +30,9 @@ export class Partida {
   @JoinColumn({name:'idSeleccionada'})
   imgSeleccionadas: ImgSeleccionada[];
 
-
+  @OneToMany(type=> Resultado, resultado => resultado.partida)
+  @JoinColumn()
+  public resultados: Resultado[];
 
   constructor(
     horaInicio: string,
