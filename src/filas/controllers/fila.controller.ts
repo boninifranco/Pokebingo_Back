@@ -9,16 +9,22 @@ import { AuthGuard } from 'src/auth/auth/auth.guard';
 export class FilaController {
   constructor(private readonly filaService: FilaService) {}
 
-  @Get()
+  @Get('ordenadas-desc')
   @HttpCode(HttpStatus.OK)
-  findAll(): Promise<Fila[]> {
-    return this.filaService.findAll();
+  findAllDesc(): Promise<Fila[]> {
+    return this.filaService.findAllDesc();
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: string): Promise<Fila> {
     const fila = await this.filaService.findOne(id);
     return fila;
+  }
+  
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  findAll(): Promise<Fila[]> {
+    return this.filaService.findAll();
   }
 
   @Post()
@@ -41,4 +47,9 @@ export class FilaController {
   async delete(@Param('id', ParseIntPipe) id: string) {
     return this.filaService.delete(id);
   }
+
+  @Get('aciertos/:cartonId')
+public async getAciertosPorCarton(@Param('cartonId') cartonId: number): Promise<number> {
+  return await this.filaService.getAciertosPorCarton(cartonId);
+}
 }

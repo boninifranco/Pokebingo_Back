@@ -1,3 +1,4 @@
+import { MessagesWsGateway } from './../../messages-ws/messages-ws.gateway';
 import {  HttpException,  HttpStatus,  Injectable } from '@nestjs/common';
 import { CreateFilaDto } from '../dto/create-fila.dto';
 import { Fila } from '../entities/fila.entity';
@@ -5,18 +6,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { UpdateFilaDto } from '../dto/update-fila.dto';
 import { Carton } from 'src/cartones/entities/carton.entity';
+import { MessagesWsService } from 'src/messages-ws/messages-ws.service';
+
+//import { MessagesWsService } from 'src/messages-ws/messages-ws.service';
+
+//import { FilasGateway } from '../filas.gateway';
 
 @Injectable()
 export class FilaService {
   constructor(
     @InjectRepository(Fila) private readonly filaRepository: Repository<Fila>,
     @InjectRepository(Carton)
-    private readonly cartonRepository: Repository<Carton>,
+    private readonly cartonRepository: Repository<Carton>,    
+    //private readonly messagesWsGateway: MessagesWsGateway, // Inyectamos el gateway
   ) {}
 
   async findAll(): Promise<Fila[]> {
     try {
-      let criterio: FindManyOptions = { relations: ['casilleros'] };
+      let criterio: FindManyOptions = { relations: ['casillero']
+       };
       let filas: Fila[] = await this.filaRepository.find(criterio);
       if (filas.length != 0) return filas;
       else throw new Error('No se encontraron filas');
@@ -51,6 +59,7 @@ export class FilaService {
     }
   }
 
+  
   async create(createFilaDto: CreateFilaDto): Promise<Fila> {
     try {
       const carton = await this.cartonRepository.findOne({
@@ -86,6 +95,9 @@ export class FilaService {
       if (!fila) throw new Error('No se encuentra la fila');
       else fila.setAciertos(updateFilaDto.filaAciertos);
       fila = await this.filaRepository.save(fila);
+      // Después de actualizar, emitimos la actualización a todos los clientes
+
+      
       return fila;
     } catch (error) {
       throw new HttpException(
@@ -115,4 +127,55 @@ export class FilaService {
       );
     }
   }
+
+  public async getAciertosPorCarton(cartonId: number): Promise<number> {
+    const filas = await this.filaRepository
+      .createQueryBuilder('fila')
+      .select('SUM(fila.aciertos)', 'aciertosTotales')
+      .where('fila.cartonId = :cartonId', { cartonId })
+      .getRawOne();
+  
+    return filas.aciertosTotales || 0;  // Retorna 0 si no hay filas
+  }
+
+  /*public async findAllDesc(): Promise<Fila[]> {
+    try {
+      let criterio: FindManyOptions = { relations: ['carton'],
+        order:{aciertos: 'DESC'}
+       };
+      let filas: Fila[] = await this.filaRepository.find(criterio);
+      if (filas.length != 0) return filas;
+      else throw new Error('No se encontraron filas');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );      
+    }
+}*/
+async findAllDesc(): Promise<Fila[]> {
+  try {
+    let criterio: FindManyOptions = { relations: ['carton'],
+      order:{aciertos: 'DESC'}
+     };
+    let filas: Fila[] = await this.filaRepository.find(criterio);
+    if (filas.length != 0){
+      //this.MessagesWsGateway.wss.emit('updatedFilas', filas)
+      return filas;
+    } 
+    else throw new Error('No se encontraron filas');
+  } catch (error) {
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error: ' + error,
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
+}
+
 }

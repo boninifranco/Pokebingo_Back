@@ -22,12 +22,13 @@ export class PartidasService {
         throw new Error('Sala no encontrada');
       }
 
-      const partida = this.partidaRepository.create({
+      /*const partida = this.partidaRepository.create({
         horaInicio: createPartidaDto.horaInicio,
         cantidadCartones: createPartidaDto.cantidadCartones,
         estadoPartida: createPartidaDto.estadoPartida,
-        sala,
-      });
+        salaId: createPartidaDto.salaId,
+      });*/
+      const partida = this.partidaRepository.create(createPartidaDto)
 
       const nuevaPartida = await this.partidaRepository.save(partida);
       if (nuevaPartida) return nuevaPartida;

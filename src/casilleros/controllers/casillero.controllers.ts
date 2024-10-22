@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode, UseGuards} from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Param, Body, HttpStatus, ParseIntPipe, HttpCode, UseGuards, Patch} from '@nestjs/common';
 import { CasilleroService } from '../service/casillero.service';
 import { CreateCasilleroDto } from '../dto/create-casillero.dto';
 import { UpdateCasilleroDto } from '../dto/update-casillero.dto';
@@ -31,7 +31,7 @@ export class CasilleroController {
     return this.casilleroService.create(createCasilleroDto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async updateCasillero(
     @Param('id', ParseIntPipe) id: string,
     @Body() updateCasilleroDto: UpdateCasilleroDto,
@@ -42,6 +42,15 @@ export class CasilleroController {
     );
     return casillero;
   }
+
+  @Patch('salir-por-imagen/:imagenId')
+async marcarCasillerosPorImagen(
+  @Param('imagenId') imagenId: number,
+) {
+  return this.casilleroService.marcarCasillerosPorImagen(imagenId);
+}
+
+  
 
   @UseGuards(AuthGuard)
   @Delete(':id')

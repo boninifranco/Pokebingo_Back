@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Carton } from '../entities/carton.entity';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { CreateCartonDto } from '../dto/create-carton.dto';
@@ -35,6 +35,13 @@ export class CartonService {
     }
   }
 
+  public async getAllCartones():Promise<Carton[]> {
+    const cartones = await this.cartonRepository.find({
+      relations:['fila', 'fila.casillero', 'fila.casillero.imagenId']
+    })
+    return cartones
+  }
+
   public async findOne(id: number): Promise<Carton> {
     try {
       let criterio: FindOneOptions = {
@@ -55,10 +62,12 @@ export class CartonService {
     }
   }
 
+  //async createMany(cartones: CreateCartonDto[]): Promise<Carton[]> {
   async create(createCartonDto: CreateCartonDto): Promise<Carton> {
     try {
       let partida = await this.partidaRepository.findOne({
-        where: { partidaId: createCartonDto.idPartida },
+        //where: { partidaId: cartones[0].idPartida },
+        where: { partidaId: createCartonDto.idPartida }
       });
       if (!partida) {
         throw new Error('Partida no encontrada');
@@ -68,6 +77,16 @@ export class CartonService {
         idUsuario: createCartonDto.idUsuario
       });
       const nuevoCarton = await this.cartonRepository.save(carton);
+      // Convierte los Dto en entidades para insertar en la base de datos
+      // Primero asegúrate de que el idPartida está siendo pasado correctamente
+    /*cartones.forEach(carton => {
+      console.log('Asignando idPartida:', carton.idPartida); // Para verificar que el idPartida existe
+
+    });
+    const nuevosCartones = cartones.map(carton => this.cartonRepository.create(carton));
+
+    // Guardar todos los cartones
+    const nuevoCarton = this.cartonRepository.save(nuevosCartones);*/
       if (nuevoCarton) return nuevoCarton;
       else throw new Error('No se pudo crear el cartón');
     } catch (error) {
@@ -117,4 +136,16 @@ export class CartonService {
       );
     }
   }
+
+  public async actualizarAciertosCarton(cartonId: number, aciertos: number): Promise<Carton> {
+    const carton = await this.cartonRepository.findOne({ where: { cartonId: cartonId } });
+  
+    if (!carton) {
+      throw new NotFoundException('Cartón no encontrado');
+    }
+  
+    carton.aciertos = aciertos;  // Actualizar los aciertos
+    return await this.cartonRepository.save(carton);  // Guardar en la base de datos
+  }
+  
 }

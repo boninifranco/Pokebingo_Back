@@ -26,6 +26,7 @@ export class ImagenController {
   create(@Body() createImagenDto: CreateImagenDto): Promise<Imagen> {
     return this.imagenService.create(createImagenDto);
   }
+  
 
   @Put(':id')
   async update(
