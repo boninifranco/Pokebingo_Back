@@ -14,9 +14,9 @@ export class Sala {
   @JoinColumn({ name: 'chatId' })
   public chat: Chat[];
 
-  @OneToOne(() => Partida, (partida) => partida.sala, {
-    cascade: true,
-    onDelete: 'CASCADE',
+  @OneToMany(() => Partida, (partida) => partida.sala, {
+    //cascade: true,
+    //onDelete: 'CASCADE',
   })
-  partida: Partida;
+  partida: number;
 }

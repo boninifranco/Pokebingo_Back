@@ -51,7 +51,10 @@ export class ImagenService {
   async create(createImagenDto: CreateImagenDto): Promise<Imagen> {
     try {      
         const imagen = this.imagenRepository.create({        
-          imagen: createImagenDto.imagen });
+          nombre: createImagenDto.nombre,
+          id: createImagenDto.id,
+          url: createImagenDto.url,
+         });
         const newImagen =  await this.imagenRepository.save(imagen);
         if (newImagen) return newImagen;
         else throw new Error('No se pudo crear la imagen');     
@@ -72,7 +75,10 @@ export class ImagenService {
       let criterio: FindOneOptions = { where: { imagenId: id } };
       let imagen: Imagen = await this.imagenRepository.findOne(criterio);
       if (!imagen) throw new Error('No se encuentra la imagen');
-      else imagen.setImagen(updateImagenDto.imagen);
+      else 
+      imagen.setNombre(updateImagenDto.nombre);
+      imagen.setId(updateImagenDto.id);
+      imagen.setUrl(updateImagenDto.url);
       imagen = await this.imagenRepository.save(imagen);
       return imagen;
     } catch (error) {

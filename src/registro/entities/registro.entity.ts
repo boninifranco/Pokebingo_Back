@@ -11,7 +11,6 @@ export class Registro {
 
   @Column()
   email: string;
-
   @Column()
   contrasenia: string;
 

@@ -1,9 +1,7 @@
 import { IsInt, IsString, IsBoolean } from 'class-validator';
 
 export class CreatePartidaDto {
-  @IsInt()
-  salaId: number;
-
+  
   @IsString()
   horaInicio: string;
 
@@ -12,4 +10,8 @@ export class CreatePartidaDto {
 
   @IsBoolean()
   estadoPartida: boolean;
+
+  @IsInt()
+  salaId: number;
+
 }

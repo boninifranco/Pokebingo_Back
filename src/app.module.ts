@@ -19,6 +19,8 @@ import { CasilleroModule } from './casilleros/casillero.module';
 import { FilaModule } from './filas/fila.module';
 import { ImagenModule } from './imagenes/imagen.module';
 import { AuthModule } from './auth/auth.module';
+import { ImgSeleccionadasModule } from './img-seleccionadas/img-seleccionadas.module';
+import { MessagesWsModule } from './messages-ws/messages-ws.module';
 import { ResultadosModule } from './resultados/resultados.module';
 
 @Module({
@@ -31,6 +33,7 @@ import { ResultadosModule } from './resultados/resultados.module';
        password: 'Password',
        database: 'bingo',
        entities: ['dist/**/**.entity{.ts,.js}'],
+       //entities: [__dirname + '/**/*.entity{.ts,.js}'],
        synchronize: true
      }),
     UsuarioModule,
@@ -50,6 +53,8 @@ import { ResultadosModule } from './resultados/resultados.module';
     FilaModule,
     ImagenModule,
     AuthModule,
+    ImgSeleccionadasModule,
+    MessagesWsModule
     ResultadosModule,
    ],
   controllers: [AppController],

@@ -9,12 +9,15 @@ export class Carton {
   cartonId: number;
   @Column()
   aciertos: number;
-  @Column()
-  idUsuario: number;
+  @Column({default:null})
+  idUsuario?: number;
+  
 
-  @ManyToOne(() => Partida, (partida) => partida.cartones)
+  @ManyToOne(() => Partida, (partida) => partida.cartones, { eager: true })
   @JoinColumn({ name: 'idPartida' })
   partida: number;
+
+  
 
   @OneToOne(() => Logueo, (logueo) => logueo.id)
   @JoinColumn({ name: 'idUsuario' })
@@ -27,8 +30,9 @@ export class Carton {
   public fila: Fila[];
 
 
-  constructor(aciertos: number, idUsuario: number) {
+  constructor(aciertos: number, idUsuario: number, partida: number) {
     this.aciertos = 0;
+    this.partida = partida
   }
 
   public getaciertos(): number {

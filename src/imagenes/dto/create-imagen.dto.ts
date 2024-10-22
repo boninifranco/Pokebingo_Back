@@ -1,7 +1,11 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsInt, IsNumber, IsString } from 'class-validator';
 
 export class CreateImagenDto {
+  @IsNumber()
+  id: number;
   @IsString()
-  imagen: string;
+  nombre: string;
+  @IsString()
+  url: string;
 
 }

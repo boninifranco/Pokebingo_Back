@@ -1,8 +1,9 @@
 import { Carton } from 'src/cartones/entities/carton.entity';
+import { ImgSeleccionada } from 'src/img-seleccionadas/entities/img-seleccionada.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 import { Resultado } from 'src/resultados/entities/resultado.entity';
 import { Sala } from 'src/sala/entities/sala.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn,} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn,} from 'typeorm';
 
 @Entity('partidas')
 export class Partida {
@@ -17,13 +18,17 @@ export class Partida {
 
   @OneToOne(() => Sala, (sala) => sala.partida, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'salaId' })
-  public sala: Sala;
+  public sala: number;
 
   @OneToMany((type) => Logueo, (logueo) => logueo.idPartida)
   logueos: Logueo[];
 
   @OneToMany(() => Carton, (carton) => carton.partida)
   cartones: Carton[];
+
+  @OneToMany(() => ImgSeleccionada, (imgSeleccionada) => imgSeleccionada.partida)
+  @JoinColumn({name:'idSeleccionada'})
+  imgSeleccionadas: ImgSeleccionada[];
 
   @OneToMany(type=> Resultado, resultado => resultado.partida)
   @JoinColumn()
