@@ -4,7 +4,7 @@ import { CreateResultadoDto } from './dto/create-resultado.dto';
 import { UpdateResultadoDto } from './dto/update-resultado.dto';
 import { Resultado } from './entities/resultado.entity';
 
-@Controller('resultados')
+@Controller('resultado')
 export class ResultadosController {
   constructor(private readonly resultadosService: ResultadosService) {}
 

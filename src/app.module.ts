@@ -50,7 +50,7 @@ import { ResultadosModule } from './resultados/resultados.module';
     FilaModule,
     ImagenModule,
     AuthModule,
-    // ResultadosModule
+    ResultadosModule,
    ],
   controllers: [AppController],
   providers: [AppService],
