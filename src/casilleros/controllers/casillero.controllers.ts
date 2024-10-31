@@ -9,6 +9,12 @@ import { AuthGuard } from 'src/auth/auth/auth.guard';
 export class CasilleroController {
   constructor(private readonly casilleroService: CasilleroService) {}
 
+  @Get('salieron/')
+  @HttpCode(HttpStatus.OK)
+  findAllDesc(): Promise<Casillero[]> {
+    return this.casilleroService.findImagenesSalieron();
+  }
+
   @Get()
   @HttpCode(HttpStatus.OK)
   getAllCasilleros(): Promise<Casillero[]> {

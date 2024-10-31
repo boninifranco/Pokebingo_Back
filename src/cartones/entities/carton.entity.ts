@@ -1,37 +1,46 @@
 import { Fila } from 'src/filas/entities/fila.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 import { Partida } from 'src/partidas/entities/partida.entity';
+import { Registro } from 'src/registro/entities/registro.entity';
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity('cartones')
 export class Carton {
   @PrimaryGeneratedColumn('increment')
   cartonId: number;
-  @Column()
-  aciertos: number;
-  @Column({default:null})
-  idUsuario?: number;
+  @Column({default:0})
+  aciertos?: number;
+
+  //@Column({default:null})
+  //idUsuario?: Registro;
   
 
   @ManyToOne(() => Partida, (partida) => partida.cartones, { eager: true })
   @JoinColumn({ name: 'idPartida' })
-  partida: number;
+  partida: Partida;
 
-  
+  //@Column({default:null})
+  //idUsuario?:Registro;
 
-  @OneToOne(() => Logueo, (logueo) => logueo.id)
-  @JoinColumn({ name: 'idUsuario' })
+  //@OneToOne(() => Logueo, (logueo) => logueo.id)
+ //@JoinColumn({ name: 'idUsuario' })
+
+  @ManyToOne(() => Registro, (registro) => registro.usuarioId, { eager: true })
+  @JoinColumn({ name: 'idUsuario'})
+  idUsuario?: Registro;
 
   @OneToMany(() => Fila, (fila) => fila.carton, {
     cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'chatId' })
+  @JoinColumn({ name: 'filaId' })
   public fila: Fila[];
 
+  
 
-  constructor(aciertos: number, idUsuario: number, partida: number) {
-    this.aciertos = 0;
+
+  constructor(idUsuario: number, partida: Partida, aciertos?: number) {
+    this.aciertos = aciertos;
     this.partida = partida
   }
 

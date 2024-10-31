@@ -5,6 +5,7 @@ import { Partida } from './entities/partida.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Sala } from 'src/sala/entities/sala.entity';
+import { parse } from 'date-fns';
 
 @Injectable()
 export class PartidasService {
@@ -13,7 +14,7 @@ export class PartidasService {
     private readonly partidaRepository: Repository<Partida>,
     @InjectRepository(Sala) private readonly salaRepository: Repository<Sala>,
   ) {}
-  async create(createPartidaDto: CreatePartidaDto): Promise<Partida> {
+  async create(createPartidaDto: CreatePartidaDto): Promise<any> {
     try {
       const sala = await this.salaRepository.findOne({
         where: { salaId: createPartidaDto.salaId },
@@ -28,11 +29,17 @@ export class PartidasService {
         estadoPartida: createPartidaDto.estadoPartida,
         salaId: createPartidaDto.salaId,
       });*/
+      const fechaString = createPartidaDto.horaInicio;
+      console.log(fechaString)
+      const fecha = parse(fechaString, 'dd/MM/yyyy HH:mm', new Date());
+      //createPartidaDto.horaInicio = fecha
+      console.log(fecha)
       const partida = this.partidaRepository.create(createPartidaDto)
 
       const nuevaPartida = await this.partidaRepository.save(partida);
       if (nuevaPartida) return nuevaPartida;
-      else throw new Error('No se pudo crear el chat');
+      else throw new Error('No se pudo crear la partida');
+      
     } catch (error) {
       throw new HttpException(
         {
@@ -61,7 +68,26 @@ export class PartidasService {
     }
   }
 
-  async findOne(id: number): Promise<Partida> {
+  async findActivas(): Promise<Partida[]> {
+    try {
+      let criterio: FindManyOptions = { relations: ['cartones'],
+        where: {['estadoPartida'] : false}
+       };
+      let partidas: Partida[] = await this.partidaRepository.find(criterio);
+      if (partidas.length != 0) return partidas;
+      else throw new Error('No se encontraron partidas activas');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  async findOne(id: Partida): Promise<Partida> {
     try {
       let criterio: FindOneOptions = {
         relations: ['cartones'],
@@ -88,8 +114,14 @@ export class PartidasService {
     try {
       let criterio: FindOneOptions = { where: { partidaId: id } };
       let partida: Partida = await this.partidaRepository.findOne(criterio);
+      const fechaString = UpdatePartidaDto.horaInicio;
+      const fecha = parse(fechaString, 'dd/MM/yyyy HH:mm', new Date());
+      console.log(fecha)
+      console.log(fechaString)
+      
       if (!partida) throw new Error('No se encuentra la partida');
-      else partida.setHoraInicio(UpdatePartidaDto.horaInicio);
+      else 
+      partida.setHoraInicio(fechaString);
       partida.setCantidadCartones(UpdatePartidaDto.cantidadCartones);
       partida.setEstadoPartida(UpdatePartidaDto.estadoPartida);
       partida = await this.partidaRepository.save(partida);

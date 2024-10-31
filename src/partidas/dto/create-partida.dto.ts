@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsBoolean } from 'class-validator';
+import { IsInt, IsString, IsBoolean, IsDate } from 'class-validator';
 
 export class CreatePartidaDto {
   

@@ -21,9 +21,9 @@ export class FilasGateway {
   }
 
   // Método para emitir los cambios en las filas
-  emitFilasUpdate() {
+  //emitFilasUpdate() {
     // Obtenemos las filas desde el servicio (o directamente de la base de datos)
-    const filas = this.filasService.findAllDesc(); // Debes ajustar para que obtenga correctamente las filas
-    this.server.emit('updateFilas', filas); // Enviamos el evento "updateFilas" a todos los clientes conectados
-  }
+    //const filas = this.filasService.findAllDesc(); // Debes ajustar para que obtenga correctamente las filas
+    //his.server.emit('updateFilas', filas); // Enviamos el evento "updateFilas" a todos los clientes conectados
+  //}
 }

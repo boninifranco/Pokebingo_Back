@@ -3,7 +3,7 @@ import { CreateCasilleroDto } from '../dto/create-casillero.dto';
 import { UpdateCasilleroDto } from '../dto/update-casillero.dto';
 import { Casillero } from '../entities/casillero.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, IsNull, Repository } from 'typeorm';
 import { Fila } from 'src/filas/entities/fila.entity';
 import { Carton } from 'src/cartones/entities/carton.entity';
 
@@ -204,6 +204,33 @@ export class CasilleroService {
       else await this.casilleroRepository.delete(id);
       return `Se ha eliminado el casillero: ${id}`;
     } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  async findImagenesSalieron(): Promise<Casillero[]> {
+    try {
+      return await this.casilleroRepository
+      .createQueryBuilder('casillero')
+      .leftJoinAndSelect('casillero.imagenId', 'imagen') // Incluye la relación con Imagen
+      .select([
+        'casillero.imagenId', // Selecciona la imagenId
+        'imagen.url',       // Selecciona el nombre de la imagen (u otro campo relevante)
+        //'imagenes.url',          // Selecciona la URL de la imagen
+        'MAX(casillero.updatedAt) as lastUpdatedAt' // Selecciona la última fecha de actualización
+      ])
+      .where('casillero.updatedAt IS NOT NULL')
+      .groupBy('casillero.imagenId')
+      .orderBy('MAX(casillero.updatedAt)', 'DESC')
+      .getRawMany();
+    } 
+    catch (error) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,

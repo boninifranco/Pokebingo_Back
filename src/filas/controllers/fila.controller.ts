@@ -4,22 +4,29 @@ import { CreateFilaDto } from '../dto/create-fila.dto';
 import { UpdateFilaDto } from '../dto/update-fila.dto';
 import { Fila } from '../entities/fila.entity';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
+import { Partida } from 'src/partidas/entities/partida.entity';
 
 @Controller('filas')
 export class FilaController {
   constructor(private readonly filaService: FilaService) {}
 
-  @Get('ordenadas-desc')
+  @Get('ordenadas-desc/:aciertos/:partida')
   @HttpCode(HttpStatus.OK)
-  findAllDesc(): Promise<Fila[]> {
-    return this.filaService.findAllDesc();
+  findAllDesc(
+    @Param('aciertos',ParseIntPipe) aciertos: number,
+  @Param('partida') partida:Partida): Promise<Fila[]> {
+    return this.filaService.findAllDesc(partida,aciertos);
   }
 
+  
+
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: string): Promise<Fila> {
-    const fila = await this.filaService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Fila> {
+    const fila = await this.filaService.obtenerUsuarioDeFila(id);
     return fila;
   }
+
+  
   
   @Get('')
   @HttpCode(HttpStatus.OK)

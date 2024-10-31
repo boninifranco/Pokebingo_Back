@@ -1,3 +1,4 @@
+import { Carton } from 'src/cartones/entities/carton.entity';
 import { Desempenio } from 'src/desempenio/entities/desempenio.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
@@ -21,6 +22,11 @@ export class Registro {
   @OneToOne(() => Desempenio, (desempenio) => desempenio.jugador, {
     cascade: true,
   })
+//esta relacion la agregue ahora para poder consultar el registro que gano una partida
+  @OneToMany(() => Carton, (carton) => carton.cartonId, { cascade: true })
+  @JoinColumn({name:'idUsuario'})
+  idUsuario: Registro
+
   @OneToOne(() => Usuario,(usuario) => usuario.id,{ onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'usuarioId' })

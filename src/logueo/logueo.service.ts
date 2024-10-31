@@ -146,12 +146,13 @@ export class LogueoService {
       .andWhere('logueo.logueado = :logueado', { logueado: true })
       .getOne();
     return usuarioIdLogueado;
-  }
-  
+  }  
   async login(mail: string, pass: string): Promise<any> {
+    
     const user = await this.registroService.findUserEmail1(mail);//,pass
-    const msj = user.administrador ? `administrador` : `usuario`;
+    const msj = user.administrador ? `administrador` : `usuario`;    
     const isMatch = await bcrypt.compare(pass, user?.contrasenia);
+    console.log(isMatch)
     if (!isMatch) {
       throw new UnauthorizedException();
     }

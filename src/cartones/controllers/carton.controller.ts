@@ -1,9 +1,11 @@
-import {Controller, Get, Post, Put, Delete, Body, Param, HttpStatus, ParseIntPipe, HttpCode, UseGuards, Patch} from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Body, Param, HttpStatus, ParseIntPipe, HttpCode, UseGuards, Patch, Query} from '@nestjs/common';
 import { CartonService } from '../servicies/carton.service';
 import { CreateCartonDto } from '../dto/create-carton.dto';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { Carton } from '../entities/carton.entity';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
+import { Partida } from 'src/partidas/entities/partida.entity';
+
 
 @Controller('cartones')
 export class CartonController {
@@ -16,8 +18,13 @@ export class CartonController {
   }
 
   @Get('/all')
-async getAllCartones() {
-  return await this.cartonService.getAllCartones();
+async getAllCartones(@Query('criterio') criterio: string,@Query('orden') orden: 'ASC' | 'DESC' = 'ASC',@Query('partida') partida: Partida) {
+  return await this.cartonService.getAllCartones(criterio,orden,partida);
+}
+
+@Get('/cantidad')
+async cantidadDeCartonesPorPartida(): Promise<any> {
+  return await this.cartonService.cantidadDeCartonesPorPartida();
 }
 
   @Get(':id')
@@ -37,7 +44,7 @@ async getAllCartones() {
       return this.cartonService.create(createCartonDto);
     }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCartonDto: UpdateCartonDto,

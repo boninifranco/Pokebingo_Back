@@ -17,7 +17,7 @@ export class Logueo {
   @Column()
   logout?: string;
 
-  @OneToMany(() => Carton, (carton) => carton.cartonId, { cascade: true })
+  //@OneToMany(() => Carton, (carton) => carton.cartonId, { cascade: true })
 
   @ManyToOne((type) => Registro, (registro) => registro.id, {
     onDelete: 'CASCADE',

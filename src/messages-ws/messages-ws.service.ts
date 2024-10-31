@@ -21,7 +21,7 @@ export class MessagesWsService {
             return Object.keys (this.connectedClients);
         }
 
-        
+
     }
     
 

@@ -3,10 +3,11 @@ import {  HttpException,  HttpStatus,  Injectable } from '@nestjs/common';
 import { CreateFilaDto } from '../dto/create-fila.dto';
 import { Fila } from '../entities/fila.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, LessThanOrEqual, Not, Repository } from 'typeorm';
 import { UpdateFilaDto } from '../dto/update-fila.dto';
 import { Carton } from 'src/cartones/entities/carton.entity';
 import { MessagesWsService } from 'src/messages-ws/messages-ws.service';
+import { Partida } from 'src/partidas/entities/partida.entity';
 
 //import { MessagesWsService } from 'src/messages-ws/messages-ws.service';
 
@@ -58,6 +59,23 @@ export class FilaService {
       );
     }
   }
+  async obtenerUsuarioDeFila(filaId: number):Promise<Fila>{
+    // Realiza la consulta a la base de datos
+    const fila = await this.filaRepository.findOne({
+      where: { filaId: filaId },
+      relations: ['carton','carton.idUsuario', 'carton.idUsuario'], // Incluye las relaciones necesarias
+    });
+
+    // Verifica que la fila y sus relaciones existan
+    //if (!fila || !fila.carton || !fila.carton.usuarioId) {
+      //throw new Error('No se encontró el usuario asociado a la fila');
+    //}
+
+    // Retorna el usuario asociado a la fila
+    console.log(fila.carton)
+    return fila;
+  }
+
 
   
   async create(createFilaDto: CreateFilaDto): Promise<Fila> {
@@ -156,12 +174,29 @@ export class FilaService {
       );      
     }
 }*/
-async findAllDesc(): Promise<Fila[]> {
+
+async findAllDesc(partida: Partida, aciertos: number): Promise<Fila[]> {
   try {
-    let criterio: FindManyOptions = { relations: ['carton'],
+    /*let criterio: FindManyOptions = { relations: ['carton'],
+      where: {
+        aciertos: LessThanOrEqual(aciertos), 
+        carton: {
+          idUsuario: Not(null) // Condición para que idUsuario no sea null
+        }
+      },
       order:{aciertos: 'DESC'}
+      //LessThanOrEqual(aciertos)
      };
-    let filas: Fila[] = await this.filaRepository.find(criterio);
+    let filas: Fila[] = await this.filaRepository.find(criterio);*/
+    const filas = await this.filaRepository
+  .createQueryBuilder('fila')
+  .innerJoinAndSelect('fila.carton', 'carton')
+  .innerJoinAndSelect('carton.partida', 'partida')
+  .where('fila.aciertos <= :aciertos', { aciertos })
+  .andWhere('carton.idUsuario IS NOT NULL')
+  .andWhere('carton.partida = :partida', {partida})
+  .orderBy('fila.aciertos', 'DESC')
+  .getMany();
     if (filas.length != 0){
       //this.MessagesWsGateway.wss.emit('updatedFilas', filas)
       return filas;

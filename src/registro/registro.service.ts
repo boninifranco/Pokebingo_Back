@@ -127,6 +127,7 @@ export class RegistroService {
         .where('registro.email = :email', { email })
         //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
         .getOne();
+        
 
       if (!isUser)      
         throw new BadRequestException(

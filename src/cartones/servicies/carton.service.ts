@@ -3,7 +3,7 @@ import { Carton } from '../entities/carton.entity';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { CreateCartonDto } from '../dto/create-carton.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, IsNull, Repository } from 'typeorm';
 import { Partida } from 'src/partidas/entities/partida.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 
@@ -20,7 +20,9 @@ export class CartonService {
 
   public async findAll(): Promise<Carton[]> {
     try {
-      let criterio: FindManyOptions = { relations: ['fila'] };
+      let criterio: FindManyOptions = { relations: ['fila'],
+        
+       };
       let cartones: Carton[] = await this.cartonRepository.find(criterio);
       if (cartones.length != 0) return cartones;
       else throw new Error('No se encontraron cartones');
@@ -35,17 +37,30 @@ export class CartonService {
     }
   }
 
-  public async getAllCartones():Promise<Carton[]> {
-    const cartones = await this.cartonRepository.find({
-      relations:['fila', 'fila.casillero', 'fila.casillero.imagenId']
-    })
+  public async getAllCartones(criterio: string, orden: 'ASC' | 'DESC', partida: Partida):Promise<Carton[]> {
+    /*const cartones = await this.cartonRepository.find({
+      relations:['fila', 'fila.casillero', 'fila.casillero.imagenId'],
+      where: {idUsuario: },
+      order:{[criterio]: orden}
+    })*/
+      const cartones = await this.cartonRepository
+      .createQueryBuilder('carton')
+      .leftJoinAndSelect('carton.idUsuario', 'idUsuario')
+      .innerJoinAndSelect('carton.partida', 'partida')
+      .leftJoinAndSelect('carton.fila', 'fila')
+      .leftJoinAndSelect('fila.casillero', 'casillero')
+      .leftJoinAndSelect('casillero.imagenId', 'imagenId')
+      .where('carton.idUsuario IS NOT NULL')
+      .andWhere('carton.partida = :partida', {partida})
+      .orderBy(`carton.${criterio}`, orden)
+      .getMany();
     return cartones
-  }
+  } 
 
   public async findOne(id: number): Promise<Carton> {
     try {
       let criterio: FindOneOptions = {
-        relations: ['filas'],
+        relations: ['fila'],
         where: { cartonId: id },
       };
       let carton: Carton = await this.cartonRepository.findOne(criterio);
@@ -67,7 +82,7 @@ export class CartonService {
     try {
       let partida = await this.partidaRepository.findOne({
         //where: { partidaId: cartones[0].idPartida },
-        where: { partidaId: createCartonDto.idPartida }
+        where: { partidaId: createCartonDto.idPartida.partidaId }
       });
       if (!partida) {
         throw new Error('Partida no encontrada');
@@ -105,7 +120,9 @@ export class CartonService {
       let criterio: FindOneOptions = { where: { cartonId: id } };
       let carton: Carton = await this.cartonRepository.findOne(criterio);
       if (!carton) throw new Error(`No se encuentra el cartón: ${id}`);
-      carton.setaciertos(updateCartonDto.aciertos);
+      if(updateCartonDto.aciertos){
+        carton.setaciertos(updateCartonDto.aciertos);
+      }     
       carton.idUsuario = updateCartonDto.idUsuario;
       carton = await this.cartonRepository.save(carton);
       return carton;
@@ -146,6 +163,17 @@ export class CartonService {
   
     carton.aciertos = aciertos;  // Actualizar los aciertos
     return await this.cartonRepository.save(carton);  // Guardar en la base de datos
+  }
+
+  public async cantidadDeCartonesPorPartida() {
+    const resultado = await this.cartonRepository
+      .createQueryBuilder('carton')
+      .select('carton.idPartida', 'idPartida') 
+      .addSelect('COUNT(carton.cartonId)', 'cantidad') 
+      .groupBy('carton.idPartida') 
+      .getRawMany(); 
+
+    return resultado;
   }
   
 }
