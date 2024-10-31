@@ -106,7 +106,31 @@ export class PartidasService {
       );
     }
   }
-
+  async findLastActive(): Promise<Partida> {
+    try {
+      const criterio: FindOneOptions<Partida> = {
+        where: { estadoPartida: true },  // Filtro por estadoPartida en true
+        order: { horaInicio: 'DESC' },   // Ordenar por horaInicio descendente
+      };
+  
+      const partida = await this.partidaRepository.findOne(criterio);
+      
+      if (!partida) {
+        throw new Error('No se encontró ninguna partida activa.');
+      }
+      
+      return partida;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error.message,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+  
   async update(
     id: number,
     UpdatePartidaDto: UpdatePartidaDto,

@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { CreateResultadoDto } from './dto/create-resultado.dto';
 import { UpdateResultadoDto } from './dto/update-resultado.dto';
 import { Resultado } from './entities/resultado.entity';
@@ -45,7 +45,7 @@ export class ResultadosService {
 
   async findAll(): Promise<Resultado[]> {
     try {
-      let criterio: FindManyOptions = {relations: ['partidas','usuarios']}
+      let criterio: FindManyOptions = {relations: ['partida','usuario']}
       let resultados: Resultado[] = await this.resultadoRepository.find(criterio);
       if (resultados) return resultados;
       else throw new Error('No se encontraron resultados');
@@ -77,10 +77,59 @@ export class ResultadosService {
       );
     }
   }
-
-  update(id: number, updateResultadoDto: UpdateResultadoDto) {
-    return `This action updates a #${id} resultado`;
+  async findByPartida(partidaId: number): Promise<Resultado[]> {
+    try {
+      const resultados = await this.resultadoRepository.find({
+        where: { partida: { partidaId } },
+        relations: ['usuario'],
+      });
+  
+      if (!resultados.length) {
+        throw new BadRequestException(`No existen resultados para la partida ${partidaId}`);
+      }
+  
+      return resultados;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al obtener los resultados: ${error.message}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
+  async update(id: number, updateResultadoDto: UpdateResultadoDto): Promise<Resultado> {
+    try {
+      let criterio: FindOneOptions = { where: { resultadoId: id } };
+      let resultado: Resultado = await this.resultadoRepository.findOne(criterio);
+      if (!resultado) throw new Error('No se encuentra el resultado');
+      const partida = await this.partidaRepository.findOne({ where: { partidaId: updateResultadoDto.partidaId } });
+    const usuario = await this.usuarioRepository.findOne({ where: { id: updateResultadoDto.usuarioId } });
+
+    if (!partida) {
+      throw new Error('No se encuentra la partida');
+    }
+
+    if (!usuario) {
+      throw new Error('No se encuentra el usuario');
+    }
+    resultado.resultado = updateResultadoDto.resultado;
+    resultado.partida = partida;
+    resultado.usuario = usuario;
+
+    await this.resultadoRepository.save(resultado); 
+    return resultado;
+  } catch (error) {
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error: ' + error.message,
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
+}
 
   remove(id: number) {
     return `This action removes a #${id} resultado`;

@@ -26,6 +26,11 @@ async getAllCartones(@Query('criterio') criterio: string,@Query('orden') orden: 
 async cantidadDeCartonesPorPartida(): Promise<any> {
   return await this.cartonService.cantidadDeCartonesPorPartida();
 }
+@Get('/usuario/:idUser')
+async findByUserId(@Param('idUser', ParseIntPipe) idUser: number): Promise<Carton> {
+  return await this.cartonService.findByUserId(idUser);
+}
+
 
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number): Promise<Carton> {
