@@ -54,8 +54,8 @@ import { ResultadosModule } from './resultados/resultados.module';
     ImagenModule,
     AuthModule,
     ImgSeleccionadasModule,
-    MessagesWsModule
-    ResultadosModule,
+    MessagesWsModule,
+    ResultadosModule
    ],
   controllers: [AppController],
   providers: [AppService],

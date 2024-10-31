@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpStatus, HttpCode, Put, ParseIntPipe} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpStatus, HttpCode, Put, ParseIntPipe, Patch} from '@nestjs/common';
 import { PartidasService } from './partidas.service';
 import { CreatePartidaDto } from './dto/create-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
@@ -14,6 +14,12 @@ export class PartidasController {
     return this.partidasService.create(createPartidaDto);
   }
 
+  @Get('/activas')
+  @HttpCode(HttpStatus.OK)
+  findActivas(): Promise<Partida[]> {
+    return this.partidasService.findActivas();
+  }
+
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Partida[]> {
@@ -21,12 +27,12 @@ export class PartidasController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Partida> {
+  async findOne(@Param('id', ParseIntPipe) id: Partida): Promise<Partida> {
     const partida = await this.partidasService.findOne(id);
     return partida;
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() UpdatePartidaDto: UpdatePartidaDto,

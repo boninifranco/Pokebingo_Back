@@ -7,7 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Fila } from 'src/filas/entities/fila.entity';
 import { Repository } from 'typeorm';
 
-@WebSocketGateway({cors: true})
+@WebSocketGateway({
+  cors: true,
+  pingInterval: 25000, // Enviar un ping cada 25 segundos
+  pingTimeout: 60000, // Ajusta el tiempo de espera para el ping en milisegundos
+})
 export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconnect{
   
   @WebSocketServer() wss: Server;
@@ -20,15 +24,16 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     
      {}
   handleConnection(client: Socket) {
-    const token = client.handshake.headers.authentication as string;
-    console.log({token})
-    //console.log('Cliente conectado:', client.id)
+    //const token = client.handshake.headers.authentication as string;
+    //console.log({token})
+    const user = client.handshake.query.user;
+    console.log('Cliente conectado:', user || client.id)
     this.messagesWsService.registerClient(client);
     
 
     this.wss.emit('clients-updated', this.messagesWsService.getConnectedClients())
 
-    console.log('conectados:', this.messagesWsService.getConnectedClients())
+    console.log('conectados (desde actualizados):', this.messagesWsService.getConnectedClients())
     
   }
   handleDisconnect(client: Socket) {
@@ -36,17 +41,19 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     this.messagesWsService.removeClient(client.id);
 
     this.wss.emit('clients-updated', this.messagesWsService.getConnectedClients())
-    //console.log('conectados:', this.messagesWsService.getConnectedClients())
+    //console.log('conectados (desde desconectados):', this.messagesWsService.getConnectedClients())
     
   }
 
   // Cuando un cliente envía un mensaje
   @SubscribeMessage('sendMessage')
-  handleMessage(client: Socket, payload: { message: string, salaId: string }): void {
+  handleMessage(client: Socket, payload: { message: string}): void {
     // Reenviar el mensaje a todos los clientes conectados en la sala correspondiente
+    const user = client.handshake.query.user; 
     console.log(payload)
+
     //this.wss.to(payload.salaId).emit('receiveMessage', { user: client.id, message: payload.message });
-    this.wss.emit('receiveMessage', { user: client.id, message: payload.message });
+    this.wss.emit('receiveMessage', { user: user || client.id, message: payload.message });
   }
 
   /*@SubscribeMessage('message-from-client')
