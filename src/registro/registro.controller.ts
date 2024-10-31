@@ -8,6 +8,7 @@ import { Registro } from './entities/registro.entity';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
 import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
+import { UpdateContraseniaDto } from './dto/cambiarcontrasenia.dto';
 
 @Controller('registro')
 export class RegistroController {
@@ -88,6 +89,15 @@ export class RegistroController {
       .status(HttpStatus.NOT_FOUND)
       .json({ message: `El registro con id ${id} no se encontró` });
   }
+
+  @Patch('cambiar-contrasenia/:usuarioId')
+  async cambiarContrasenia(
+    @Param('usuarioId', ParseIntPipe) usuarioId: number,
+    @Body() updateContraseniaDto: UpdateContraseniaDto,
+  ): Promise<any> {
+    return await this.registroService.cambiarContrasenia(usuarioId, updateContraseniaDto);
+  }
+  
 
   @UseGuards(AuthGuard)
   @Delete(':id')

@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
@@ -13,6 +14,8 @@ import { UsuarioService } from 'src/usuario/usuario.service';
 import { error } from 'console';
 import * as bcrypt from 'bcrypt';
 import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
+import { JwtService } from '@nestjs/jwt';
+import { UpdateContraseniaDto } from './dto/cambiarcontrasenia.dto';
 
 @Injectable()
 export class RegistroService {
@@ -20,6 +23,7 @@ export class RegistroService {
     @InjectRepository(Registro)
     private readonly registroRepository: Repository<Registro>,
     private readonly usuarioService: UsuarioService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async create(
@@ -85,6 +89,26 @@ export class RegistroService {
       );
     }
   }
+  
+  async cambiarContrasenia(usuarioId: number, updateContraseniaDto: UpdateContraseniaDto): Promise<any> {
+    const registro = await this.findRegistroId(usuarioId); // Usar usuarioId en lugar de email
+    if (!registro) {
+      throw new BadRequestException(`No existe un registro para el usuario con ID ${usuarioId}`);
+    }
+  
+    const isMatch = await bcrypt.compare(updateContraseniaDto.currentPassword, registro.contrasenia);
+  
+    if (!isMatch) {
+      throw new UnauthorizedException('Contraseña actual incorrecta');
+    }
+  
+    const hashNewPassword = await this.hashPass(updateContraseniaDto.newPassword);
+    registro.contrasenia = hashNewPassword;
+    await this.registroRepository.save(registro);
+  
+    return { message: 'Contraseña actualizada exitosamente' };
+  }  
+
   async findRegistroId(usuarioId: number): Promise<Registro> {
     const registroUsuarioId = await this.registroRepository
       .createQueryBuilder('registro')
@@ -92,14 +116,12 @@ export class RegistroService {
       .getOne();
     return registroUsuarioId;
   }
-//, contrasenia:string
   async findUserEmail(email:string): Promise<Registro> {
     try {
       
       const isUser = await this.registroRepository
         .createQueryBuilder('registro')
         .where('registro.email = :email', { email })
-        //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
         .getOne();
 
       if (isUser)
@@ -213,6 +235,10 @@ export class RegistroService {
       );
     }
   }
+  async save(registro: Registro): Promise<Registro> {
+    return this.registroRepository.save(registro);
+  }
+  
 
   private async hashPass(pass: string): Promise<string> {
     const saltOrRounds = 10;

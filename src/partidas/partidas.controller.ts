@@ -26,6 +26,11 @@ export class PartidasController {
     return this.partidasService.findAll();
   }
 
+  @Get('ultima-partida')
+  async getUltimaPartidaActiva() {
+    return await this.partidasService.findLastActive();
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: Partida): Promise<Partida> {
     const partida = await this.partidasService.findOne(id);
