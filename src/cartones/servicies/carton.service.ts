@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Carton } from '../entities/carton.entity';
 import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { CreateCartonDto } from '../dto/create-carton.dto';
@@ -74,6 +74,33 @@ export class CartonService {
         },
         HttpStatus.NOT_FOUND,
       );
+    }
+  }
+
+  async findByPartida(partidaId: number): Promise<Carton[]> {
+    try {
+      const cartones = await this.cartonRepository.find({
+        where: {
+          partida: { partidaId },
+          idUsuario: IsNull(),
+        },
+        relations: ['fila', 'fila.casillero', 'fila.casillero.imagenId'],
+      });
+  
+      if (cartones.length === 0) {
+        throw new NotFoundException(`No hay cartones sin usuario asignado para la partida ${partidaId}`);
+      }
+  
+      return cartones;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Error al obtener cartones: ${error.message}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+  
     }
   }
 
@@ -186,6 +213,32 @@ export class CartonService {
   
     carton.aciertos = aciertos;  // Actualizar los aciertos
     return await this.cartonRepository.save(carton);  // Guardar en la base de datos
+  }
+
+  public async asignarUsuario(cartonId: number, usuarioId: number): Promise<Carton> {
+    try {
+      let carton = await this.cartonRepository.findOne({ where: { cartonId } });
+      if (!carton) {
+        throw new NotFoundException(`No se encontró el cartón con ID: ${cartonId}`);
+      }
+  
+      if (carton.idUsuario) {
+        throw new BadRequestException(`El cartón ya tiene un usuario asignado`);
+      }
+  
+      carton.idUsuario = { usuarioId } as any; 
+      carton = await this.cartonRepository.save(carton);
+  
+      return carton;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Error al asignar el usuario al cartón: ' + error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   public async cantidadDeCartonesPorPartida() {

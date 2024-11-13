@@ -22,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
 import { ImgSeleccionadasModule } from './img-seleccionadas/img-seleccionadas.module';
 import { MessagesWsModule } from './messages-ws/messages-ws.module';
 import { ResultadosModule } from './resultados/resultados.module';
+import { MercadoPagoModule } from './mercadopago/mercadopago/mercadopago.module';
 
 @Module({
    imports:[
@@ -55,7 +56,8 @@ import { ResultadosModule } from './resultados/resultados.module';
     AuthModule,
     ImgSeleccionadasModule,
     MessagesWsModule,
-    ResultadosModule
+    ResultadosModule,
+    MercadoPagoModule
    ],
   controllers: [AppController],
   providers: [AppService],

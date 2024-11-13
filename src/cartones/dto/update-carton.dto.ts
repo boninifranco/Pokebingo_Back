@@ -6,4 +6,8 @@ export class UpdateCartonDto extends PartialType(CreateCartonDto) {
   @IsInt()
   @IsOptional()
   aciertos?: number;
+
+  @IsOptional()
+  @IsInt()
+  usuarioId?: number;
 }
