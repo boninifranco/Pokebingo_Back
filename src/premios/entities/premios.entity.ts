@@ -12,4 +12,6 @@ export class Premios {
   creditos: number;
   @Column()
   descripcion: string;
+  @Column()
+  imagen: string;
 }

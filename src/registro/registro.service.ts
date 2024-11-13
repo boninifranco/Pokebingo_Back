@@ -175,9 +175,13 @@ export class RegistroService {
       if (!registro)
         throw new BadRequestException(`No existe el registro con id ${id}`);
       registro.email = updateRegistroDto.email;
-      const hashPass = await this.hashPass(updateRegistroDto.contrasenia);
-      registro.contrasenia = hashPass;
+      if(updateRegistroDto.contrasenia){
+        const hashPass = await this.hashPass(updateRegistroDto.contrasenia);
+        registro.contrasenia = hashPass;
+      }      
       registro.administrador = updateRegistroDto.administrador;
+      registro.userName = updateRegistroDto.userName;
+      registro.avatar = updateRegistroDto.avatar;
       await this.registroRepository.update(id, registro);
       return registro;
     } catch (error) {

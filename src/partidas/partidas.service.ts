@@ -50,6 +50,33 @@ export class PartidasService {
       );
     }
   }
+  public async partidasSinCartones(): Promise<Partida[]> {
+    const partidasSinCartones = await this.partidaRepository
+      .createQueryBuilder('partida')
+      .leftJoin('partida.cartones', 'carton') 
+      .where('carton.partida IS NULL') 
+      .getMany();
+
+    return partidasSinCartones;
+  }
+
+  async getPartidasConImagenes() {
+    const partidas = await this.partidaRepository
+      .createQueryBuilder('partida')
+      .leftJoinAndSelect('partida.imgSeleccionadas', 'imgSeleccionadas')
+      .select(['partida.partidaId AS partida_id'])
+      .addSelect('COUNT(imgSeleccionadas.idSeleccionada) > 0', 'hasImages')
+      .groupBy('partida.partidaId')
+      .getRawMany();
+
+     // Mapeamos los resultados para tener un array de objetos en el formato solicitado
+     const resultado = partidas.map(row => ({
+      partidaId: row.partida_id,
+      hasImages: row.hasImages === '1', // Convertimos "1"/"0" a booleano
+    }));
+
+    return resultado;
+  }
 
   async findAll(): Promise<Partida[]> {
     try {
