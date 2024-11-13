@@ -10,6 +10,11 @@ import { Partida } from 'src/partidas/entities/partida.entity';
 export class FilaController {
   constructor(private readonly filaService: FilaService) {}
 
+  @Get('/max')
+  async maxIdFila(): Promise<number> {
+    const fila = await this.filaService.maxIdFila();
+    return fila;
+  }
   @Get('ordenadas-desc/:aciertos/:partida')
   @HttpCode(HttpStatus.OK)
   findAllDesc(

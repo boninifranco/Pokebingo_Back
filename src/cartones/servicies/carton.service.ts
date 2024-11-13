@@ -7,6 +7,7 @@ import { FindManyOptions, FindOneOptions, IsNull, Repository } from 'typeorm';
 import { Partida } from 'src/partidas/entities/partida.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 
+
 @Injectable()
 export class CartonService {
   constructor(
@@ -18,9 +19,11 @@ export class CartonService {
     private readonly logueoRepository: Repository<Logueo>,
   ) {}
 
-  public async findAll(): Promise<Carton[]> {
+  public async findAll(partida:number): Promise<Carton[]> {
     try {
-      let criterio: FindManyOptions = { relations: ['fila'],
+      let criterio: FindManyOptions = {
+        where: { partida: partida }, 
+        relations: ['fila','fila.casillero','fila.casillero.imagenId'],
         
        };
       let cartones: Carton[] = await this.cartonRepository.find(criterio);
@@ -37,15 +40,12 @@ export class CartonService {
     }
   }
 
+
   public async getAllCartones(criterio: string, orden: 'ASC' | 'DESC', partida: Partida):Promise<Carton[]> {
-    /*const cartones = await this.cartonRepository.find({
-      relations:['fila', 'fila.casillero', 'fila.casillero.imagenId'],
-      where: {idUsuario: },
-      order:{[criterio]: orden}
-    })*/
-      const cartones = await this.cartonRepository
+      
+      const cartones =  this.cartonRepository
       .createQueryBuilder('carton')
-      .leftJoinAndSelect('carton.idUsuario', 'idUsuario')
+      .leftJoinAndSelect('carton.idUsuario', 'idUsuario')      
       .innerJoinAndSelect('carton.partida', 'partida')
       .leftJoinAndSelect('carton.fila', 'fila')
       .leftJoinAndSelect('fila.casillero', 'casillero')
@@ -53,9 +53,28 @@ export class CartonService {
       .where('carton.idUsuario IS NOT NULL')
       .andWhere('carton.partida = :partida', {partida})
       .orderBy(`carton.${criterio}`, orden)
+      
       .getMany();
     return cartones
+  
+    
   } 
+
+  public async allCartones(partida: Partida):Promise<Carton[]> {
+      
+    const cartones = await this.cartonRepository
+  .createQueryBuilder('carton')
+  .where('carton.partida = :partida', { partida }) // Filtrar solo por la partida específica
+  .leftJoinAndSelect('carton.idUsuario', 'idUsuario')
+  .leftJoinAndSelect('carton.fila', 'fila')
+  .leftJoinAndSelect('fila.casillero', 'casillero')
+  .leftJoinAndSelect('casillero.imagenId', 'imagenId')
+  .getMany();
+
+return cartones;
+
+  
+}
 
   public async findOne(id: number): Promise<Carton> {
     try {
@@ -250,6 +269,25 @@ export class CartonService {
       .getRawMany(); 
 
     return resultado;
+  }
+
+  public async cartonesCompradosPorPartida(partida: number):Promise<number> {
+    const resultado = await this.cartonRepository
+    .createQueryBuilder("carton")
+    .where("carton.idPartida = :partida", { partida })
+    .andWhere("carton.IdUsuario IS NOT NULL")
+    .getCount();
+
+    return resultado;
+  }
+
+  public async maxIdCarton():Promise< number>{
+    const ultimoCarton = await this.cartonRepository
+        .createQueryBuilder('carton')
+        .select('MAX(carton.cartonId)', 'max')
+        .getRawOne();    
+    return ultimoCarton ? Number(ultimoCarton.max) : 0;
+    
   }
   
 }

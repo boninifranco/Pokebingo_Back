@@ -15,25 +15,47 @@ export class CartonController {
     @InjectRepository(Partida) private partidaRepository: Repository<Partida>,
   ) {}
 
-  @Get()
+  @Get('/partida/:partida')
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.cartonService.findAll();
+  async findAll(@Param('partida') partida: number):Promise<Carton[]> {
+    return await this.cartonService.findAll(partida);
+  }
+
+  @Get('/max')
+  async maxIdCarton(): Promise<number> {
+    const ultimoCarton = await this.cartonService.maxIdCarton();
+    return ultimoCarton;
   }
 
   @Get('/all')
-async getAllCartones(@Query('criterio') criterio: string,@Query('orden') orden: 'ASC' | 'DESC' = 'ASC',@Query('partida') partida: Partida) {
+async getAllCartonesConusuario(@Query('criterio') criterio: string,@Query('orden') orden: 'ASC' | 'DESC' = 'ASC',@Query('partida') partida: Partida) {
+  
   return await this.cartonService.getAllCartones(criterio,orden,partida);
 }
+
+@Get('/todos/:partida')
+async allCartones(@Param('partida') partida: Partida) {
+  
+  return await this.cartonService.allCartones(partida);
+}
+
 
 @Get('/cantidad')
 async cantidadDeCartonesPorPartida(): Promise<any> {
   return await this.cartonService.cantidadDeCartonesPorPartida();
 }
-@Get('/usuario/:idUser')
+
+@Get('/comprados/:partida')
+async cartonesCompradosPorPartida(@Param('partida') partida: number): Promise<any> {
+  return await this.cartonService.cartonesCompradosPorPartida(partida);
+}
+
+
+
+/*@Get('/usuario/:idUser')
 async findByUserId(@Param('idUser', ParseIntPipe) idUser: number): Promise<Carton> {
   return await this.cartonService.findByUserId(idUser);
-}
+}*/
 
 @Get('bypartida/:partidaId')
 async findByPartida(

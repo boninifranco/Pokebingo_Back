@@ -53,8 +53,10 @@ export class ImgSeleccionadasService {
     return await this.imgSeleccionadaRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} imgSeleccionada`;
+  async findOne(id: number) {
+    
+    const imagen = await this.imagenRepository.findOne({ where: { imagenId: id } })
+    return imagen;
   }
 
   async findByPartidaId(partidaId: number): Promise<ImgSeleccionada[]> {
@@ -72,14 +74,31 @@ export class ImgSeleccionadasService {
       .where('imgSeleccionada.partidaId = :partidaId', { partidaId })
       .getMany();
   }
+  async remove(id: number) {
+    try {
+      let criterio: FindOneOptions = { where: { idSeleccionada: id } };
+      let imagen = await this.imgSeleccionadaRepository.findOne(criterio);
+      if (!imagen) throw new Error('No se encuentra la imagen');
+      console.log(imagen)
+      await this.imgSeleccionadaRepository.delete(id);
+      return `Se ha eliminado la imagen: ${id}`;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
   }
 
 
   /*update(id: number, updateImgSeleccionadaDto: UpdateImgSeleccionadaDto) {
     return `This action updates a #${id} imgSeleccionada`;
-  }
+  }*/
 
-  remove(id: number) {
-    return `This action removes a #${id} imgSeleccionada`;
-  }
-}*/
+  
+
+

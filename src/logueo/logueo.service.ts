@@ -147,6 +147,7 @@ export class LogueoService {
       .getOne();
     return usuarioIdLogueado;
   }  
+  
   async login(mail: string, pass: string): Promise<any> {
     
     const user = await this.registroService.findUserEmail1(mail);//,pass
@@ -182,7 +183,9 @@ export class LogueoService {
           id: user.id,
           email: user.email,
           admin: user.administrador,
-          idLogin: logueoOk.id
+          idLogin: logueoOk.id,
+          userName: user.userName,
+          avatar: user.avatar
           
         }
                   

@@ -23,6 +23,7 @@ import { ImgSeleccionadasModule } from './img-seleccionadas/img-seleccionadas.mo
 import { MessagesWsModule } from './messages-ws/messages-ws.module';
 import { ResultadosModule } from './resultados/resultados.module';
 import { MercadoPagoModule } from './mercadopago/mercadopago/mercadopago.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
    imports:[
@@ -58,6 +59,7 @@ import { MercadoPagoModule } from './mercadopago/mercadopago/mercadopago.module'
     MessagesWsModule,
     ResultadosModule,
     MercadoPagoModule
+    FilesModule
    ],
   controllers: [AppController],
   providers: [AppService],

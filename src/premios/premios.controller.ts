@@ -1,11 +1,13 @@
 import {  Controller,  Get,  Post,  Body,  Patch,  Param,  Delete,  HttpCode,
-  HttpStatus,  Res,  ParseIntPipe,  UseGuards,} from '@nestjs/common';
+  HttpStatus,  Res,  ParseIntPipe,  UseGuards} from '@nestjs/common';
 import { PremiosService } from './premios.service';
 import { CreatePremiosDto } from './dto/create-premios.dto';
 import { UpdatePremiosDto } from './dto/update-premios.dto';
 import { Premios } from './entities/premios.entity';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
+
+
 
 @Controller('premios')
 export class PremiosController {
@@ -58,4 +60,6 @@ export class PremiosController {
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente' });
   }
+
+  
 }
