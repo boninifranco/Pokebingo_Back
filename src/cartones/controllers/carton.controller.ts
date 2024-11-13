@@ -5,11 +5,15 @@ import { UpdateCartonDto } from '../dto/update-carton.dto';
 import { Carton } from '../entities/carton.entity';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
 import { Partida } from 'src/partidas/entities/partida.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 
 @Controller('cartones')
 export class CartonController {
-  constructor(private readonly cartonService: CartonService) {}
+  constructor(private readonly cartonService: CartonService,
+    @InjectRepository(Partida) private partidaRepository: Repository<Partida>,
+  ) {}
 
   @Get('/partida/:partida')
   @HttpCode(HttpStatus.OK)
@@ -53,6 +57,12 @@ async findByUserId(@Param('idUser', ParseIntPipe) idUser: number): Promise<Carto
   return await this.cartonService.findByUserId(idUser);
 }*/
 
+@Get('bypartida/:partidaId')
+async findByPartida(
+  @Param('partidaId', ParseIntPipe) partidaId: number,
+): Promise<Carton[]> {
+  return await this.cartonService.findByPartida(partidaId);
+}
 
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number): Promise<Carton> {
@@ -94,7 +104,13 @@ public async actualizarAciertosCarton(
   return await this.cartonService.actualizarAciertosCarton(cartonId, aciertos);
 }
 
-
+@Patch('/asignar-usuario/:cartonId')
+async asignarUsuario(
+  @Param('cartonId', ParseIntPipe) cartonId: number,
+  @Body('usuarioId', ParseIntPipe) usuarioId: number,
+): Promise<Carton> {
+  return await this.cartonService.asignarUsuario(cartonId, usuarioId);
+}
 
 }
 
