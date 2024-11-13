@@ -58,7 +58,7 @@ import { FilesModule } from './files/files.module';
     ImgSeleccionadasModule,
     MessagesWsModule,
     ResultadosModule,
-    MercadoPagoModule
+    MercadoPagoModule,
     FilesModule
    ],
   controllers: [AppController],
