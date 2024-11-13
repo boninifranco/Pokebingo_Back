@@ -15,7 +15,7 @@ export class Carton {
   //idUsuario?: Registro;
   
 
-  @ManyToOne(() => Partida, (partida) => partida.cartones, { eager: true })
+  @ManyToOne(() => Partida, (partida) => partida.cartones, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'idPartida' })
   partida: Partida;
 

@@ -213,4 +213,14 @@ async findAllDesc(partida: Partida, aciertos: number): Promise<Fila[]> {
   }
 }
 
+public async maxIdFila(): Promise< number> {
+  const ultimaFila = await this.filaRepository
+        .createQueryBuilder('fila')
+        .select('MAX(fila.filaId)', 'max')
+        .getRawOne();
+
+    return ultimaFila ? Number(ultimaFila.max) : 0;
+
+}
+
 }

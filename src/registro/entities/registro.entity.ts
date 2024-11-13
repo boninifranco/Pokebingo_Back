@@ -18,6 +18,12 @@ export class Registro {
   @Column('boolean', {default: false})
   administrador: boolean;
 
+  @Column({default:''})
+  userName:string;
+
+  @Column({default:''})
+  avatar: string;
+
   @OneToMany(() => Logueo, (logueo) => logueo.idUsuario, { cascade: true })
   @OneToOne(() => Desempenio, (desempenio) => desempenio.jugador, {
     cascade: true,

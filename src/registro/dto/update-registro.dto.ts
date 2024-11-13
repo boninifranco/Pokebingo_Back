@@ -12,4 +12,12 @@ export class UpdateRegistroDto extends PartialType(CreateRegistroDto) {
   @IsOptional()
   @IsBoolean()
   administrador?: boolean;
+
+  @IsOptional()
+  @IsString()
+  userName: string;
+  
+  @IsOptional()
+  @IsString()
+  avatar: string;
 }

@@ -19,6 +19,15 @@ export class PartidasController {
   findActivas(): Promise<Partida[]> {
     return this.partidasService.findActivas();
   }
+  @Get('/sinCartones')
+  @HttpCode(HttpStatus.OK)
+  partidasSinCartones(): Promise<Partida[]> {
+    return this.partidasService.partidasSinCartones();
+  }
+  @Get('/conImagenes')
+  async getPartidasConImagenes() {
+    return this.partidasService.getPartidasConImagenes();
+  }
 
   @Get()
   @HttpCode(HttpStatus.OK)

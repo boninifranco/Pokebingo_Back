@@ -27,7 +27,10 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     //const token = client.handshake.headers.authentication as string;
     //console.log({token})
     const user = client.handshake.query.user;
+    const avatar = client.handshake.query.avatar;
     console.log('Cliente conectado:', user || client.id)
+    console.log('Cliente avatar:', avatar || 'no tiene avatar')
+    
     this.messagesWsService.registerClient(client);
     
 
@@ -49,11 +52,12 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
   @SubscribeMessage('sendMessage')
   handleMessage(client: Socket, payload: { message: string}): void {
     // Reenviar el mensaje a todos los clientes conectados en la sala correspondiente
-    const user = client.handshake.query.user; 
+    const user = client.handshake.query.user;
+    const avatar = client.handshake.query.avatar; 
     console.log(payload)
 
     //this.wss.to(payload.salaId).emit('receiveMessage', { user: client.id, message: payload.message });
-    this.wss.emit('receiveMessage', { user: user || client.id, message: payload.message });
+    this.wss.emit('receiveMessage', { user: user || client.id, avatar: avatar, message: payload.message });
   }
 
   /*@SubscribeMessage('message-from-client')

@@ -15,6 +15,7 @@ export class ImgSeleccionadasController {
     return await this.imgSeleccionadasService.create(createImgSeleccionadaDto);
   }
 
+
   @Get()
   findAll() {
     return this.imgSeleccionadasService.findAll();
@@ -33,10 +34,10 @@ export class ImgSeleccionadasController {
   /*@Patch(':id')
   update(@Param('id') id: string, @Body() updateImgSeleccionadaDto: UpdateImgSeleccionadaDto) {
     return this.imgSeleccionadasService.update(+id, updateImgSeleccionadaDto);
-  }
+  }*/
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.imgSeleccionadasService.remove(+id);
-  }*/
+  remove(@Param('id') id: number) {
+    return this.imgSeleccionadasService.remove(id);
+  }
 }

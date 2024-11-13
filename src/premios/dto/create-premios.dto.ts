@@ -6,4 +6,7 @@ export class CreatePremiosDto {
 
   @IsInt()
   creditos: number;
+  
+  @IsString()
+  imagen: string;
 }
