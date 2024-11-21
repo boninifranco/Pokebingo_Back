@@ -123,28 +123,26 @@ return cartones;
     }
   }
 
-  public async findByUserId(idUser: number): Promise<Carton> {
-    try {
-      const carton = await this.cartonRepository.findOne({
-        where: { idUsuario: { usuarioId: idUser } }, // Relación con usuarioId de Registro
-        relations: ['fila', 'fila.casillero', 'fila.casillero.imagenId'],
-      });
-      
-      if (!carton) {
-        throw new Error(`No se encontró el cartón para el usuario: ${idUser}`);
-      }
-      
-      return carton;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Se produjo un error: ' + error.message,
-        },
-        HttpStatus.NOT_FOUND,
-      );
+  public async findCartonesByUserAndPartida(idUser: number, partidaId: number): Promise<Carton[]> {
+    const cartones = await this.cartonRepository
+      .createQueryBuilder('carton')
+      .leftJoinAndSelect('carton.fila', 'fila')
+      .leftJoinAndSelect('fila.casillero', 'casillero')
+      .leftJoinAndSelect('casillero.imagenId', 'imagenId')
+      .leftJoinAndSelect('carton.partida', 'partida') // Incluye la relación con partida
+      .leftJoinAndSelect('carton.idUsuario', 'usuario') // Incluye la relación con usuario
+      .where('usuario.usuarioId = :idUser', { idUser }) // Filtra por usuario
+      .andWhere('partida.partidaId = :partidaId', { partidaId }) // Filtra por partidaId
+      .getMany();
+  
+    if (!cartones || cartones.length === 0) {
+      throw new Error(`No se encontraron cartones para el usuario: ${idUser} en la partida: ${partidaId}`);
     }
-  }  
+  
+    return cartones;
+  }
+  
+  
 
   //async createMany(cartones: CreateCartonDto[]): Promise<Carton[]> {
   async create(createCartonDto: CreateCartonDto): Promise<Carton> {
