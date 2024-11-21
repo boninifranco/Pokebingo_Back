@@ -24,17 +24,23 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
 import { ResultadosModule } from './resultados/resultados.module';
 import { MercadoPagoModule } from './mercadopago/mercadopago/mercadopago.module';
 import { FilesModule } from './files/files.module';
+import { ConfigModule } from '@nestjs/config';
+import { EnvConfiguration } from './config/env.config';
 
 @Module({
    imports:[
+    ConfigModule.forRoot(
+      {
+        load:[ EnvConfiguration]
+      }),
     TypeOrmModule.forRoot({
        type: 'mysql',
-       host: 'localhost',
-       port: 3306,
-       username: 'root',
-       password: 'Password',
-       database: 'bingo',
-       entities: ['dist/**/**.entity{.ts,.js}'],
+       host: process.env.HOST,
+       port: +process.env.DBPORT,
+       username: process.env.DBUSERNAME,
+       password: process.env.PASSWORD,
+       database: process.env.DATABASE,
+       entities: [process.env.ENTITIES],//['dist/**/**.entity{.ts,.js}'],
        //entities: [__dirname + '/**/*.entity{.ts,.js}'],
        synchronize: true
      }),
@@ -64,4 +70,6 @@ import { FilesModule } from './files/files.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(){}
+}

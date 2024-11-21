@@ -56,7 +56,7 @@ export class DesempenioController {
       .status(HttpStatus.NOT_FOUND)
       .json({ message: `El desempenio con id ${id} no se encontró` });
   }
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const isDesempenio = await this.desempenioService.remove(id);

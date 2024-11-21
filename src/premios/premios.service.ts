@@ -79,6 +79,7 @@ export class PremiosService {
       premio.descripcion = updatePremiosDto.descripcion;
       premio.creditos = updatePremiosDto.creditos;
       premio.imagen = updatePremiosDto.imagen;
+      premio.stock = updatePremiosDto.stock;
       await this.premiosReposirory.update(id, premio);
       return premio;
     } catch (error) {
@@ -112,4 +113,4 @@ export class PremiosService {
       );
     }
   }
-}
+};

@@ -58,7 +58,7 @@ async marcarCasillerosPorImagen(
 
   
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async deleteCasillero(@Param('id', ParseIntPipe) id: string) {
     return this.casilleroService.delete(id);

@@ -90,7 +90,7 @@ async findByPartida(
     return updatedCarton;
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return this.cartonService.delete(id);

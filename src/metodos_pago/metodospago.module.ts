@@ -3,9 +3,12 @@ import { MetodosPagoService } from './metodospago.service';
 import { MetodosPagoController } from './metodospago.controller';
 import { MetodosPago } from './entities/metodospago.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MetodosPago])],
+  imports: [
+    ConfigModule,
+    TypeOrmModule.forFeature([MetodosPago])],
   controllers: [MetodosPagoController],
   providers: [MetodosPagoService],
 })
