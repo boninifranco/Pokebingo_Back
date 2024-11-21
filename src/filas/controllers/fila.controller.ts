@@ -54,7 +54,7 @@ export class FilaController {
     return updatedFila;
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: string) {
     return this.filaService.delete(id);

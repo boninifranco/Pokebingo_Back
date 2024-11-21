@@ -61,7 +61,7 @@ export class StockPremiosController {
     return this.stockPremiosService.findOne(+id);
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const isStockPremio = await this.stockPremiosService.remove(id);

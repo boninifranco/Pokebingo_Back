@@ -51,7 +51,7 @@ export class PremiosController {
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente' });
   }
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const premios = await this.premiosService.remove(id);

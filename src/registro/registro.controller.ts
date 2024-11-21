@@ -99,7 +99,7 @@ export class RegistroController {
   }
   
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const registro = await this.registroService.remove(id);

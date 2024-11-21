@@ -54,7 +54,7 @@ export class PuntajesController {
       .json({ message: `El puntaje con id ${id} no existe` });
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const isPuntaje = await this.puntajesService.remove(id);
