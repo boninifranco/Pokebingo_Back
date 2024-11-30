@@ -67,6 +67,13 @@ export class CartonController {
     return await this.cartonService.cartonesCompradosPorPartida(partida);
   }
 
+  @Get('/no-comprados/:partida')
+  async cartonesNoCompradosPorPartida(
+    @Param('partida') partida: number,
+  ): Promise<any> {
+    return await this.cartonService.cartonesNoCompradosPorPartida(partida);
+  }
+
   @Get('bypartida/:partidaId')
   async findByPartida(
     @Param('partidaId', ParseIntPipe) partidaId: number,
