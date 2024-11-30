@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateUsuarioDto {
   @IsString()
@@ -16,4 +16,13 @@ export class CreateUsuarioDto {
   @IsOptional()
   @IsString()
   direccion: string;
+
+  @IsNumber()
+  puntos: number;
+
+  @IsNumber()
+  creditos: number;
+
+  @IsNumber()
+  cartonesComprados: number;
 }

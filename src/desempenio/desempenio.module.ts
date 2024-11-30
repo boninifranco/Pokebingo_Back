@@ -4,6 +4,7 @@ import { DesempenioController } from './desempenio.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Desempenio } from './entities/desempenio.entity';
 import { RegistroModule } from 'src/registro/registro.module';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Desempenio]), RegistroModule],
@@ -11,3 +12,4 @@ import { RegistroModule } from 'src/registro/registro.module';
   providers: [DesempenioService],
 })
 export class DesempenioModule {}
+

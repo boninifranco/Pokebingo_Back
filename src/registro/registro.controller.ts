@@ -9,6 +9,7 @@ import { Response } from 'express';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
 import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 import { UpdateContraseniaDto } from './dto/cambiarcontrasenia.dto';
+import { CreateDesempenioDto } from 'src/desempenio/dto/create-desempenio.dto';
 
 @Controller('registro')
 export class RegistroController {
@@ -33,7 +34,7 @@ export class RegistroController {
   ): Promise<Registro> {
     const registro = await this.registroService.findOneId(id);
     if (registro) {
-      res.status(HttpStatus.FOUND).json(registro);
+      res.status(HttpStatus.OK).json(registro);
       return registro;
     }
     res
@@ -48,7 +49,7 @@ export class RegistroController {
   ): Promise<Registro> {
     const registro = await this.registroService.findRegistroId(usuarioId);
     if (registro) {
-      res.status(HttpStatus.FOUND).json(registro);
+      res.status(HttpStatus.OK).json(registro);
       return registro;
     }
     res
@@ -61,12 +62,10 @@ export class RegistroController {
     @Res() res: Response,
     @Param('usuarioId', ParseIntPipe) usuarioId: number,
     @Body() updateRegistroDto: UpdateRegistroDto,
-  ): Promise<Registro> {
-    console.log(`Hola2!!`)
-    const registro = await this.registroService.updateAdmin(usuarioId, updateRegistroDto);
-    console.log(`hola de nuevo ${registro.usuarioId}`)
+  ): Promise<Registro> {    
+    const registro = await this.registroService.updateAdmin(usuarioId, updateRegistroDto);    
     if (registro) {
-      res.status(HttpStatus.FOUND).json(registro);
+      res.status(HttpStatus.OK).json(registro);
       return registro;
     }
     res
@@ -82,7 +81,7 @@ export class RegistroController {
   ): Promise<Registro> {
     const registro = await this.registroService.update(id, updateRegistroDto);
     if (registro) {
-      res.status(HttpStatus.FOUND).json(registro);
+      res.status(HttpStatus.OK).json(registro);
       return registro;
     }
     res
@@ -104,7 +103,7 @@ export class RegistroController {
   async remove(@Res() res: Response, @Param('id', ParseIntPipe) id: number) {
     const registro = await this.registroService.remove(id);
     if (registro) {
-      res.status(HttpStatus.FOUND).json(registro);
+      res.status(HttpStatus.OK).json(registro);
     }
     res
       .status(HttpStatus.NOT_FOUND)
@@ -116,7 +115,7 @@ export class RegistroController {
     const {email,contrasenia}=body
     const user = await this.registroService.findUserEmail(email);//,contrasenia
     if(user){
-      res.status(HttpStatus.FOUND).json(user)
+      res.status(HttpStatus.OK).json(user)
     }else{
       res
       .status(HttpStatus.NOT_FOUND)

@@ -67,7 +67,7 @@ export class PremiosService {
 
   async update(
     id: number,
-    updatePremiosDto: UpdatePremiosDto,
+    updatePremiosDto: UpdatePremiosDto    
   ): Promise<Premios> {
     try {
       const criterio: FindOneOptions = { where: { id: id } };
@@ -78,8 +78,34 @@ export class PremiosService {
         );
       premio.descripcion = updatePremiosDto.descripcion;
       premio.creditos = updatePremiosDto.creditos;
-      premio.imagen = updatePremiosDto.imagen;
-      premio.stock = updatePremiosDto.stock;
+      premio.imagen = updatePremiosDto.imagen;      
+      premio.stock = updatePremiosDto.stock;      
+      await this.premiosReposirory.update(id, premio);
+      return premio;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al enviar la petición ${error}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  async updateCanje(
+    id: number,
+    updatePremiosDto: UpdatePremiosDto    
+  ): Promise<Premios> {
+    try {
+      const criterio: FindOneOptions = { where: { id: id } };
+      let premio = await this.premiosReposirory.findOne(criterio);
+      if (!premio)
+        throw new BadRequestException(
+          `No se encontró el premio con el id ${id} en la base de datos`,
+        );
+      
+      premio.stock = premio.stock + updatePremiosDto.stock;      
       await this.premiosReposirory.update(id, premio);
       return premio;
     } catch (error) {

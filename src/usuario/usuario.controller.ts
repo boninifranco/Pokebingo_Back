@@ -18,7 +18,7 @@ export class UsuarioController {
   }
 
   @Get()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.usuarioService.findAll();
     //console.log('hola')
@@ -35,7 +35,7 @@ export class UsuarioController {
     const usuario = await this.usuarioService.findOne(id);
 
     if (usuario) {
-      res.status(HttpStatus.FOUND).json(usuario);
+      res.status(HttpStatus.OK).json(usuario);
       return usuario;
     }
     res
@@ -57,7 +57,7 @@ export class UsuarioController {
       updateUsuarioDto,
     );
     if (usuarioUpdate) {
-      res.status(HttpStatus.FOUND).json(usuarioUpdate);
+      res.status(HttpStatus.OK).json(usuarioUpdate);
       return usuarioUpdate;
     }
     res

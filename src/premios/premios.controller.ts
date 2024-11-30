@@ -14,13 +14,13 @@ export class PremiosController {
   constructor(private readonly premiosService: PremiosService) {}
 
   @Post()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   async create(@Body() createPremiosDto: CreatePremiosDto): Promise<Premios> {
     return this.premiosService.create(createPremiosDto);
   }
 
   @Get()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Premios[]> {
     return this.premiosService.findAll();
   }
@@ -32,7 +32,7 @@ export class PremiosController {
   ): Promise<Premios> {
     const premios = await this.premiosService.findOne(id);
     if (premios) {
-      res.status(HttpStatus.FOUND).json(premios);
+      res.status(HttpStatus.OK).json(premios);
       return premios;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente' });
@@ -46,7 +46,27 @@ export class PremiosController {
   ): Promise<Premios> {
     const premios = await this.premiosService.update(id, updatePremiosDto);
     if (premios) {
-      res.status(HttpStatus.FOUND).json(premios);
+      res.status(HttpStatus.OK).json({
+        message: 'Formulario enviado correctamente',
+        updatePremiosDto,
+    });
+      return premios;
+    }
+    res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente' });
+  }
+
+  @Patch('/canje/:id')
+  async updateCanje(
+    @Res() res: Response,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePremiosDto: UpdatePremiosDto,
+  ): Promise<Premios> {
+    const premios = await this.premiosService.updateCanje(id, updatePremiosDto);
+    if (premios) {
+      res.status(HttpStatus.OK).json({
+        message: 'Formulario enviado correctamente',
+        updatePremiosDto,
+    });
       return premios;
     }
     res.status(HttpStatus.NOT_FOUND).json({ error: 'premio no existente' });
