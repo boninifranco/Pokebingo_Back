@@ -95,6 +95,9 @@ export class UsuarioService {
         usuario.dni = updateUsuarioDto.dni;
         usuario.direccion = updateUsuarioDto.direccion;
         usuario.celular = updateUsuarioDto.celular;
+        usuario.puntos = usuario.puntos + updateUsuarioDto.puntos;
+        usuario.creditos = updateUsuarioDto.creditos;
+        usuario.cartonesComprados = updateUsuarioDto.cartonesComprados;
         console.log(usuario);
         await this.usuarioRepository.update(id, usuario);
       }

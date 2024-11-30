@@ -16,6 +16,12 @@ export class Usuario {
   celular: string;
   @Column({default:''})
   direccion: string;
+  @Column({default:0})
+  puntos: number;
+  @Column({default:0})
+  creditos: number;
+  @Column({default:0})
+  cartonesComprados: number;
   @OneToOne(() => Registro,(registro)=> registro.id,{ onDelete: 'CASCADE' },)
   @JoinColumn({ name: 'registroId'})
   registro: number;

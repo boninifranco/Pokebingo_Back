@@ -3,11 +3,12 @@ import { PuntajesService } from './puntajes.service';
 import { PuntajesController } from './puntajes.controller';
 import { Puntajes } from './entities/puntajes.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Resultado } from 'src/resultados/entities/resultado.entity';
 
 @Module({
   imports:[
     TypeOrmModule.forFeature([
-      Puntajes
+      Puntajes, Resultado
     ]),
   ],
   controllers: [PuntajesController],

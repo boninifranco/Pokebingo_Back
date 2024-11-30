@@ -16,6 +16,9 @@ import * as bcrypt from 'bcrypt';
 import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateContraseniaDto } from './dto/cambiarcontrasenia.dto';
+import { DesempenioService } from 'src/desempenio/desempenio.service';
+import { CreateDesempenioDto } from 'src/desempenio/dto/create-desempenio.dto';
+import { Desempenio } from 'src/desempenio/entities/desempenio.entity';
 
 @Injectable()
 export class RegistroService {
