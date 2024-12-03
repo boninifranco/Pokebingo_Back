@@ -93,6 +93,7 @@ export class RegistroService {
     }
   }
   
+
   async cambiarContrasenia(usuarioId: number, updateContraseniaDto: UpdateContraseniaDto): Promise<any> {
     const registro = await this.findRegistroId(usuarioId); // Usar usuarioId en lugar de email
     if (!registro) {
@@ -110,7 +111,21 @@ export class RegistroService {
     await this.registroRepository.save(registro);
   
     return { message: 'Contraseña actualizada exitosamente' };
-  }  
+  }
+
+  async recuperarContrasenia(usuarioId: number, updateContraseniaDto: UpdateContraseniaDto): Promise<any> {
+    const registro = await this.findRegistroId(usuarioId); // Usar usuarioId en lugar de email
+    if (!registro) {
+      throw new BadRequestException(`No existe un registro para el usuario con ID ${usuarioId}`);
+    }  
+    const hashNewPassword = await this.hashPass(updateContraseniaDto.newPassword);
+    registro.contrasenia = hashNewPassword;
+    await this.registroRepository.save(registro);
+  
+    return { message: 'Contraseña recuperada exitosamente' };
+  }
+  
+  
 
   async findRegistroId(usuarioId: number): Promise<Registro> {
     const registroUsuarioId = await this.registroRepository

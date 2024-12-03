@@ -96,6 +96,14 @@ export class RegistroController {
   ): Promise<any> {
     return await this.registroService.cambiarContrasenia(usuarioId, updateContraseniaDto);
   }
+
+  @Patch('recuperar-contrasenia/:usuarioId')
+  async recuperarContrasenia(
+    @Param('usuarioId', ParseIntPipe) usuarioId: number,
+    @Body() updateContraseniaDto: UpdateContraseniaDto,
+  ): Promise<any> {
+    return await this.registroService.recuperarContrasenia(usuarioId, updateContraseniaDto);
+  }
   
 
   //@UseGuards(AuthGuard)

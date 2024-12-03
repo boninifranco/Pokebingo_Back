@@ -200,9 +200,23 @@ export class LogueoService {
         },
         HttpStatus.NOT_FOUND,
       );
-    }      
-
-      
+    }
     
+  }
+  async buscarEmail(mail: string): Promise<any> {
+    try {
+      const user = await this.registroService.findUserEmail1(mail);      
+      if(!user) throw new BadRequestException('No existe el email')
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error al enviar la petición ${error}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );      
+    }     
+       
   }
 }

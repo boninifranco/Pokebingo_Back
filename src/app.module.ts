@@ -26,6 +26,8 @@ import { MercadoPagoModule } from './mercadopago/mercadopago/mercadopago.module'
 import { FilesModule } from './files/files.module';
 import { ConfigModule } from '@nestjs/config';
 import { EnvConfiguration } from './config/env.config';
+import { MailModule } from './mail/mail.module';
+import { MailController } from './mail/mail.controller';
 
 @Module({
    imports:[
@@ -65,9 +67,10 @@ import { EnvConfiguration } from './config/env.config';
     MessagesWsModule,
     ResultadosModule,
     MercadoPagoModule,
-    FilesModule
+    FilesModule,
+    MailModule
    ],
-  controllers: [AppController],
+  controllers: [AppController, MailController],
   providers: [AppService],
 })
 export class AppModule {
