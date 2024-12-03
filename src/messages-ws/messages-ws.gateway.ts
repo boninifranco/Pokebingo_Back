@@ -60,6 +60,17 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     this.wss.emit('receiveMessage', { user: user || client.id, avatar: avatar, message: payload.message });
   }
 
+  @SubscribeMessage('sendReclamo')
+  handleReclamo(client: Socket, payload: { reclamo: string}): void {
+    // Reenviar el mensaje a todos los clientes conectados en la sala correspondiente
+    const user = client.handshake.query.user;
+    //const avatar = client.handshake.query.avatar; 
+    console.log(payload)
+
+    //this.wss.to(payload.salaId).emit('receiveMessage', { user: client.id, message: payload.message });
+    this.wss.emit('receiveReclamo', { user: user || client.id, message: payload.reclamo });
+  }
+
   /*@SubscribeMessage('message-from-client')
   hadleMessageFromClient( client: Socket, payload: NewMessageDto){
     //console.log(client.id, payload)
