@@ -1,4 +1,4 @@
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { MessagesWsService } from './messages-ws.service';
 import { Server, Socket } from 'socket.io';
 import { NewMessageDto } from './dtos/new-message.dto';
@@ -28,6 +28,8 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     //console.log({token})
     const user = client.handshake.query.user;
     const avatar = client.handshake.query.avatar;
+    const ficha = client.handshake.query.ficha;
+
     console.log('Cliente conectado:', user || client.id)
     console.log('Cliente avatar:', avatar || 'no tiene avatar')
     
@@ -69,6 +71,17 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
 
     //this.wss.to(payload.salaId).emit('receiveMessage', { user: client.id, message: payload.message });
     this.wss.emit('receiveReclamo', { user: user || client.id, message: payload.reclamo });
+  }
+
+  @SubscribeMessage('sendFicha')
+  handleFicha(@MessageBody() data: { id: number; url: string }): void {
+    // Reenviar el mensaje a todos los clientes conectados en la sala correspondiente
+    //const user = client.handshake.query.user;
+    //const avatar = client.handshake.query.avatar; 
+    console.log('este salio', data)
+
+    //this.wss.to(payload.salaId).emit('receiveMessage', { user: client.id, message: payload.message });
+    this.wss.emit('receiveFicha', data);
   }
 
   /*@SubscribeMessage('message-from-client')
