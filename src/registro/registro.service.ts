@@ -16,6 +16,9 @@ import * as bcrypt from 'bcrypt';
 import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateContraseniaDto } from './dto/cambiarcontrasenia.dto';
+import { DesempenioService } from 'src/desempenio/desempenio.service';
+import { CreateDesempenioDto } from 'src/desempenio/dto/create-desempenio.dto';
+import { Desempenio } from 'src/desempenio/entities/desempenio.entity';
 
 @Injectable()
 export class RegistroService {
@@ -90,6 +93,7 @@ export class RegistroService {
     }
   }
   
+
   async cambiarContrasenia(usuarioId: number, updateContraseniaDto: UpdateContraseniaDto): Promise<any> {
     const registro = await this.findRegistroId(usuarioId); // Usar usuarioId en lugar de email
     if (!registro) {
@@ -107,7 +111,21 @@ export class RegistroService {
     await this.registroRepository.save(registro);
   
     return { message: 'Contraseña actualizada exitosamente' };
-  }  
+  }
+
+  async recuperarContrasenia(usuarioId: number, updateContraseniaDto: UpdateContraseniaDto): Promise<any> {
+    const registro = await this.findRegistroId(usuarioId); // Usar usuarioId en lugar de email
+    if (!registro) {
+      throw new BadRequestException(`No existe un registro para el usuario con ID ${usuarioId}`);
+    }  
+    const hashNewPassword = await this.hashPass(updateContraseniaDto.newPassword);
+    registro.contrasenia = hashNewPassword;
+    await this.registroRepository.save(registro);
+  
+    return { message: 'Contraseña recuperada exitosamente' };
+  }
+  
+  
 
   async findRegistroId(usuarioId: number): Promise<Registro> {
     const registroUsuarioId = await this.registroRepository
@@ -139,22 +157,19 @@ export class RegistroService {
       );
     }
   }
-
-  //, contrasenia:string
+  
   async findUserEmail1(email:string): Promise<Registro> {
     try {
 
       const isUser = await this.registroRepository
         .createQueryBuilder('registro')
-        .where('registro.email = :email', { email })
-        //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
+        .where('registro.email = :email', { email })        
         .getOne();
         
 
       if (!isUser)      
         throw new BadRequestException(
-          `No existe un registro para el email ${email}`,// y password ${contrasenia}
-         
+          `No existe un registro para el email ${email}`,         
         );
       return isUser;
     } catch (error) {
@@ -199,14 +214,11 @@ export class RegistroService {
     usuarioId: number,
     updateRegistroDto: UpdateRegistroDto,
   ): Promise<Registro> {
-    try {
-      //const criterio: FindOneOptions = { where: { usuarioId: usuarioId } };
+    try {      
       let registro = await this.findRegistroId(usuarioId);
       console.log(`Esto es en registro service updateAdmin, usuarioId: ${registro.id} ${registro.administrador}`)
       if (!registro)
-        throw new BadRequestException(`No existe el registro con id ${usuarioId}`);
-      //registro.email = updateRegistroDto.email;
-      //registro.contrasenia = updateRegistroDto.contrasenia;
+        throw new BadRequestException(`No existe el registro con id ${usuarioId}`);      
       registro.administrador = updateRegistroDto.administrador;
       await this.registroRepository.update(registro.id, registro);
       return registro;

@@ -1,3 +1,4 @@
+import { Puntajes } from 'src/puntajes/entities/puntajes.entity';
 import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { CreateResultadoDto } from './dto/create-resultado.dto';
 import { UpdateResultadoDto } from './dto/update-resultado.dto';
@@ -7,12 +8,14 @@ import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Partida } from 'src/partidas/entities/partida.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 
+
 @Injectable()
 export class ResultadosService {
   constructor(
     @InjectRepository(Resultado) private resultadoRepository: Repository<Resultado>,
     @InjectRepository(Partida) private partidaRepository: Repository<Partida>,
     @InjectRepository(Usuario) private usuarioRepository: Repository<Usuario>,
+    @InjectRepository(Puntajes) private puntajesRepository: Repository<Puntajes>,
   ) {}
   async create(createResultadoDto: CreateResultadoDto): Promise<Resultado> {
     try{
@@ -24,8 +27,12 @@ export class ResultadosService {
       if (!usuario){
         throw new Error('Usuario no encontrada');
       }
+      const puntaje = await this.puntajesRepository.findOne({where: { id: createResultadoDto.idPuntaje},})
+      if (!puntaje){
+        throw new Error('Puntaje no encontrado');
+      }
       const resultado = this.resultadoRepository.create({
-        resultado: createResultadoDto.resultado,
+        idPuntaje: puntaje,
         partida: partida,
         usuario: usuario,
       });
@@ -105,7 +112,8 @@ export class ResultadosService {
       let resultado: Resultado = await this.resultadoRepository.findOne(criterio);
       if (!resultado) throw new Error('No se encuentra el resultado');
       const partida = await this.partidaRepository.findOne({ where: { partidaId: updateResultadoDto.partidaId } });
-    const usuario = await this.usuarioRepository.findOne({ where: { id: updateResultadoDto.usuarioId } });
+      const usuario = await this.usuarioRepository.findOne({ where: { id: updateResultadoDto.usuarioId } });
+      const puntaje = await this.puntajesRepository.findOne({where: { id: updateResultadoDto.idPuntaje},})
 
     if (!partida) {
       throw new Error('No se encuentra la partida');
@@ -114,7 +122,7 @@ export class ResultadosService {
     if (!usuario) {
       throw new Error('No se encuentra el usuario');
     }
-    resultado.resultado = updateResultadoDto.resultado;
+    resultado.idPuntaje = puntaje;
     resultado.partida = partida;
     resultado.usuario = usuario;
 

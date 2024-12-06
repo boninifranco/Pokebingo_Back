@@ -4,6 +4,8 @@ import { CreateImagenDto } from '../dto/create-imagen.dto';
 import { UpdateImagenDto } from '../dto/update-imagen.dto';
 import { Imagen } from '../entities/imagen.entity';
 import { AuthGuard } from 'src/auth/auth/auth.guard';
+import { CreateImgPremiosDto } from '../dto/create-imgPremios.dto';
+import { ImgPremios } from '../entities/imgPremios.entity';
 
 @Controller('imagenes')
 export class ImagenController {
@@ -13,6 +15,11 @@ export class ImagenController {
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Imagen[]> {
     return this.imagenService.findAll();
+  }
+  @Get('/premios')
+  @HttpCode(HttpStatus.OK)
+  findAllImgPremios(): Promise<ImgPremios[]> {
+    return this.imagenService.findAllImgPremios();
   }
 
   @Get(':id')
@@ -26,6 +33,12 @@ export class ImagenController {
   create(@Body() createImagenDto: CreateImagenDto): Promise<Imagen> {
     return this.imagenService.create(createImagenDto);
   }
+
+  @Post('/premios')
+  @HttpCode(HttpStatus.CREATED)
+  createImgPremios(@Body() createImgPremiosDto: CreateImgPremiosDto): Promise<ImgPremios> {
+    return this.imagenService.createImgPremios(createImgPremiosDto);
+  }
   
 
   @Put(':id')
@@ -37,7 +50,7 @@ export class ImagenController {
     return updatedImagen;
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: string) {
     const deleteImagen = this.imagenService.remove(id);

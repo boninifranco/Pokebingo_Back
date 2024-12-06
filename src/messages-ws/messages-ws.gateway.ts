@@ -1,4 +1,4 @@
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { MessagesWsService } from './messages-ws.service';
 import { Server, Socket } from 'socket.io';
 import { NewMessageDto } from './dtos/new-message.dto';
@@ -15,19 +15,17 @@ import { Repository } from 'typeorm';
 export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconnect{
   
   @WebSocketServer() wss: Server;
-  constructor(
-    //@InjectRepository(Fila) private readonly filaRepository: Repository<Fila>,
-    //private readonly filaService : FilaService,
-    private readonly messagesWsService: MessagesWsService,
-    //private readonly filaService: FilaService
+  constructor(    
+    private readonly messagesWsService: MessagesWsService,    
     )
     
      {}
   handleConnection(client: Socket) {
-    //const token = client.handshake.headers.authentication as string;
-    //console.log({token})
+    //const token = client.handshake.headers.authentication as string;   
     const user = client.handshake.query.user;
     const avatar = client.handshake.query.avatar;
+    const ficha = client.handshake.query.ficha;
+
     console.log('Cliente conectado:', user || client.id)
     console.log('Cliente avatar:', avatar || 'no tiene avatar')
     
@@ -39,13 +37,10 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     console.log('conectados (desde actualizados):', this.messagesWsService.getConnectedClients())
     
   }
-  handleDisconnect(client: Socket) {
-    //console.log('Cliente desconectado:', client.id)
+  handleDisconnect(client: Socket) {    
     this.messagesWsService.removeClient(client.id);
 
     this.wss.emit('clients-updated', this.messagesWsService.getConnectedClients())
-    //console.log('conectados (desde desconectados):', this.messagesWsService.getConnectedClients())
-    
   }
 
   // Cuando un cliente envía un mensaje
@@ -55,9 +50,24 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     const user = client.handshake.query.user;
     const avatar = client.handshake.query.avatar; 
     console.log(payload)
-
-    //this.wss.to(payload.salaId).emit('receiveMessage', { user: client.id, message: payload.message });
+   
     this.wss.emit('receiveMessage', { user: user || client.id, avatar: avatar, message: payload.message });
+  }
+
+  @SubscribeMessage('sendReclamo')
+  handleReclamo(client: Socket, payload: { reclamo: string}): void {
+    // Reenviar el mensaje a todos los clientes conectados en la sala correspondiente
+    const user = client.handshake.query.user;
+    
+    this.wss.emit('receiveReclamo', { user: user || client.id, message: payload.reclamo });
+  }
+
+  @SubscribeMessage('sendFicha')
+  handleFicha(@MessageBody() data: { id: number; url: string }): void {
+    // Reenviar el mensaje a todos los clientes conectados en la sala correspondiente    
+    console.log('este salio', data)
+   
+    this.wss.emit('receiveFicha', data);
   }
 
   /*@SubscribeMessage('message-from-client')
@@ -80,13 +90,5 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
       message: payload.message || 'no-message'
     })
 
-  }*/
-
-  
-
-  // Método para emitir filas actualizadas
-  /*async sendUpdatedFilas() {
-    const filas = await this.filaService.findAllDesc(); // Obtener las filas actualizadas
-    this.wss.emit('filas', filas); // Emitir a todos los clientes conectados
   }*/
 }

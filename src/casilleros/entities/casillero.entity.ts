@@ -1,6 +1,6 @@
 import { Fila } from 'src/filas/entities/fila.entity';
 import { Imagen } from 'src/imagenes/entities/imagen.entity';
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity('casilleros')
 export class Casillero {
@@ -15,19 +15,7 @@ export class Casillero {
   @ManyToOne(() => Fila, (fila) => fila.filaId, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'filaId' })
   public filaId: number;
-  // Relación Many-to-One con Fila
-  /*@ManyToOne(() => Fila, (fila) => fila.casillero, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'filaId' })
-  fila: Fila;  // Esta es la relación con la entidad Fila
-
-  @Column()  // Este es el campo filaId como columna normal
-  filaId: number;*/
-
   
-  
-  //@Column()
-  //imagenId: number;
-
   @ManyToOne(() => Imagen,(imagen) => imagen.imagenId,{ onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'imagenId' })

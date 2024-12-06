@@ -5,7 +5,6 @@ export class Imagen {
   @PrimaryGeneratedColumn('increment')
   imagenId: number;
   
-
   @Column()
   id: number;
   

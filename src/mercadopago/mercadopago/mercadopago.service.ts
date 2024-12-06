@@ -11,7 +11,6 @@ export class MercadoPagoService {
     this.client = new MercadoPagoConfig({ accessToken: mpago_token });
   }
 
-  // Método para crear una preferencia de pago
   async createPreference(data: any): Promise<string> {
     try {
       const preference = new Preference(this.client);
@@ -21,22 +20,23 @@ export class MercadoPagoService {
           {
             id: '1',
             title: data.title,
-            description: 'Carton Pokebingo',
+            description: 'Cartón Pokebingo',
             quantity: Number(data.quantity),
             unit_price: Number(data.unit_price),
             currency_id: 'ARS',
           },
         ],
         back_urls: {
-          success: 'http://localhost:3001/SalaJuegoUser',
+          success: 'http://localhost:3000/mercadopago/validate_payment',
           failure: 'http://localhost:3001/SalaJuegoUser',
-          pending: 'http://localhost:3000/pending',
+          pending: 'http://localhost:3000/mercadopago/validate_payment',
         },
         auto_return: 'approved',
+        external_reference: `${data.cartones.join(',')}-${data.usuarioId}`,
       };
 
       const result = await preference.create({ body });
-
+      console.log('Preferencia creada:', result);
       return result.id;
     } catch (error) {
       console.error('Error al crear la preferencia:', error);

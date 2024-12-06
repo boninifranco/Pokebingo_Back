@@ -14,4 +14,6 @@ export class Premios {
   descripcion: string;
   @Column()
   imagen: string;
+  @Column()
+  stock: number;
 }

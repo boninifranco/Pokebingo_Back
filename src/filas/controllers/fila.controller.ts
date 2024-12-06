@@ -23,15 +23,11 @@ export class FilaController {
     return this.filaService.findAllDesc(partida,aciertos);
   }
 
-  
-
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Fila> {
     const fila = await this.filaService.obtenerUsuarioDeFila(id);
     return fila;
   }
-
-  
   
   @Get('')
   @HttpCode(HttpStatus.OK)
@@ -54,7 +50,7 @@ export class FilaController {
     return updatedFila;
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: string) {
     return this.filaService.delete(id);

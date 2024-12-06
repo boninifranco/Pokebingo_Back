@@ -12,13 +12,13 @@ export class PuntajesController {
   constructor(private readonly puntajesService: PuntajesService) {}
 
   @Post()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   create(@Body() createPuntajesDto: CreatePuntajesDto) {
     return this.puntajesService.create(createPuntajesDto);
   }
 
   @Get()
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.puntajesService.findAll();
   }
@@ -30,7 +30,7 @@ export class PuntajesController {
   ): Promise<Puntajes> {
     const isPuntaje = await this.puntajesService.findOne(id);
     if (isPuntaje) {
-      res.status(HttpStatus.FOUND).json(isPuntaje);
+      res.status(HttpStatus.OK).json(isPuntaje);
       return isPuntaje;
     }
     res
@@ -54,7 +54,7 @@ export class PuntajesController {
       .json({ message: `El puntaje con id ${id} no existe` });
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const isPuntaje = await this.puntajesService.remove(id);

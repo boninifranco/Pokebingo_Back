@@ -76,4 +76,10 @@ export class LogueoController {
   login(@Body() loginDto: LoginDto) {
     return this.logueoService.login(loginDto.email, loginDto.password);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('buscar')
+  buscarEmail(@Body() loginDto: LoginDto) {
+    return this.logueoService.buscarEmail(loginDto.email);
+  }
 }

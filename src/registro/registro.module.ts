@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Registro } from './entities/registro.entity';
 import { Logueo } from 'src/logueo/entities/logueo.entity';
 import { UsuarioModule } from 'src/usuario/usuario.module';
+import { DesempenioModule } from 'src/desempenio/desempenio.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Registro, Logueo]), UsuarioModule],
@@ -13,3 +14,4 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
   exports: [RegistroService],
 })
 export class RegistroModule {}
+
