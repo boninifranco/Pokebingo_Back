@@ -93,12 +93,3 @@ export class ImgSeleccionadasService {
     }
   }
   }
-
-
-  /*update(id: number, updateImgSeleccionadaDto: UpdateImgSeleccionadaDto) {
-    return `This action updates a #${id} imgSeleccionada`;
-  }*/
-
-  
-
-

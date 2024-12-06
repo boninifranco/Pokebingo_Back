@@ -78,8 +78,6 @@ export class CasilleroService {
     }
   }
 
-  
-
   async update(
     id: string,
     updateCasilleroDto: UpdateCasilleroDto,
@@ -113,18 +111,15 @@ export class CasilleroService {
 
 
     const filasActualizadas = new Set<number>(); // Para evitar sumar varias veces en la misma fila
-    //const cartonesActualizados = new Set<number>(); // Para evitar sumar varias veces en el mismo cartón
-
     // 2. Actualizar los casilleros, marcándolos como 'salio = true' y actualizar filas y cartones
     const casillerosActualizados = await Promise.all(
       casilleros.map(async (casillero) => {
         casillero.salio = true;
         casillero.updatedAt = new Date;
-        await this.casilleroRepository.save(casillero);
-        
+        await this.casilleroRepository.save(casillero);        
 
     // 3. Actualizar la fila correspondiente sumando +1 en 'aciertos' si no se ha sumado aún
-    /*const fila = await this.filaRepository.findOne({ where: { filaId: casillero.filaId } });*/
+    
     const filas = await this.filaRepository
   .createQueryBuilder('fila')
   .innerJoin('fila.casillero', 'casillero') // Hacer join con la relación casilleros  
@@ -142,33 +137,7 @@ export class CasilleroService {
       }
     }
 
-    
-
-  //await this.cartonRepository.update( Carton.cartonId, { aciertos: totalAciertos.sum });
-
-    
-      /*const cartones = await this.cartonRepository
-  .createQueryBuilder('carton')
-  .innerJoin('carton.fila', 'fila') // Hacer join con las filas del cartón
-  .innerJoin('fila.casillero', 'casillero') // Hacer join con los casilleros de la fila
-  .where('casillero.imagenId = :imagenId', { imagenId }) // Filtrar por imagenId
-  .select(['carton', 'fila', 'casillero']) // Seleccionar cartón, fila y casilleros
-  .getMany();
-  console.log(cartones)
-  for(const carton of cartones){
-    if (carton && !cartonesActualizados.has(carton.cartonId)) {
-      let aciertos = carton.aciertos += 1;
-      await this.cartonRepository.update(aciertos,carton,);
-      cartonesActualizados.add(carton.cartonId); // Evitar sumar dos veces en el mismo cartón
-    }
-  }*/
-
   
-
-    
-    
-    
-
         return casillero;
       }),
     );
@@ -192,8 +161,7 @@ export class CasilleroService {
     } else {
       throw new Error(`Error al calcular el total de aciertos valor ${totalAciertos} o el cartonId valor ${cartonId}`);
     }
-  }
-  
+  }  
 
   async delete(id: string) {
     try {
@@ -221,8 +189,7 @@ export class CasilleroService {
       .leftJoinAndSelect('casillero.imagenId', 'imagen') // Incluye la relación con Imagen
       .select([
         'casillero.imagenId', // Selecciona la imagenId
-        'imagen.url',       // Selecciona el nombre de la imagen (u otro campo relevante)
-        //'imagenes.url',          // Selecciona la URL de la imagen
+        'imagen.url',       // Selecciona el nombre de la imagen (u otro campo relevante)        
         'MAX(casillero.updatedAt) as lastUpdatedAt' // Selecciona la última fecha de actualización
       ])
       .where('casillero.updatedAt IS NOT NULL')

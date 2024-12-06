@@ -22,32 +22,14 @@ export class LogueoService {
   ) {}
 
   async create(createLogueoDto: CreateLogueoDto): Promise<Logueo> {
-    //const isRegistro = await this.registroService.findOneId(
-      //Number(createLogueoDto.idUsuario),
-    //);
-    //if (!isRegistro)
-      //throw new error(
-        //`No existe registro del usuario con id ${createLogueoDto.idUsuario}`,
-      //);
-    //const usuarioLogueado = await this.findLogueoTrue(
-      //createLogueoDto.idUsuario,
-    //);
-    //if (usuarioLogueado)
-      //throw new BadRequestException(
-        //`El usuario con Id ${createLogueoDto.idUsuario} ya se encuentra logueado`,
-      //);
-    try {
-      
-     
+    
+    try {   
         let { logout ,idUsuario } = createLogueoDto;
         let login = new Date();
         logout = '';
         const logueoDto = { login, idUsuario, logout };
         const nuevoLogueo: Logueo = this.logueoRepository.create(logueoDto);
         return this.logueoRepository.save(nuevoLogueo);
-      
-      
-      
     } catch (error) {
       throw new HttpException(
         {
@@ -168,30 +150,21 @@ export class LogueoService {
         `El usuario con Id ${idUsuario} ya se encuentra logueado`,
       );
       try {
-      
-     
-        //let { logout ,idUsuario } = this.createLogueoDto;
         let login = new Date();
         const logout = '';
         const logueoDto = { login, idUsuario, logout };
         const nuevoLogueo: Logueo = this.logueoRepository.create(logueoDto);
         const logueoOk = await this.logueoRepository.save(nuevoLogueo); 
         
-        return {
-          //logueado_como: msj,
+        return {          
           access_token: await this.jwtService.signAsync(payload),
           id: user.id,
           email: user.email,
           admin: user.administrador,
           idLogin: logueoOk.id,
           userName: user.userName,
-          avatar: user.avatar
-          
-        }
-                  
-      
-      
-      
+          avatar: user.avatar          
+        }      
     } catch (error) {
       throw new HttpException(
         {
@@ -216,7 +189,6 @@ export class LogueoService {
         },
         HttpStatus.NOT_FOUND,
       );      
-    }     
-       
+    }  
   }
 }

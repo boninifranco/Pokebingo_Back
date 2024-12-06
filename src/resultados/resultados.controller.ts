@@ -32,13 +32,7 @@ export class ResultadosController {
       `Los registros con id ${partidaId} no se encontraron`,
       HttpStatus.NOT_FOUND,
     );
-  }
-  
-  // @Get(':id')
-  // async findOne(@Param('id', ParseIntPipe) id: number): Promise<Resultado> {
-  //   const resultado = await this.resultadosService.findOne(id);
-  //   return resultado
-  // }
+  } 
 
   @Patch(':id')
   async update(
@@ -58,11 +52,4 @@ export class ResultadosController {
       );
     }
   }
-
-
-  // @Delete(':id')
-  // async remove(@Param('id', ParseIntPipe) id: number) {
-  //   const resultado = await this.resultadosService.remove(id);
-  //   return resultado
-  // }
 }

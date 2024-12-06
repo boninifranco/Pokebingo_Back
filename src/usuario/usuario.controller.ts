@@ -21,9 +21,6 @@ export class UsuarioController {
   @HttpCode(HttpStatus.OK)
   findAll() {
     return this.usuarioService.findAll();
-    //console.log('hola')
-    //return {message: 'Hola desde el backend'}
-
   }
 
   @Get(':id')
@@ -42,8 +39,6 @@ export class UsuarioController {
       .status(HttpStatus.NOT_FOUND)
       .json({ message: `Usuario con id ${id} no encontrado` });
   }
-
-  
 
   @Patch(':id')
   async update(

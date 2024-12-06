@@ -1,8 +1,7 @@
 import {
   Controller,
   Get,
-  Post,
-  Put,
+  Post,  
   Delete,
   Body,
   Param,
@@ -96,12 +95,7 @@ export class CartonController {
     const carton = await this.cartonService.findOne(id);
     return carton;
   }
-
-  /*@Post()
-  @HttpCode(HttpStatus.CREATED)
-  createMany(@Body() cartones: CreateCartonDto[]):Promise<Carton[]> {
-    return this.cartonService.createMany(cartones);
-  }*/
+  
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createCartonDto: CreateCartonDto) {
