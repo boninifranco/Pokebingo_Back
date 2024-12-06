@@ -7,10 +7,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 export class Resultado {
 
     @PrimaryGeneratedColumn('increment')
-    resultadoId: number;
-
-    //@Column()
-    //resultado: string;
+    resultadoId: number;    
 
     @ManyToOne(type=> Partida, partida => partida.resultados)
     @JoinColumn({ name: 'partidaId' })

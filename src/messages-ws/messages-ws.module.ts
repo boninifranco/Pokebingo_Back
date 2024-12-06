@@ -8,7 +8,6 @@ import { FilaModule } from 'src/filas/fila.module';
 
 @Module({
   imports: [FilaModule],
-  providers: [MessagesWsGateway,MessagesWsService],
-  //exports:[MessagesWsService]
+  providers: [MessagesWsGateway,MessagesWsService],  
 })
 export class MessagesWsModule {}

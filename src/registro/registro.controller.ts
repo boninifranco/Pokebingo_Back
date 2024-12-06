@@ -128,8 +128,6 @@ export class RegistroController {
       res
       .status(HttpStatus.NOT_FOUND)
       .json({message:`No existe un usuario con el email o la contraseña indicadas`})
-
-
     }
   }
 }

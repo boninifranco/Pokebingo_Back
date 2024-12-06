@@ -13,16 +13,6 @@ export class UsuarioService {
   ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-    /*if(createUsuarioDto.dni!=''){
-      //console.log('falta dni')
-      const criterio: FindOneOptions = { where: { dni: createUsuarioDto.dni } };    
-    const isUsuario = await this.usuarioRepository.findOne(criterio);
-    console.log(isUsuario);
-    if (isUsuario)
-      throw new BadRequestException(
-        `El usuario con dni ${createUsuarioDto.dni} ya existe`,
-      );
-    }*/
     
     try {
       const nuevoUsuario = this.usuarioRepository.create(createUsuarioDto);

@@ -28,7 +28,7 @@ export class Registro {
   @OneToOne(() => Desempenio, (desempenio) => desempenio.jugador, {
     cascade: true,
   })
-//esta relacion la agregue ahora para poder consultar el registro que gano una partida
+
   @OneToMany(() => Carton, (carton) => carton.cartonId, { cascade: true })
   @JoinColumn({name:'idUsuario'})
   idUsuario: Registro

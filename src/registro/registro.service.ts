@@ -157,22 +157,19 @@ export class RegistroService {
       );
     }
   }
-
-  //, contrasenia:string
+  
   async findUserEmail1(email:string): Promise<Registro> {
     try {
 
       const isUser = await this.registroRepository
         .createQueryBuilder('registro')
-        .where('registro.email = :email', { email })
-        //.andWhere('registro.contrasenia = :contrasenia', { contrasenia })
+        .where('registro.email = :email', { email })        
         .getOne();
         
 
       if (!isUser)      
         throw new BadRequestException(
-          `No existe un registro para el email ${email}`,// y password ${contrasenia}
-         
+          `No existe un registro para el email ${email}`,         
         );
       return isUser;
     } catch (error) {
@@ -217,14 +214,11 @@ export class RegistroService {
     usuarioId: number,
     updateRegistroDto: UpdateRegistroDto,
   ): Promise<Registro> {
-    try {
-      //const criterio: FindOneOptions = { where: { usuarioId: usuarioId } };
+    try {      
       let registro = await this.findRegistroId(usuarioId);
       console.log(`Esto es en registro service updateAdmin, usuarioId: ${registro.id} ${registro.administrador}`)
       if (!registro)
-        throw new BadRequestException(`No existe el registro con id ${usuarioId}`);
-      //registro.email = updateRegistroDto.email;
-      //registro.contrasenia = updateRegistroDto.contrasenia;
+        throw new BadRequestException(`No existe el registro con id ${usuarioId}`);      
       registro.administrador = updateRegistroDto.administrador;
       await this.registroRepository.update(registro.id, registro);
       return registro;

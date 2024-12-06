@@ -22,13 +22,7 @@ export class PartidasService {
       if (!sala) {
         throw new Error('Sala no encontrada');
       }
-
-      /*const partida = this.partidaRepository.create({
-        horaInicio: createPartidaDto.horaInicio,
-        cantidadCartones: createPartidaDto.cantidadCartones,
-        estadoPartida: createPartidaDto.estadoPartida,
-        salaId: createPartidaDto.salaId,
-      });*/
+      
       const fechaString = createPartidaDto.horaInicio;
       console.log(fechaString)
       const fecha = parse(fechaString, 'dd/MM/yyyy HH:mm', new Date());
