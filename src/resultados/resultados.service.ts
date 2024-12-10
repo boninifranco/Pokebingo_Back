@@ -88,7 +88,7 @@ export class ResultadosService {
     try {
       const resultados = await this.resultadoRepository.find({
         where: { partida: { partidaId } },
-        relations: ['usuario'],
+        relations: ['usuario','idPuntaje'],
       });
   
       if (!resultados.length) {
