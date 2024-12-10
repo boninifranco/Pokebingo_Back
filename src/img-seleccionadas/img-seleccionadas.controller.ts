@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus
 import { ImgSeleccionadasService } from './img-seleccionadas.service';
 import { CreateImgSeleccionadaDto } from './dto/create-img-seleccionada.dto';
 import { ImgSeleccionada } from './entities/img-seleccionada.entity';
+import { CreateSalieronDto } from './dto/create-salieron.dto';
+import { clear } from 'console';
 
 @Controller('img-seleccionadas')
 export class ImgSeleccionadasController {
@@ -13,9 +15,20 @@ export class ImgSeleccionadasController {
     return await this.imgSeleccionadasService.create(createImgSeleccionadaDto);
   }
 
+  @Post('/salieron')
+  @HttpCode(HttpStatus.CREATED)
+  async createSalieron(@Body() createSalieronDto: CreateSalieronDto):Promise<any> {
+    return await this.imgSeleccionadasService.createSalieron(createSalieronDto);
+  }
+
   @Get()
   findAll() {
     return this.imgSeleccionadasService.findAll();
+  }
+
+  @Get('salieron')
+  findAllSalieron() {
+    return this.imgSeleccionadasService.findAllSalieron();
   }
 
   @Get(':id')
@@ -31,5 +44,5 @@ export class ImgSeleccionadasController {
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.imgSeleccionadasService.remove(id);
-  }
+  }  
 }
