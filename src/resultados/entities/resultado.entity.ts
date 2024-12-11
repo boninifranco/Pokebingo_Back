@@ -9,7 +9,7 @@ export class Resultado {
     @PrimaryGeneratedColumn('increment')
     resultadoId: number;    
 
-    @ManyToOne(type=> Partida, partida => partida.resultados)
+    @ManyToOne(type=> Partida, partida => partida.resultados,{ onDelete: 'CASCADE', eager: true })
     @JoinColumn({ name: 'partidaId' })
     public partida: Partida;
 

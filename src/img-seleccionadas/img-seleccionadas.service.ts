@@ -6,12 +6,16 @@ import { ImgSeleccionada } from './entities/img-seleccionada.entity';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Partida } from 'src/partidas/entities/partida.entity';
 import { Imagen } from 'src/imagenes/entities/imagen.entity';
+import { Salieron } from './entities/salieron.entity';
+import { CreateSalieronDto } from './dto/create-salieron.dto';
 
 @Injectable()
 export class ImgSeleccionadasService {
   constructor(
     @InjectRepository(ImgSeleccionada)
     private readonly imgSeleccionadaRepository: Repository<ImgSeleccionada>,
+    @InjectRepository(Salieron)
+    private readonly salieronRepository: Repository<Salieron>,
     @InjectRepository(Partida)
     private partidaRepository: Repository<Partida>,
 
@@ -49,8 +53,28 @@ export class ImgSeleccionadasService {
     return ;
   }
 
+  async createSalieron(createSalieronDto: CreateSalieronDto): Promise<any> {
+    try {
+      
+      const salio = this.salieronRepository.create(createSalieronDto)
+      return await this.salieronRepository.save(salio)
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Se produjo un error: ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
   async findAll(): Promise<ImgSeleccionada[]> {
     return await this.imgSeleccionadaRepository.find();
+  }
+
+  async findAllSalieron(): Promise<Salieron[]> {
+    return await this.salieronRepository.find();
   }
 
   async findOne(id: number) {
@@ -91,5 +115,5 @@ export class ImgSeleccionadasService {
         HttpStatus.NOT_FOUND,
       );
     }
-  }
+  }  
   }
