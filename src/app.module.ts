@@ -36,17 +36,17 @@ import { MailController } from './mail/mail.controller';
       }),
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USERNAME,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DATABASE,
+      host: process.env.HOST,
+      port: parseInt(process.env.PORT),
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
       autoLoadEntities: true,
       synchronize: true,
-      ssl: process.env.POSTGRES_SSL === "true",
+      ssl: process.env.SSL === "true",
       extra: {
         ssl:
-          process.env.POSTGRES_SSL === "true"
+          process.env.SSL === "true"
             ? {
                 rejectUnauthorized: false,
               }
