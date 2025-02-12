@@ -31,20 +31,27 @@ import { MailController } from './mail/mail.controller';
 
 @Module({
    imports:[
-    ConfigModule.forRoot(
-      {
-        load:[ EnvConfiguration]
+      ConfigModule.forRoot({
+        isGlobal: true,
       }),
     TypeOrmModule.forRoot({
-       type: 'mysql',
-       host: process.env.HOST,
-       port: +process.env.DBPORT,
-       username: process.env.DBUSERNAME,
-       password: process.env.PASSWORD,
-       database: process.env.DATABASE,
-       entities: [process.env.ENTITIES],//['dist/**/**.entity{.ts,.js}'],
-       //entities: [__dirname + '/**/*.entity{.ts,.js}'],
-       synchronize: true
+      type: "postgres",
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USERNAME,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DATABASE,
+      autoLoadEntities: true,
+      synchronize: true,
+      ssl: process.env.POSTGRES_SSL === "true",
+      extra: {
+        ssl:
+          process.env.POSTGRES_SSL === "true"
+            ? {
+                rejectUnauthorized: false,
+              }
+            : null,
+      },
      }),
     UsuarioModule,
     LogueoModule,

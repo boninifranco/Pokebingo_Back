@@ -30,6 +30,6 @@ async function bootstrap() {
     prefix: '/static-assets/',
   });
   
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
