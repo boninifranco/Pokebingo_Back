@@ -30,6 +30,8 @@ async function bootstrap() {
     prefix: '/static-assets/',
   });
   
-  await app.listen(parseInt(process.env.PORT) || 3000);
+  const port = process.env.PORT || 3000;
+  console.log(`🚀 Servidor iniciando en el puerto: ${port}`);
+  await app.listen(port);
 }
 bootstrap();
