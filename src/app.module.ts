@@ -38,9 +38,9 @@ import { MailController } from './mail/mail.controller';
       type: "postgres",
       host: process.env.HOST,
       port: parseInt(process.env.PORT),
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
-      database: process.env.DATABASE,
+      username: process.env.DBUSERNAME, // Usa DBUSERNAME del .env
+      password: process.env.PASSWORD,   // Usa PASSWORD del .env
+      database: process.env.DATABASE, 
       autoLoadEntities: true,
       synchronize: true,
       ssl: process.env.SSL === "true",
@@ -83,3 +83,5 @@ import { MailController } from './mail/mail.controller';
 export class AppModule {
   constructor(){}
 }
+console.log('Database USERNAME:', process.env.DBUSERNAME);
+console.log('Database Password:', process.env.PASSWORD);
