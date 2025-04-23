@@ -36,17 +36,17 @@ import { MailController } from './mail/mail.controller';
       }),
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: process.env.HOST,
-      port: parseInt(process.env.PORT),
-      username: process.env.DBUSERNAME, // Usa DBUSERNAME del .env
-      password: process.env.PASSWORD,   // Usa PASSWORD del .env
-      database: process.env.DATABASE, 
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
-      ssl: process.env.SSL === "true",
+      ssl: process.env.DB_SSL === "true",
       extra: {
         ssl:
-          process.env.SSL === "true"
+          process.env.DB_SSL === "true"
             ? {
                 rejectUnauthorized: false,
               }
@@ -81,7 +81,13 @@ import { MailController } from './mail/mail.controller';
   providers: [AppService],
 })
 export class AppModule {
-  constructor(){}
+  constructor(){
+    console.log('Database Configuration:', {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      database: process.env.DB_DATABASE,
+      ssl: process.env.DB_SSL
+    });
+  }
 }
-console.log('Database USERNAME:', process.env.DBUSERNAME);
-console.log('Database Password:', process.env.PASSWORD);
