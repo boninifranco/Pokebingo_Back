@@ -31,28 +31,18 @@ import { MailController } from './mail/mail.controller';
 
 @Module({
    imports:[
-      ConfigModule.forRoot({
-        isGlobal: true,
-      }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
       autoLoadEntities: true,
-      synchronize: true,
-      ssl: process.env.DB_SSL === "true",
-      extra: {
-        ssl:
-          process.env.DB_SSL === "true"
-            ? {
-                rejectUnauthorized: false,
-              }
-            : null,
+      synchronize: false,
+      ssl: {
+        rejectUnauthorized: false,
       },
-     }),
+    }),
     UsuarioModule,
     LogueoModule,
     RegistroModule,
@@ -77,17 +67,7 @@ import { MailController } from './mail/mail.controller';
     FilesModule,
     MailModule
    ],
-  controllers: [AppController, MailController],
-  providers: [AppService],
-})
-export class AppModule {
-  constructor(){
-    console.log('Database Configuration:', {
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      database: process.env.DB_DATABASE,
-      ssl: process.env.DB_SSL
-    });
-  }
-}
+   controllers: [AppController, MailController],
+   providers: [AppService],
+ })
+ export class AppModule {}
